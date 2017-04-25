@@ -1,0 +1,18 @@
+api:
+    resource: "@APIBundle/Resources/config/routing.yml"
+    type:     rest
+    prefix:   /api
+
+superadmin:
+    resource: "@SuperadminBundle/Controller/"
+    type:     annotation
+    prefix:   /secured/superadmin
+
+app:
+    resource: '@AppBundle/Controller/'
+    type: annotation
+
+token_login:
+    path: /token-authentication
+    defaults: { _controller: "AppBundle:Default:token"}
+    methods: POST

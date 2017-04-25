@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+{% block title %}Proyecto{% endblock %}
+{% block stylesheets %}{{ parent() }}{% endblock %}
+{% block bodystyle%}
+    style="background-image: url({{ asset('assets/img/city.jpg') }});background-repeat:no-repeat;background-position: center top;
+    background-size: 100% auto;"
+{% endblock %}
+{% block body %}
+    <div class="row animated fadeInDown"><br>
+        <div class="panel panel-default col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12 col-xs-12" style="background: rgba(0, 0, 0, 0.5);color: #fff">
+            <div class="panel-body">
+                <form action="{{ path('login_check') }}"  method="post">
+                    <center>
+                        <img class="img-responsive" width="30%" src="{{asset('assets/img/logo.png') }}"
+                             alt="">
+                    </center>
+                    <div class="form-group">
+                        <label for="username"><i class="fa fa-user"></i> Usuario</label>
+                        <input id="username" name="_username" type="text" class="form-control" placeholder="Ingrese su nombre de usuario">
+                    </div>
+                    <div class="form-group">
+                        <label for="password"><i class="fa fa-lock"></i> Contraseña</label>
+                        <input type="password" id="password" name="_password" class="form-control" placeholder="Ingrese su contraseña">
+                    </div>
+                    <div class="form-group">
+                        {% if error %}
+                            <div class="alert alert-danger">
+                                <center><span><strong><i class="fa fa-exclamation-triangle"></i> Atención:</strong> Credenciales incorrectas.</span>
+                                    <p>El usuario y/o la contraseña son incorrectas</p></center>
+                            </div>
+                        {% endif %}
+                        <input type="hidden" name="_target_path" value="/secured/index">
+                        <center><button class="btn btn-primary" type="submit">
+                                <i class="fa fa-key"></i>Ingresar</button>
+                        </center>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,4 @@
+api_v1:
+  type: rest
+  resource: "@APIBundle/Resources/config/routing_v1.yml"
+  prefix: /1
