@@ -10,4 +10,26 @@ namespace AppBundle\Repository;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function verificarQueNoExistaElUsuario($username){        
+        $qb=$this->createQueryBuilder('u');
+        $qb->add('from', 'AppBundle:User u');
+        $qb->add('where', 'u.username =:Username');
+        $qb->setParameter('Username',$username);
+        return $qb->getQuery()->getResult();
+    }
+    
+    
+    public function buscarSoloUsuariosVisibles(){
+        $qb=$this->createQueryBuilder('u');
+        $qb->add('from', 'AppBundle:User u');
+        $qb->add('where', 'u.visible =1');
+        return $qb->getQuery()->getResult();  
+    }
+    
+    
+    public function obtenerTokenParaElUsuario(){        
+        $token = md5(time().'..'.'prysaarc'.'.,'.date('Ymdhis'));
+        return $token;
+    }
+    
 }

@@ -1,3 +1,10 @@
 users:
   type: rest
   resource: APIBundle\Controller\UsersController
+  
+empresas:
+  type: rest
+  resource: APIBundle\Controller\EmpresasController
+usuarios:
+  type: rest
+  resource: APIBundle\Controller\UsuariosController

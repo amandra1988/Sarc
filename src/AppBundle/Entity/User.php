@@ -14,44 +14,47 @@ use JMS\Serializer\Annotation as JMS;
 class User implements UserInterface, \Serializable
 {
     /**
-    * @ORM\Column(type="integer")
+    * @ORM\Column(name="id", type="integer")
     * @ORM\Id
     * @ORM\GeneratedValue(strategy="AUTO")
     * @JMS\SerializedName("id")
-    * @JMS\Groups({"user_detail"})
+    * @JMS\Groups({"usuario_detalle","usuario_lista"})
     */
     private $id;
 
     /**
-    * @ORM\Column(type="string", length=25, unique=true)
+    * @ORM\Column(name="username", type="string", length=25, unique=true)
     * @JMS\SerializedName("username")
-    * @JMS\Groups({"user_detail"})
+    * @JMS\Groups({"usuario_detalle","usuario_lista"})
     */
     private $username;
 
     /**
-    * @ORM\Column(type="string", length=64)
+    * @ORM\Column(name="password", type="string", length=64)
     */
     private $password;
-
+    
     /**
-     * @ORM\Column(type="string", length=25)
-     * @JMS\SerializedName("role")
-     * @JMS\Groups({"user_detail"})
+    * @ORM\Column(name="usr_visible", type="boolean", options={"default":1})
+    */
+    private $visible;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Rol", inversedBy="usuario" )
+     * @ORM\JoinColumn(name="rol_id", referencedColumnName="rol_id")
+     * @JMS\SerializedName("rol")
+     * @JMS\Groups({"usuario_detalle","usuario_lista"})
      */
-    private $role;
-
-        /**
-    * @ORM\Column(type="string", length=60, unique=false)
-    * @JMS\SerializedName("email")
-    * @JMS\Groups({"user_detail"})
-    */
-    private $email;
-
+    protected $rol;
+    
     /**
-    * @ORM\Column(name="active", type="boolean",options={"default":1})
-    */
-    private $isActive;
+     * @ORM\ManyToOne(targetEntity="Empresa", inversedBy="usuarios" )
+     * @ORM\JoinColumn(name="emp_id", referencedColumnName="emp_id")
+     * @JMS\SerializedName("empresa")
+     * @JMS\Groups({"usuario_detalle","usuario_lista"})
+     */
+    protected $empresa;
+    
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
@@ -60,8 +63,7 @@ class User implements UserInterface, \Serializable
 
     public function __construct()
     {
-    $this->isActive = true;
-
+        $this->visible = true;
     }
 
     /**
@@ -95,29 +97,6 @@ class User implements UserInterface, \Serializable
     public function getUsername()
     {
         return $this->username;
-    }
-
-    /**
-     * Set role
-     *
-     * @param string $role
-     *
-     * @return User
-     */
-    public function setRole($role)
-    {
-        $this->role = $role;
-        return $this;
-    }
-
-    /**
-     * Get role
-     *
-     * @return string
-     */
-    public function getRole()
-    {
-        return $this->role;
     }
 
     /**
@@ -165,30 +144,7 @@ class User implements UserInterface, \Serializable
     {
         return $this->email;
     }
-
-    /**
-     * Set isActive
-     *
-     * @param boolean $isActive
-     *
-     * @return User
-     */
-    public function setIsActive($isActive)
-    {
-        $this->isActive = $isActive;
-        return $this;
-    }
-
-    /**
-     * Get isActive
-     *
-     * @return boolean
-     */
-    public function getIsActive()
-    {
-        return $this->isActive;
-    }
-
+    
     /**
      * Set token
      *
@@ -219,7 +175,7 @@ class User implements UserInterface, \Serializable
 
     public function getRoles()
     {
-        return array($this->getRole());
+        return array($this->getRol()->getNombre());
     }
 
     public function eraseCredentials()
@@ -244,5 +200,77 @@ class User implements UserInterface, \Serializable
             $this->username,
             $this->password,
             ) = unserialize($serialized);
+    }
+
+    /**
+     * Set visible
+     *
+     * @param boolean $visible
+     *
+     * @return User
+     */
+    public function setVisible($visible)
+    {
+        $this->visible = $visible;
+
+        return $this;
+    }
+
+    /**
+     * Get visible
+     *
+     * @return boolean
+     */
+    public function getVisible()
+    {
+        return $this->visible;
+    }
+
+    /**
+     * Set rol
+     *
+     * @param \AppBundle\Entity\Rol $rol
+     *
+     * @return User
+     */
+    public function setRol(\AppBundle\Entity\Rol $rol = null)
+    {
+        $this->rol = $rol;
+
+        return $this;
+    }
+
+    /**
+     * Get rol
+     *
+     * @return \AppBundle\Entity\Rol
+     */
+    public function getRol()
+    {
+        return $this->rol;
+    }
+
+    /**
+     * Set empresa
+     *
+     * @param \AppBundle\Entity\Empresa $empresa
+     *
+     * @return Usuario
+     */
+    public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
+    {
+        $this->empresa = $empresa;
+
+        return $this;
+    }
+
+    /**
+     * Get empresa
+     *
+     * @return \AppBundle\Entity\Empresa
+     */
+    public function getEmpresa()
+    {
+        return $this->empresa;
     }
 }

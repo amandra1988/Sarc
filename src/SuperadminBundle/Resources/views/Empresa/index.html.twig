@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block angularInyect %}
+    ng-app="superadmin-empresas"
+{% endblock %}
+
+{% block title %}SAARC{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
+{% endblock %}
+
+{% block bodystyle%}
+    style="background-image: url({{ asset('assets/img/superadmin.jpg') }});
+    background-repeat:no-repeat;
+    background-position: center top;
+    background-size: 100% auto;"
+{% endblock %}
+
+{% block header %}
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">SAARC</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                  <li><a href="{{ path('superadmin-dashboard') }}">Home</a></li>
+                  <li  class="active"><a href="empresas">Empresas</a></li>
+                  <li><a href="{{ path('usuarios') }}">Usuarios</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                  <li><a href="{{path('logout')}}">Cerrar sesión</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+
+{% block javascripts %}
+    <script type="text/javascript">
+        saConstants = {
+            urlBase: "{{ urlBase }}",
+            urlBaseImg: "{{ urlBaseImagenes }}",
+            urlBaseApi: "{{ urlBaseApi }}",
+            urlBaseTmp: "{{ urlBaseTemplates }}",
+            apiKey: "{{ apikey }}"
+        };
+    </script>
+   {{ parent() }}
+{% include '@Superadmin/Empresa/javascripts.html.twig' %}
+{% endblock %}
+
+{% block body %}
+    <div class="jumbotron">
+        {{ parent() }}
+    </div>
+{% endblock %}

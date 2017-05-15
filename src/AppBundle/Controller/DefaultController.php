@@ -20,7 +20,7 @@ class DefaultController extends Controller
         // obtener el error de login si hay
         $error = $authenticationUtils->getLastAuthenticationError();
         // último nombre de usuario introducido por el usuario
-        $lastUsername = $authenticationUtils->getLastUsername();
+        $lastUsername = $authenticationUtils->getLastUsername();        
         return $this->render(
             'AppBundle:login:index.html.twig',
             array(
@@ -36,7 +36,6 @@ class DefaultController extends Controller
      */
     public function loginCheckAction()
     {
-
     }
 
     /**

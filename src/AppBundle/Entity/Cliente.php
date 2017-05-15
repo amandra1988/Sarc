@@ -1,0 +1,349 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\Annotation as JMS;
+
+/**
+ * Cliente
+ *
+ * @ORM\Table(name="cliente")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ClienteRepository")
+ */
+class Cliente
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="cli_id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @JMS\SerializedName("cliente_id")
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cli_nombre", type="string", length=100)
+     *  @JMS\SerializedName("cliente_nombre")
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     */
+    private $cliNombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cli_direccion", type="string", length=255)
+     * @JMS\SerializedName("cliente_direccion")
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     */
+    private $cliDireccion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cli_numero", type="string", length=255)
+     * @JMS\SerializedName("cliente_numero")
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     */
+    private $cliNumero;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cli_telefono", type="string", length=15)
+     * @JMS\SerializedName("cliente_telefono")
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     */
+    private $cliTelefono;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cli_celular", type="string", length=15)
+     * @JMS\SerializedName("cliente_celular")
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     */
+    private $cliCelular;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cli_correo", type="string", length=100)
+     * @JMS\SerializedName("cliente_correo")
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     */
+    private $cliCorreo;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="cli_visible", type="boolean")
+     */
+    private $cliVisible;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="cli_longitud", type="integer")
+     * @JMS\SerializedName("cliente_longitud")
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     */
+    private $cliLongitud;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="cli_latitud", type="integer")
+     * @JMS\SerializedName("cliente_latitud")
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     */
+    private $cliLatitud;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Empresa", inversedBy="clientes" )
+     * @ORM\JoinColumn(name="emp_id", referencedColumnName="emp_id")
+     * @JMS\SerializedName("cliente_empresa")
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     */
+    protected $empresa;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Comuna", inversedBy="clientes" )
+     * @ORM\JoinColumn(name="com_id", referencedColumnName="com_id")
+     * @JMS\SerializedName("cliente_comuna")
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     */
+    protected $comuna;
+    
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set cliNombre
+     *
+     * @param string $cliNombre
+     *
+     * @return Cliente
+     */
+    public function setCliNombre($cliNombre)
+    {
+        $this->cliNombre = $cliNombre;
+
+        return $this;
+    }
+
+    /**
+     * Get cliNombre
+     *
+     * @return string
+     */
+    public function getCliNombre()
+    {
+        return $this->cliNombre;
+    }
+
+    /**
+     * Set cliDireccion
+     *
+     * @param string $cliDireccion
+     *
+     * @return Cliente
+     */
+    public function setCliDireccion($cliDireccion)
+    {
+        $this->cliDireccion = $cliDireccion;
+
+        return $this;
+    }
+
+    /**
+     * Get cliDireccion
+     *
+     * @return string
+     */
+    public function getCliDireccion()
+    {
+        return $this->cliDireccion;
+    }
+
+    /**
+     * Set cliNumero
+     *
+     * @param string $cliNumero
+     *
+     * @return Cliente
+     */
+    public function setCliNumero($cliNumero)
+    {
+        $this->cliNumero = $cliNumero;
+
+        return $this;
+    }
+
+    /**
+     * Get cliNumero
+     *
+     * @return string
+     */
+    public function getCliNumero()
+    {
+        return $this->cliNumero;
+    }
+
+    /**
+     * Set cliTelefono
+     *
+     * @param string $cliTelefono
+     *
+     * @return Cliente
+     */
+    public function setCliTelefono($cliTelefono)
+    {
+        $this->cliTelefono = $cliTelefono;
+
+        return $this;
+    }
+
+    /**
+     * Get cliTelefono
+     *
+     * @return string
+     */
+    public function getCliTelefono()
+    {
+        return $this->cliTelefono;
+    }
+
+    /**
+     * Set cliCelular
+     *
+     * @param string $cliCelular
+     *
+     * @return Cliente
+     */
+    public function setCliCelular($cliCelular)
+    {
+        $this->cliCelular = $cliCelular;
+
+        return $this;
+    }
+
+    /**
+     * Get cliCelular
+     *
+     * @return string
+     */
+    public function getCliCelular()
+    {
+        return $this->cliCelular;
+    }
+
+    /**
+     * Set cliCorreo
+     *
+     * @param string $cliCorreo
+     *
+     * @return Cliente
+     */
+    public function setCliCorreo($cliCorreo)
+    {
+        $this->cliCorreo = $cliCorreo;
+
+        return $this;
+    }
+
+    /**
+     * Get cliCorreo
+     *
+     * @return string
+     */
+    public function getCliCorreo()
+    {
+        return $this->cliCorreo;
+    }
+
+    /**
+     * Set cliVisible
+     *
+     * @param boolean $cliVisible
+     *
+     * @return Cliente
+     */
+    public function setCliVisible($cliVisible)
+    {
+        $this->cliVisible = $cliVisible;
+
+        return $this;
+    }
+
+    /**
+     * Get cliVisible
+     *
+     * @return bool
+     */
+    public function getCliVisible()
+    {
+        return $this->cliVisible;
+    }
+
+    /**
+     * Set cliLongitud
+     *
+     * @param integer $cliLongitud
+     *
+     * @return Cliente
+     */
+    public function setCliLongitud($cliLongitud)
+    {
+        $this->cliLongitud = $cliLongitud;
+
+        return $this;
+    }
+
+    /**
+     * Get cliLongitud
+     *
+     * @return int
+     */
+    public function getCliLongitud()
+    {
+        return $this->cliLongitud;
+    }
+
+    /**
+     * Set cliLatitud
+     *
+     * @param integer $cliLatitud
+     *
+     * @return Cliente
+     */
+    public function setCliLatitud($cliLatitud)
+    {
+        $this->cliLatitud = $cliLatitud;
+
+        return $this;
+    }
+
+    /**
+     * Get cliLatitud
+     *
+     * @return int
+     */
+    public function getCliLatitud()
+    {
+        return $this->cliLatitud;
+    }
+}
+
