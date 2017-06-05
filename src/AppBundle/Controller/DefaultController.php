@@ -56,6 +56,9 @@ class DefaultController extends Controller
             case 'ROLE_SUPERADMIN':
                 return $this->redirectToRoute('superadmin-dashboard');
                 break;
+            case 'ROLE_ADMIN':
+                return $this->redirectToRoute('admin-dashboard');
+                break;
         }
     }
 

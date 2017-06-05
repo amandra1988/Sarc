@@ -55,6 +55,11 @@ class User implements UserInterface, \Serializable
      */
     protected $empresa;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Operador", mappedBy="usuario", cascade={"persist", "remove"} )
+     */
+    protected  $operadores;
+    
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
@@ -272,5 +277,39 @@ class User implements UserInterface, \Serializable
     public function getEmpresa()
     {
         return $this->empresa;
+    }
+
+    /**
+     * Add operadore
+     *
+     * @param \AppBundle\Entity\Operador $operadore
+     *
+     * @return User
+     */
+    public function addOperadore(\AppBundle\Entity\Operador $operadore)
+    {
+        $this->operadores[] = $operadore;
+
+        return $this;
+    }
+
+    /**
+     * Remove operadore
+     *
+     * @param \AppBundle\Entity\Operador $operadore
+     */
+    public function removeOperadore(\AppBundle\Entity\Operador $operadore)
+    {
+        $this->operadores->removeElement($operadore);
+    }
+
+    /**
+     * Get operadores
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOperadores()
+    {
+        return $this->operadores;
     }
 }

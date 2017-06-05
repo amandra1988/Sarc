@@ -11,10 +11,10 @@ namespace AppBundle\Repository;
 class EmpresaRepository extends \Doctrine\ORM\EntityRepository
 {
     public function buscarSoloEmpresasVisibles(){        
-        $qb=$this->createQueryBuilder('e');
-        $qb->add('from', 'AppBundle:Empresa e');
-        $qb->add('where', 'e.empVisible =:visible');
-        $qb->setParameter('visible',1);
+        $qb=$this->createQueryBuilder('e')
+                 ->add('from', 'AppBundle:Empresa e')
+                 ->add('where', 'e.empVisible =:visible')
+                 ->setParameter('visible',1);
         return $qb->getQuery()->getResult();
     }
     

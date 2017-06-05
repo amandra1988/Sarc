@@ -39,3 +39,4 @@ security:
         - { path: /, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: /token-authentication, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/secured/superadmin, roles: [ROLE_SUPERADMIN]}
+        - { path: ^/secured/admin, roles: [ROLE_ADMIN]}

@@ -1,3 +1,8 @@
+admin:
+    resource: "@AdminBundle/Controller/"
+    type:     annotation
+    prefix:   /secured/admin
+
 api:
     resource: "@APIBundle/Resources/config/routing.yml"
     type:     rest

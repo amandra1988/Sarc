@@ -20,7 +20,7 @@ class Region
      * @ORM\Column(name="reg_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @JMS\SerializedName("reg_id")
+     * @JMS\SerializedName("region_id")
      * @JMS\Groups({"region_detalle","region_lista"})
      */
     private $id;
@@ -29,10 +29,18 @@ class Region
      * @var string
      *
      * @ORM\Column(name="reg_nombre", type="string", length=120)
-     * @JMS\SerializedName("reg_nombre")
+     * @JMS\SerializedName("region_nombre")
      * @JMS\Groups({"region_detalle","region_lista"})
      */
     private $regNombre;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="reg_ordinal", type="string", length=5)
+     */
+    private $regOrdinal;
+    
     
         
     /**
@@ -114,5 +122,29 @@ class Region
     public function getProvincias()
     {
         return $this->provincias;
+    }
+
+    /**
+     * Set regOrdinal
+     *
+     * @param string $regOrdinal
+     *
+     * @return Region
+     */
+    public function setRegOrdinal($regOrdinal)
+    {
+        $this->regOrdinal = $regOrdinal;
+
+        return $this;
+    }
+
+    /**
+     * Get regOrdinal
+     *
+     * @return string
+     */
+    public function getRegOrdinal()
+    {
+        return $this->regOrdinal;
     }
 }

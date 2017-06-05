@@ -4,10 +4,6 @@ namespace APIBundle\Controller;
 
 use AppBundle\Entity\Empresa;
 use Symfony\Component\HttpFoundation\Request;
-//use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-//use FOS\RestBundle\Controller\Annotations\QueryParam;
-//use FOS\RestBundle\Request\ParamFetcher;
-//use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 
 class EmpresasController extends APIBaseController
@@ -18,7 +14,7 @@ class EmpresasController extends APIBaseController
     */ 
     public function getEmpresasAction(Request $request){
         
-        $groups = ['empresa_lista'];
+        $groups = ['empresa_lista','centro_detalle'];
         if(is_array($request->get('expand'))){
             $groups = array_merge($groups, $request->get('expand'));
         }
@@ -33,7 +29,9 @@ class EmpresasController extends APIBaseController
     */
     public function postEmpresasAction(Request $request){
         $groups ='';
+        $centroDeAcopio  = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->find($request->get('centro')); 
         $empresa = new Empresa();
+        $empresa->setCentroDeAcopio($centroDeAcopio);
         $empresa->setEmpNombre($request->get('nombre'));
         $empresa->setEmpRut($request->get('rut'));
         $empresa->setEmpDireccion($request->get('direccion'));
@@ -53,6 +51,8 @@ class EmpresasController extends APIBaseController
     */
     public function patchEmpresasAction(Request $request, Empresa $empresa){
         $groups ='';
+        $centroDeAcopio  = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->find($request->get('centro')); 
+        $empresa->setCentroDeAcopio($centroDeAcopio);
         $empresa->setEmpNombre($request->get('nombre'));
         $empresa->setEmpRut($request->get('rut'));
         $empresa->setEmpDireccion($request->get('direccion'));

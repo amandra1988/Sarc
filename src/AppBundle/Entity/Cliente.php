@@ -87,22 +87,41 @@ class Cliente
     private $cliVisible;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="cli_longitud", type="integer")
+     * @ORM\Column(name="cli_longitud", type="string", length=100)
      * @JMS\SerializedName("cliente_longitud")
      * @JMS\Groups({"cliente_detalle","cliente_lista"})
      */
     private $cliLongitud;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="cli_latitud", type="integer")
+     * @ORM\Column(name="cli_latitud", type="string", length=100)
      * @JMS\SerializedName("cliente_latitud")
      * @JMS\Groups({"cliente_detalle","cliente_lista"})
      */
     private $cliLatitud;
+    
+     /**
+     * @var int
+     *
+     * @ORM\Column(name="cli_demanda", type="integer")
+     * @JMS\SerializedName("cliente_demanda")
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     */
+    private $cliDemanda;
+    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Frecuencia", inversedBy="clientes" )
+     * @ORM\JoinColumn(name="fre_id", referencedColumnName="fre_id")
+     * @JMS\SerializedName("cliente_frecuencia")
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     */
+    protected $frecuencia;
+    
     
     /**
      * @ORM\ManyToOne(targetEntity="Empresa", inversedBy="clientes" )
@@ -345,5 +364,100 @@ class Cliente
     {
         return $this->cliLatitud;
     }
-}
 
+    /**
+     * Set frecuencia
+     *
+     * @param \AppBundle\Entity\Frecuencia $frecuencia
+     *
+     * @return Cliente
+     */
+    public function setFrecuencia(\AppBundle\Entity\Frecuencia $frecuencia = null)
+    {
+        $this->frecuencia = $frecuencia;
+
+        return $this;
+    }
+
+    /**
+     * Get frecuencia
+     *
+     * @return \AppBundle\Entity\Frecuencia
+     */
+    public function getFrecuencia()
+    {
+        return $this->frecuencia;
+    }
+
+    /**
+     * Set empresa
+     *
+     * @param \AppBundle\Entity\Empresa $empresa
+     *
+     * @return Cliente
+     */
+    public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
+    {
+        $this->empresa = $empresa;
+
+        return $this;
+    }
+
+    /**
+     * Get empresa
+     *
+     * @return \AppBundle\Entity\Empresa
+     */
+    public function getEmpresa()
+    {
+        return $this->empresa;
+    }
+
+    /**
+     * Set comuna
+     *
+     * @param \AppBundle\Entity\Comuna $comuna
+     *
+     * @return Cliente
+     */
+    public function setComuna(\AppBundle\Entity\Comuna $comuna = null)
+    {
+        $this->comuna = $comuna;
+
+        return $this;
+    }
+
+    /**
+     * Get comuna
+     *
+     * @return \AppBundle\Entity\Comuna
+     */
+    public function getComuna()
+    {
+        return $this->comuna;
+    }
+
+    /**
+     * Set cliDemanda
+     *
+     * @param integer $cliDemanda
+     *
+     * @return Cliente
+     */
+    public function setCliDemanda($cliDemanda)
+    {
+        $this->cliDemanda = $cliDemanda;
+
+        return $this;
+    }
+
+    /**
+     * Get cliDemanda
+     *
+     * @return integer
+     */
+    public function getCliDemanda()
+    {
+        return $this->cliDemanda;
+    }
+}

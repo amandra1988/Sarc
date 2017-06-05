@@ -1,5 +1,5 @@
 angular.module('superadmin-empresas')
-.controller('EmpresasController',['$scope','EmpresaFactory','$uibModal','urlBasePartials',function ($scope,EmpresaFactory, $uibModal,urlBasePartials) {
+.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','$uibModal','urlBasePartials',function ($scope,EmpresaFactory,CentroFactory,$uibModal,urlBasePartials) {
         
         $scope.empresas =[];
 
@@ -10,6 +10,14 @@ angular.module('superadmin-empresas')
         };
         
         $scope.listaDeEmpresas();
+        
+        $scope.listaDeCentros= function (){
+            CentroFactory.query({'expand[]': []}, function(retorno) {
+                $scope.centros = retorno;
+            });   
+        };
+        
+        $scope.listaDeCentros();
 
         $scope.accion = 1;
        
@@ -30,6 +38,7 @@ angular.module('superadmin-empresas')
             {
                 if($scope.empresas[i].id_empresa === id) {
                     $scope.empresa.id =$scope.empresas[i].id_empresa ;
+                    $scope.empresa.cen =$scope.empresas[i].centro_de_acopio.id_centro ;
                     $scope.empresa.nom =$scope.empresas[i].nombre_empresa ;
                     $scope.empresa.rut =$scope.empresas[i].rut_empresa ;
                     $scope.empresa.dir =$scope.empresas[i].direccion_empresa;
@@ -73,6 +82,9 @@ angular.module('superadmin-empresas')
                     },
                     empresa: function() {
                         return $scope.empresa;
+                    },
+                    centros:function(){
+                        return $scope.centros;
                     }
                 }
             });
@@ -81,17 +93,18 @@ angular.module('superadmin-empresas')
     }]
 )
 
-.controller('PopupModal', ['$scope','$uibModalInstance','accion','EmpresaFactory','empresa', function ($scope,$uibModalInstance,accion,EmpresaFactory,empresa) {
+.controller('PopupModal', ['$scope','$uibModalInstance','accion','EmpresaFactory','empresa','centros', function ($scope,$uibModalInstance,accion,EmpresaFactory,empresa,centros) {
     
     $scope.emp = {};
     $scope.mensaje ='';
     $scope.accion = accion;
-     
+    $scope.centros = centros;
     if($scope.accion === 1){
         $scope.mensaje = 'Nueva' ;
     } 
     if($scope.accion === 2){
         $scope.mensaje = 'Editar' ;
+        $scope.emp.centro = empresa.cen;
         $scope.emp.id = empresa.id;
         $scope.emp.nombre = empresa.nom;
         $scope.emp.rut = empresa.rut;
@@ -105,6 +118,7 @@ angular.module('superadmin-empresas')
     $scope.guardar= function(){
         var e = new EmpresaFactory();
         e.nombre = $scope.emp.nombre;
+        e.centro = $scope.emp.centro.id_centro;
         e.rut = $scope.emp.rut;
         e.direccion = $scope.emp.direccion;
         e.telefono = $scope.emp.telefono;

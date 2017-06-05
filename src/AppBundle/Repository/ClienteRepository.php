@@ -10,4 +10,11 @@ namespace AppBundle\Repository;
  */
 class ClienteRepository extends \Doctrine\ORM\EntityRepository
 {
+     public function buscarSoloClientesVisibles($idEmpresa){        
+        $qb=$this->createQueryBuilder('c')
+                 ->add('from', 'AppBundle:Cliente c')
+                 ->add('where', 'c.cliVisible =:visible')
+                 ->setParameter('visible',1);
+        return $qb->getQuery()->getResult();
+    }
 }

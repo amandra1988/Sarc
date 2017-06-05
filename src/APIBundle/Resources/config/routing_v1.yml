@@ -5,6 +5,27 @@ users:
 empresas:
   type: rest
   resource: APIBundle\Controller\EmpresasController
+  
 usuarios:
   type: rest
   resource: APIBundle\Controller\UsuariosController
+  
+centros:
+  type: rest
+  resource: APIBundle\Controller\CentrosController
+  
+comunas:
+  type: rest
+  resource: APIBundle\Controller\ComunasController
+  
+camiones:
+  type: rest
+  resource: APIBundle\Controller\CamionesController
+    
+operadores:
+  type: rest
+  resource: APIBundle\Controller\OperadoresController
+  
+clientes:
+  type: rest
+  resource: APIBundle\Controller\ClientesController

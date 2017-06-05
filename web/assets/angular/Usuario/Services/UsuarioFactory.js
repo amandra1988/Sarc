@@ -4,7 +4,7 @@ angular.module('superadmin-usuarios')
         return $resource(
             urlBaseApi + 'usuarios/:idUsuario',
             {},
-            {'query': {method: 'GET', isArray:true },'patch': {method:'PATCH'}}
+            {'query': {method: 'GET', isArray:false },'patch': {method:'PATCH'}}
          );
     }
 ])

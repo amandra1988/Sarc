@@ -37,6 +37,8 @@ class Comuna
     /**
      * @ORM\ManyToOne(targetEntity="Provincia", inversedBy="comunas" )
      * @ORM\JoinColumn(name="prv_id", referencedColumnName="prv_id")
+     * * @JMS\SerializedName("provincia")
+     * @JMS\Groups({"comuna_detalle","comuna_lista"})
      */
     protected $provincia;
     
@@ -44,6 +46,11 @@ class Comuna
      * @ORM\OneToMany(targetEntity="Cliente", mappedBy="comuna", cascade={"persist", "remove"} )
      */
     protected  $clientes;
+    
+     /**
+     * @ORM\OneToMany(targetEntity="CentroDeAcopio", mappedBy="comuna", cascade={"persist", "remove"} )
+     */
+    protected  $centrosDeAcopio;
     
     /**
      * Get id
@@ -101,5 +108,81 @@ class Comuna
     public function getProvincia()
     {
         return $this->provincia;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->clientes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->centrosDeAcopio = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add cliente
+     *
+     * @param \AppBundle\Entity\Cliente $cliente
+     *
+     * @return Comuna
+     */
+    public function addCliente(\AppBundle\Entity\Cliente $cliente)
+    {
+        $this->clientes[] = $cliente;
+
+        return $this;
+    }
+
+    /**
+     * Remove cliente
+     *
+     * @param \AppBundle\Entity\Cliente $cliente
+     */
+    public function removeCliente(\AppBundle\Entity\Cliente $cliente)
+    {
+        $this->clientes->removeElement($cliente);
+    }
+
+    /**
+     * Get clientes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getClientes()
+    {
+        return $this->clientes;
+    }
+
+    /**
+     * Add centrosDeAcopio
+     *
+     * @param \AppBundle\Entity\CentroDeAcopio $centrosDeAcopio
+     *
+     * @return Comuna
+     */
+    public function addCentrosDeAcopio(\AppBundle\Entity\CentroDeAcopio $centrosDeAcopio)
+    {
+        $this->centrosDeAcopio[] = $centrosDeAcopio;
+
+        return $this;
+    }
+
+    /**
+     * Remove centrosDeAcopio
+     *
+     * @param \AppBundle\Entity\CentroDeAcopio $centrosDeAcopio
+     */
+    public function removeCentrosDeAcopio(\AppBundle\Entity\CentroDeAcopio $centrosDeAcopio)
+    {
+        $this->centrosDeAcopio->removeElement($centrosDeAcopio);
+    }
+
+    /**
+     * Get centrosDeAcopio
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCentrosDeAcopio()
+    {
+        return $this->centrosDeAcopio;
     }
 }

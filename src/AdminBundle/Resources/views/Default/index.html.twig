@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+{% block title %}SAARC{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
+{% endblock %}
+
+{% block bodystyle%}
+    style="background-image: url({{ asset('assets/img/admin.jpg') }});
+    background-repeat:no-repeat;
+    background-position: center top;
+    background-size: 100% auto;"
+{% endblock %}
+
+{% block header %}
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">SAARC</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                  <li class="active"><a href="#">Home</a></li>
+                  <li><a href="{{path('camiones')}}">Camiones</a></li>
+                  <li><a href="{{path('operadores')}}">Operadores</a></li> 
+                  <li><a href="{{path('clientes')}}">Clientes</a></li>
+                  <li><a href="{{path('rutas')}}">Rutas</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Cambiar mi clave</a></li>
+                    <li><a href="{{path('logout')}}">Cerrar sesión</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="jumbotron">
+        <h2>Administrador de sistema</h2>
+        <p>
+            Este módulo aún se encuentra en construcción
+        </p>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
