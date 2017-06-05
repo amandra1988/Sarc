@@ -39,7 +39,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_direccion", type="string", length=255)
      * @JMS\SerializedName("cliente_direccion")
-     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     * @JMS\Groups({"cliente_lista"})
      */
     private $cliDireccion;
 
@@ -48,7 +48,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_numero", type="string", length=255)
      * @JMS\SerializedName("cliente_numero")
-     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     * @JMS\Groups({"cliente_lista"})
      */
     private $cliNumero;
 
@@ -57,7 +57,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_telefono", type="string", length=15)
      * @JMS\SerializedName("cliente_telefono")
-     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     * @JMS\Groups({"cliente_lista"})
      */
     private $cliTelefono;
 
@@ -66,7 +66,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_celular", type="string", length=15)
      * @JMS\SerializedName("cliente_celular")
-     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     * @JMS\Groups({"cliente_lista"})
      */
     private $cliCelular;
 
@@ -75,7 +75,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_correo", type="string", length=100)
      * @JMS\SerializedName("cliente_correo")
-     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     * @JMS\Groups({"cliente_lista"})
      */
     private $cliCorreo;
 
@@ -91,7 +91,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_longitud", type="string", length=100)
      * @JMS\SerializedName("cliente_longitud")
-     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     * @JMS\Groups({"cliente_lista"})
      */
     private $cliLongitud;
 
@@ -100,7 +100,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_latitud", type="string", length=100)
      * @JMS\SerializedName("cliente_latitud")
-     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     * @JMS\Groups({"cliente_lista"})
      */
     private $cliLatitud;
     
@@ -109,7 +109,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_demanda", type="integer")
      * @JMS\SerializedName("cliente_demanda")
-     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     * @JMS\Groups({"cliente_lista"})
      */
     private $cliDemanda;
     
@@ -118,7 +118,7 @@ class Cliente
      * @ORM\ManyToOne(targetEntity="Frecuencia", inversedBy="clientes" )
      * @ORM\JoinColumn(name="fre_id", referencedColumnName="fre_id")
      * @JMS\SerializedName("cliente_frecuencia")
-     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     * @JMS\Groups({"cliente_lista"})
      */
     protected $frecuencia;
     
@@ -127,7 +127,7 @@ class Cliente
      * @ORM\ManyToOne(targetEntity="Empresa", inversedBy="clientes" )
      * @ORM\JoinColumn(name="emp_id", referencedColumnName="emp_id")
      * @JMS\SerializedName("cliente_empresa")
-     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     * @JMS\Groups({"cliente_lista"})
      */
     protected $empresa;
     
@@ -135,10 +135,15 @@ class Cliente
      * @ORM\ManyToOne(targetEntity="Comuna", inversedBy="clientes" )
      * @ORM\JoinColumn(name="com_id", referencedColumnName="com_id")
      * @JMS\SerializedName("cliente_comuna")
-     * @JMS\Groups({"cliente_detalle","cliente_lista"})
+     * @JMS\Groups({"cliente_lista"})
      */
     protected $comuna;
-    
+	
+	/**
+     * @ORM\OneToMany(targetEntity="Ruta", mappedBy="cliente", cascade={"persist", "remove"} )
+     */
+    protected $rutas;
+	
     /**
      * Get id
      *
@@ -459,5 +464,47 @@ class Cliente
     public function getCliDemanda()
     {
         return $this->cliDemanda;
+    }
+  
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->rutas = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add ruta
+     *
+     * @param \AppBundle\Entity\Ruta $ruta
+     *
+     * @return Cliente
+     */
+    public function addRuta(\AppBundle\Entity\Ruta $ruta)
+    {
+        $this->rutas[] = $ruta;
+
+        return $this;
+    }
+
+    /**
+     * Remove ruta
+     *
+     * @param \AppBundle\Entity\Ruta $ruta
+     */
+    public function removeRuta(\AppBundle\Entity\Ruta $ruta)
+    {
+        $this->rutas->removeElement($ruta);
+    }
+
+    /**
+     * Get rutas
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRutas()
+    {
+        return $this->rutas;
     }
 }

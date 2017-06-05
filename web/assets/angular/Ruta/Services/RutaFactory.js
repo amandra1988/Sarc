@@ -1,19 +1,10 @@
-angular.module('superadmin-empresas')
+angular.module('admin-rutas')
 
-.factory('EmpresaFactory', ['$resource', 'urlBaseApi', function ($resource ,  urlBaseApi ) {
+.factory('RutaFactory', ['$resource', 'urlBaseApi', function ($resource ,  urlBaseApi ) {
         return $resource(
-            urlBaseApi + 'empresas/:idEmpresa',
+            urlBaseApi + 'empresas/:idEmpresa/rutas/:idRuta',
             {},
             {'query': {method: 'GET', isArray:true },'patch': {method:'PATCH'}}
-         );
-    }
-])
-
-.factory('CentroFactory', ['$resource', 'urlBaseApi', function ($resource ,  urlBaseApi ) {
-        return $resource(
-            urlBaseApi + 'centros/',
-            {},
-            {'query': {method: 'GET', isArray:false }}
          );
     }
 ]);

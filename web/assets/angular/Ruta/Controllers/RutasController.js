@@ -1,17 +1,17 @@
 angular.module('admin-rutas')
 .controller('RutasController',['$scope','RutaFactory','$uibModal','urlBasePartials',function ($scope,RutaFactory,$uibModal,urlBasePartials) {
         
-       /* $scope.empresas =[];
+        $scope.rutas =[];
 
-        $scope.listaDeEmpresas= function (){
-            EmpresaFactory.query({'expand[]': []}, function(retorno) {
-                $scope.empresas = retorno;   
+        $scope.listaDeRutas= function (){
+            RutaFactory.query({idEmpresa: 2 ,'expand[]': []}, function(retorno) {
+                $scope.rutas = retorno;   
             });   
         };
         
-        $scope.listaDeEmpresas();
-        
-        $scope.listaDeCentros= function (){
+        $scope.listaDeRutas();
+		
+        /*$scope.listaDeCentros= function (){
             CentroFactory.query({'expand[]': []}, function(retorno) {
                 $scope.centros = retorno;
             });   
@@ -65,11 +65,15 @@ angular.module('admin-rutas')
                     $scope.listaDeEmpresas();
                 });
             }); 
-        };
+        };*/
         
+		$scope.verMapa = function(){
+			var modalInstance = $scope.modal();	
+		};
+		
         $scope.modal =  function(){
              var modalInstance= $uibModal.open({
-                templateUrl: urlBasePartials+'modal_empresas.html',
+                templateUrl: urlBasePartials+'modal_rutas.html',
                 backdrop: 'static',
                 size: 'lg',
                 animation: true,
@@ -77,7 +81,7 @@ angular.module('admin-rutas')
                 ariaDescribedBy: 'modal-body',
                 controller: 'PopupModal',
                 resolve: {
-                    accion: function() {
+                    /*accion: function() {
                         return $scope.accion;
                     },
                     empresa: function() {
@@ -85,56 +89,15 @@ angular.module('admin-rutas')
                     },
                     centros:function(){
                         return $scope.centros;
-                    }
+                    }*/
                 }
             });
             return modalInstance;
-        };*/
+        };
     }]
 )
-/*
-.controller('PopupModal', ['$scope','$uibModalInstance','accion','EmpresaFactory','empresa','centros', function ($scope,$uibModalInstance,accion,EmpresaFactory,empresa,centros) {
-    
-    $scope.emp = {};
-    $scope.mensaje ='';
-    $scope.accion = accion;
-    $scope.centros = centros;
-    if($scope.accion === 1){
-        $scope.mensaje = 'Nueva' ;
-    } 
-    if($scope.accion === 2){
-        $scope.mensaje = 'Editar' ;
-        $scope.emp.centro = empresa.cen;
-        $scope.emp.id = empresa.id;
-        $scope.emp.nombre = empresa.nom;
-        $scope.emp.rut = empresa.rut;
-        $scope.emp.direccion = empresa.dir;
-        $scope.emp.telefono = empresa.tel;
-        $scope.emp.celular = empresa.cel;
-    }
-    if($scope.accion === 0){
-        $scope.mensaje ='Eliminar';
-    }
-    $scope.guardar= function(){
-        var e = new EmpresaFactory();
-        e.nombre = $scope.emp.nombre;
-        e.centro = $scope.emp.centro.id_centro;
-        e.rut = $scope.emp.rut;
-        e.direccion = $scope.emp.direccion;
-        e.telefono = $scope.emp.telefono;
-        e.celular = $scope.emp.celular;
-        e.visible = 1;
-        if(accion === 1)
-        {
-            e.$save({}, function(response) {
-               $uibModalInstance.close();
-            });
-        }else{ // Editar
-            e.$patch({idEmpresa: $scope.emp.id}, function(response) {
-                $uibModalInstance.close();
-            });
-        }  
-    };
+
+.controller('PopupModal', ['$scope','$uibModalInstance',function ($scope,$uibModalInstance) {
     
     $scope.close = function () {
         $uibModalInstance.dismiss();
@@ -144,5 +107,5 @@ angular.module('admin-rutas')
         $uibModalInstance.close();
     };
 }
-*/
+
 ]);

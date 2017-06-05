@@ -39,7 +39,6 @@
                   <li class="active"><a href="{{path('rutas')}}">Rutas</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">Cambiar mi clave</a></li>
                     <li><a href="{{path('logout')}}">Cerrar sesión</a></li>
                 </ul>
             </div>
@@ -64,5 +63,9 @@
 {% block body %}
     <div class="jumbotron">
         {{ parent() }}
+		Comentario:
+			En esta vista el administrador de sistema puede visualizar las rutas programas durante el día.
+			Estas rutas son generadas por el sistema cada noche, según la configuración de cada cliente.
+		
     </div>
 {% endblock %}

@@ -29,3 +29,7 @@ operadores:
 clientes:
   type: rest
   resource: APIBundle\Controller\ClientesController
+  
+rutas:
+  type: rest
+  resource: APIBundle\Controller\RutasController

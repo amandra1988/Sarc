@@ -47,7 +47,7 @@ class Operador
      *
      * @ORM\Column(name="ope_rut", type="string", length=255)
      * @JMS\SerializedName("rut_operador")
-     * @JMS\Groups({"operador_detalle","operador_lista"})
+     * @JMS\Groups({"operador_lista"})
      */
     private $opeRut;
 
@@ -56,7 +56,7 @@ class Operador
      *
      * @ORM\Column(name="ope_licencia", type="string", length=50)
      * @JMS\SerializedName("licencia_operador")
-     * @JMS\Groups({"operador_detalle","operador_lista"})
+     * @JMS\Groups({"operador_lista"})
      */
     private $opeLicencia;
 
@@ -65,7 +65,7 @@ class Operador
      *
      * @ORM\Column(name="ope_celular", type="string", length=255)
      * @JMS\SerializedName("celular_operador")
-     * @JMS\Groups({"operador_detalle","operador_lista"})
+     * @JMS\Groups({"operador_lista"})
      */
     private $opeCelular;
 
@@ -74,7 +74,7 @@ class Operador
      *
      * @ORM\Column(name="ope_correo", type="string", length=255)
      * @JMS\SerializedName("correo_operador")
-     * @JMS\Groups({"operador_detalle","operador_lista"})
+     * @JMS\Groups({"operador_lista"})
      */
     private $opeCorreo;
 
@@ -92,6 +92,10 @@ class Operador
     protected $usuario;
 
 
+	/**
+     * @ORM\OneToMany(targetEntity="Ruta", mappedBy="operador", cascade={"persist", "remove"} )
+     */
+    protected $rutas;
     /**
      * Get id
      *
@@ -292,5 +296,47 @@ class Operador
     public function getUsuario()
     {
         return $this->usuario;
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->rutas = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add ruta
+     *
+     * @param \AppBundle\Entity\Ruta $ruta
+     *
+     * @return Operador
+     */
+    public function addRuta(\AppBundle\Entity\Ruta $ruta)
+    {
+        $this->rutas[] = $ruta;
+
+        return $this;
+    }
+
+    /**
+     * Remove ruta
+     *
+     * @param \AppBundle\Entity\Ruta $ruta
+     */
+    public function removeRuta(\AppBundle\Entity\Ruta $ruta)
+    {
+        $this->rutas->removeElement($ruta);
+    }
+
+    /**
+     * Get rutas
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRutas()
+    {
+        return $this->rutas;
     }
 }
