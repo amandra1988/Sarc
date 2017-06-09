@@ -28,7 +28,7 @@
         </div>
         <div class="form-group row">
         <label>Seleccione Comuna:</label>
-            <select ng-options="comuna as comuna.comuna_nombre for comuna in comunas track by comuna.comuna_id" ng-model="centro.comuna" name="comuna"  class="form-control">
+            <select ng-model="centro.comuna" name="comuna" ng-options="comuna as comuna.comuna_nombre for comuna in comunas track by comuna.comuna_id"  class="form-control">
                 <option value="">--</option>
             </select>
         </div>

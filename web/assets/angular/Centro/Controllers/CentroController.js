@@ -20,7 +20,8 @@ angular.module('superadmin-centro-de-acopio')
         };
             
         $scope.listaDeComunas();
-
+		$scope.centro = [];
+		
         $scope.nuevoCentro = function() {
             $scope.accion = 1;
             $scope.centro = [];
@@ -32,7 +33,6 @@ angular.module('superadmin-centro-de-acopio')
         };
        
         $scope.editarCentro = function(id) {
-            $scope.centro =[];
             $scope.accion = 2;
             for(var i=0,len=$scope.centros.length; i<len;i++)
             {
@@ -41,7 +41,7 @@ angular.module('superadmin-centro-de-acopio')
                     $scope.centro.nombre =$scope.centros[i].nombre_centro ;
                     $scope.centro.direccion =$scope.centros[i].direccion_centro ;
                     $scope.centro.numero =$scope.centros[i].numero_centro;
-                    $scope.centro.comuna =$scope.centros[i].comuna.comuna_id;
+                    $scope.centro.comuna =$scope.centros[i].comuna;
                     break;
                 }
             }
@@ -92,14 +92,13 @@ angular.module('superadmin-centro-de-acopio')
 )
 
 .controller('PopupModal', ['$scope','$uibModalInstance','accion','CentroFactory','comunas','centro', function ($scope,$uibModalInstance,accion,CentroFactory,comunas,centro) {
- 
-    $scope.accion  = accion;
     $scope.mensaje = '';
     $scope.error   = '';
     $scope.confirm = '';
+	$scope.accion  = accion;
     $scope.comunas = comunas;
     $scope.centro  = centro;
-    
+
     if($scope.accion === 1){
         $scope.mensaje = 'Nuevo' ;
     }
