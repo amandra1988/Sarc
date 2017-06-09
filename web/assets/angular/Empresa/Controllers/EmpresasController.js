@@ -1,5 +1,6 @@
-angular.module('superadmin-empresas')
-.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','$uibModal','urlBasePartials',function ($scope,EmpresaFactory,CentroFactory,$uibModal,urlBasePartials) {
+var app = angular.module('superadmin-empresas');
+
+app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','$uibModal','urlBasePartials',function ($scope,EmpresaFactory,CentroFactory,$uibModal,urlBasePartials) {
         
         $scope.empresas =[];
 
@@ -38,7 +39,7 @@ angular.module('superadmin-empresas')
             {
                 if($scope.empresas[i].id_empresa === id) {
                     $scope.empresa.id =$scope.empresas[i].id_empresa ;
-                    $scope.empresa.cen =$scope.empresas[i].centro_de_acopio.id_centro ;
+                    $scope.empresa.cen =$scope.empresas[i].centro_de_acopio ;
                     $scope.empresa.nom =$scope.empresas[i].nombre_empresa ;
                     $scope.empresa.rut =$scope.empresas[i].rut_empresa ;
                     $scope.empresa.dir =$scope.empresas[i].direccion_empresa;
@@ -93,10 +94,11 @@ angular.module('superadmin-empresas')
     }]
 )
 
-.controller('PopupModal', ['$scope','$uibModalInstance','accion','EmpresaFactory','empresa','centros', function ($scope,$uibModalInstance,accion,EmpresaFactory,empresa,centros) {
+.controller('PopupModal', ['$scope','$uibModalInstance','accion','EmpresaFactory','empresa','centros', 'validarRut',function ($scope,$uibModalInstance,accion,EmpresaFactory,empresa,centros,validarRut) {
     
     $scope.emp = {};
     $scope.mensaje ='';
+	$scope.error ='';
     $scope.accion = accion;
     $scope.centros = centros;
     if($scope.accion === 1){
@@ -112,27 +114,64 @@ angular.module('superadmin-empresas')
         $scope.emp.telefono = empresa.tel;
         $scope.emp.celular = empresa.cel;
     }
+
     if($scope.accion === 0){
         $scope.mensaje ='Eliminar';
     }
+
     $scope.guardar= function(){
+
+        if( !$scope.emp.centro )
+        {
+            $scope.error = 'Seleccione centro de acopio de la empresa.';
+            return;
+        }
+
+        if( !$scope.emp.nombre)
+        {
+            $scope.error = 'Ingrese nombre de la empresa.';
+            return;
+        }
+
+        if(!validarRut($scope.emp.rut))
+        {
+            $scope.error = 'El RUT no es válido.';
+            $scope.emp.rut = '';
+            return;
+        }
+
+        if( !$scope.emp.direccion)
+        {
+            $scope.error = 'Ingrese direccion de la empresa.';
+            return;
+        }
+
+        if($scope.emp.telefono > 999999999 || $scope.emp.celular >999999999)
+        {
+            $scope.error = 'El campo celular y teléfono deben tener máximo 9 dígitos.';
+            return;
+        }
+
+        $scope.error ='';
+
         var e = new EmpresaFactory();
-        e.nombre = $scope.emp.nombre;
-        e.centro = $scope.emp.centro.id_centro;
-        e.rut = $scope.emp.rut;
+        e.nombre    = $scope.emp.nombre;
+        e.centro    = $scope.emp.centro.id_centro;
+        e.rut       = $scope.emp.rut;
         e.direccion = $scope.emp.direccion;
-        e.telefono = $scope.emp.telefono;
-        e.celular = $scope.emp.celular;
-        e.visible = 1;
-        if(accion === 1)
+        e.telefono  = $scope.emp.telefono;
+        e.celular   = $scope.emp.celular;
+        e.visible   = true;
+
+        if($scope.accion === 1)
         {
             e.$save({}, function(response) {
                $uibModalInstance.close();
             });
         }else{ // Editar
-            e.$patch({idEmpresa: $scope.emp.id}, function(response) {
+           /* e.$patch({idEmpresa: $scope.emp.id}, function(response) {
                 $uibModalInstance.close();
-            });
+            });*/
         }  
     };
     
