@@ -7,4 +7,20 @@ angular.module('admin-clientes')
             {'query': {method: 'GET', isArray:false },'patch': {method:'PATCH'}}
          );
     }
+])
+.factory('FrecuenciaFactory', ['$resource', 'urlBaseApi', function ($resource ,  urlBaseApi ) {
+        return $resource(
+            urlBaseApi + 'frecuencias/',
+            {},
+            {'query': {method: 'GET', isArray:false },'patch': {method:'PATCH'}}
+         );
+    }
+])
+.factory('ComunaFactory', ['$resource', 'urlBaseApi', function ($resource ,  urlBaseApi ) {
+        return $resource(
+            urlBaseApi + 'comunas/',
+            {},
+            {'query': {method: 'GET', isArray:false }}
+         );
+    }
 ]);

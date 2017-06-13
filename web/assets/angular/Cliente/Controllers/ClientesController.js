@@ -9,21 +9,27 @@ angular.module('admin-clientes')
             });   
         };
         
+        $scope.listaDeClientes= function (){
+            ClienteFactory.query({ idEmpresa: 2 , 'expand[]': []}, function(retorno) {
+                $scope.clientes = retorno;   
+            });   
+        };
+        
         $scope.listaDeClientes();
 
-        /*$scope.accion = 1;
+        $scope.accion = 1;
        
-        $scope.nuevoCamion = function() {
+        $scope.nuevoCliente = function() {
             $scope.accion =1;
             $scope.camion =[];
             var modalInstance = $scope.modal();
             modalInstance.result.then(function()
             {
-               $scope.listaDeCamiones();
+               $scope.listaDeClientes();
             });
         };
         
-        $scope.editarCamion = function(id) {
+        /*$scope.editarCamion = function(id) {
            
             $scope.accion = 2;
             $scope.camion =[];
@@ -56,11 +62,11 @@ angular.module('admin-clientes')
                     $scope.listaDeCamiones();
                 });
             }); 
-        };
+        };*/
         
         $scope.modal =  function(){
              var modalInstance= $uibModal.open({
-                templateUrl: urlBasePartials+'modal_camiones.html',
+                templateUrl: urlBasePartials+'modal_clientes.html',
                 backdrop: 'static',
                 size: 'lg',
                 animation: true,
@@ -71,56 +77,68 @@ angular.module('admin-clientes')
                     accion: function() {
                         return $scope.accion;
                     },
-                    camion: function() {
-                        return $scope.camion;
+                    cliente: function() {
+                        return $scope.cliente;
                     }
                 }
             });
             return modalInstance;
-        };*/
+        };
     }]
 )
-/*
-.controller('PopupModal', ['$scope','$uibModalInstance','accion','CamionFactory','camion', function ($scope,$uibModalInstance,accion,CamionFactory,camion) {
 
-    $scope.mensaje = '';
-    $scope.accion = accion;
-    $scope.camion = camion;
+.controller('PopupModal', ['$scope','$uibModalInstance','accion','ClienteFactory','ComunaFactory','FrecuenciaFactory','cliente', function ($scope,$uibModalInstance,accion,ClienteFactory,ComunaFactory,FrecuenciaFactory,cliente) {
+    $scope.accion  = accion;
+    $scope.cliente = cliente;
     $scope.error = '';
     $scope.confirm = '';
-    $scope.cam = {tipo_carga:1};
+    $scope.mensaje = '';
     
-    console.log($scope.camion);
     if($scope.accion === 1){
-        $scope.mensaje = 'Nueva' ;
+        $scope.mensaje = 'Nuevo' ;
     }
     
-    if($scope.accion === 2){
+   /* if($scope.accion === 2){
         $scope.mensaje = 'Editar' ;
         $scope.cam.id = $scope.camion.id;
         $scope.cam.patente = $scope.camion.patente;
         $scope.cam.capacidad = $scope.camion.capacidad;
         $scope.cam.tipo_carga = $scope.camion.tipo_carga;
-    }
+    }*/
     
     if($scope.accion === 0){
         $scope.mensaje ='Eliminar';
     }
     
+    $scope.frecuencias =[];
+    $scope.listaDeFrecuencias= function (){
+        FrecuenciaFactory.query({'expand[]': []}, function(retorno) {
+            $scope.frecuencias = retorno;   
+        });   
+    };
+    
+    $scope.comunas =[];
+    $scope.listaDeComunas= function (){
+        ComunaFactory.query({'expand[]': []}, function(retorno) {
+            $scope.comunas = retorno;   
+        });   
+    };
+    
+    $scope.listaDeComunas();
+    
     $scope.guardar= function(){
-        var c = new CamionFactory();
+        var c = new ClienteFactory();
         c.patente    = $scope.cam.patente;
         c.capacidad  = $scope.cam.capacidad;
         c.tipo_carga = $scope.cam.tipo_carga;
-        c.estado     = 1;
-        c.visible    = 1;
+        c.visible    = true;
         if(accion === 1)
         {
             c.$save({idEmpresa: 2}, function(response) {
                $uibModalInstance.close();
             });
         }else{ // Editar
-            c.$patch({idEmpresa:2, idCamion:$scope.cam.id }, function(response) {
+            c.$patch({idEmpresa:2, idCliente:$scope.cli.id }, function(response) {
                 $uibModalInstance.close();
             });
         }  
@@ -135,5 +153,4 @@ angular.module('admin-clientes')
     };
 }
 
-]) */
-;
+]);

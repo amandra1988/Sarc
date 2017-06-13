@@ -10,12 +10,23 @@ namespace AppBundle\Repository;
  */
 class OperadorRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function buscarSoloOperadoresVisibles($idEmpresa){        
-        $qb=$this->createQueryBuilder('o')
-                 ->add('from', 'AppBundle:Operador o')
-                 ->add('where', 'o.opeVisible=1');
-                 //->add('where', 'o.empresa =:idEmpresa')
-                // ->setParameter('idEmpresa',$idEmpresa);
-        return $qb->getQuery()->getResult();
+    public function buscarSoloOperadoresVisibles($idEmpresa){               
+        return $this->getEntityManager()
+        ->createQuery(' SELECT o
+                        FROM AppBundle:Operador o
+                        LEFT JOIN o.usuario u
+                        WHERE o.opeVisible = 1
+                        AND u.empresa = :idEmpresa')
+        ->setParameter('idEmpresa', $idEmpresa)
+        ->getResult();
+    }
+
+    public function existeElUsuario($rut){
+        return $this->getEntityManager()
+        ->createQuery(' SELECT u
+                        FROM AppBundle:User u
+                        WHERE u.username = :usuario')
+        ->setParameter('usuario', $rut)
+        ->getResult();
     }
 }

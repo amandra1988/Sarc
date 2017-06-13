@@ -35,9 +35,9 @@ class EmpresasController extends APIBaseController
                 ->setEmpNombre($request->get('nombre'))
                 ->setEmpRut($request->get('rut'))
                 ->setEmpDireccion($request->get('direccion'))
-                ->setEmpTelefono($request->get('telefono'))
+                ->setEmpVisible(true)
                 ->setEmpCelular($request->get('celular'))
-                ->setEmpVisible($request->get('visible'));
+                ->setEmpTelefono($request->get('telefono')); 
         $em = $this->getDoctrine()->getManager();
         $em->persist($empresa);
         $em->flush();
@@ -51,13 +51,15 @@ class EmpresasController extends APIBaseController
     */
     public function patchEmpresasAction(Request $request, Empresa $empresa){
         $groups ='';
-        $centroDeAcopio  = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->find($request->get('centro')); 
-        $empresa->setCentroDeAcopio($centroDeAcopio);
-        $empresa->setEmpNombre($request->get('nombre'));
-        $empresa->setEmpRut($request->get('rut'));
-        $empresa->setEmpDireccion($request->get('direccion'));
-        $empresa->setEmpTelefono($request->get('telefono'));
-        $empresa->setEmpCelular($request->get('celular'));
+        if($request->get('centro')){
+            $centroDeAcopio  = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->find($request->get('centro')); 
+            $empresa->setCentroDeAcopio($centroDeAcopio);  
+            $empresa->setEmpNombre($request->get('nombre'));
+            $empresa->setEmpRut($request->get('rut'));
+            $empresa->setEmpDireccion($request->get('direccion'));
+            $empresa->setEmpTelefono($request->get('telefono'));
+            $empresa->setEmpCelular($request->get('celular'));
+        }
         $empresa->setEmpVisible($request->get('visible'));
         $em = $this->getDoctrine()->getManager();
         $em->persist($empresa);

@@ -1,28 +1,29 @@
-angular.module('admin-operadores')
-.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','urlBasePartials',function ($scope,OperadorFactory,$uibModal,urlBasePartials) {
+var app = angular.module('admin-operadores')
+app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','urlBasePartials',function ($scope,OperadorFactory,$uibModal,urlBasePartials) {
         
-        $scope.camiones =[];
+        $scope.operadores =[];
 
         $scope.listaDeOperadores= function (){
-            OperadorFactory.query({ idEmpresa: 2 , 'expand[]': []}, function(retorno) {
+            OperadorFactory.query({ idEmpresa: 2 , 'expand[]': ['usuario_detalle']}, function(retorno) {
                 $scope.operadores = retorno;   
             });   
         };
         
         $scope.listaDeOperadores();
 
-        /*$scope.accion = 1;
+        $scope.accion = 1;
        
-        $scope.nuevoCamion = function() {
+        $scope.nuevoOperador = function() {
             $scope.accion =1;
             $scope.camion =[];
             var modalInstance = $scope.modal();
             modalInstance.result.then(function()
             {
-               $scope.listaDeCamiones();
+               $scope.listaDeOperadores();
             });
         };
         
+        /*
         $scope.editarCamion = function(id) {
            
             $scope.accion = 2;
@@ -43,24 +44,24 @@ angular.module('admin-operadores')
             {
                $scope.listaDeCamiones();
             });
-        };
+        };*/
         
-        $scope.eliminarCamion =  function(id){
+        $scope.eliminarOperador =  function(id){
             $scope.accion = 0; 
             var modalInstance = $scope.modal();
             modalInstance.result.then(function()
             {
-                var c = new CamionFactory();
-                c.visible = 0;
-                c.$patch({idEmpresa:2,idCamion:id}, function(response) {
-                    $scope.listaDeCamiones();
+                var o = new OperadorFactory();
+                o.visible = false;
+                o.$patch({idEmpresa:2,idOperador:id}, function(response) {
+                    $scope.listaDeOperadores();
                 });
             }); 
         };
         
         $scope.modal =  function(){
              var modalInstance= $uibModal.open({
-                templateUrl: urlBasePartials+'modal_camiones.html',
+                templateUrl: urlBasePartials+'modal_operadores.html',
                 backdrop: 'static',
                 size: 'lg',
                 animation: true,
@@ -71,31 +72,30 @@ angular.module('admin-operadores')
                     accion: function() {
                         return $scope.accion;
                     },
-                    camion: function() {
-                        return $scope.camion;
+                    operador: function() {
+                        return $scope.operador;
                     }
                 }
             });
             return modalInstance;
-        };*/
+        };
     }]
 )
-/*
-.controller('PopupModal', ['$scope','$uibModalInstance','accion','CamionFactory','camion', function ($scope,$uibModalInstance,accion,CamionFactory,camion) {
+
+.controller('PopupModal', ['$scope','$uibModalInstance','accion','OperadorFactory','operador','validarRut', function ($scope,$uibModalInstance,accion,OperadorFactory,operador,validarRut) {
 
     $scope.mensaje = '';
-    $scope.accion = accion;
-    $scope.camion = camion;
-    $scope.error = '';
+    $scope.error   = '';
     $scope.confirm = '';
-    $scope.cam = {tipo_carga:1};
-    
-    console.log($scope.camion);
+    $scope.accion   = accion;
+    $scope.operador = operador;
+    $scope.ope = {};
+
     if($scope.accion === 1){
-        $scope.mensaje = 'Nueva' ;
+        $scope.mensaje = 'Nuevo' ;
     }
     
-    if($scope.accion === 2){
+    /*if($scope.accion === 2){
         $scope.mensaje = 'Editar' ;
         $scope.cam.id = $scope.camion.id;
         $scope.cam.patente = $scope.camion.patente;
@@ -106,21 +106,47 @@ angular.module('admin-operadores')
     if($scope.accion === 0){
         $scope.mensaje ='Eliminar';
     }
-    
+    */
     $scope.guardar= function(){
-        var c = new CamionFactory();
-        c.patente    = $scope.cam.patente;
-        c.capacidad  = $scope.cam.capacidad;
-        c.tipo_carga = $scope.cam.tipo_carga;
-        c.estado     = 1;
-        c.visible    = 1;
+        
+        if(!$scope.ope.nombre){
+            $scope.error = 'Ingrese nombre del operador';
+            return;  
+        }
+        if(!$scope.ope.apellido){
+            $scope.error = 'Ingrese apellido del operador.';
+            return; 
+        }
+        if(!validarRut($scope.ope.rut)){
+            $scope.error = 'El RUT no es válido.';
+            $scope.ope.rut = '';
+            return;
+        }
+        if(!$scope.ope.licencia){
+            $scope.error = 'Ingrese n° de licencia del operador.';
+            return;   
+        }
+        
+        if($scope.ope.celular > 999999999)
+        {
+            $scope.error = 'El campo celular deben tener máximo 9 dígitos.';
+            return;
+        }
+
+        var o = new OperadorFactory();
+        o.nombre = $scope.ope.nombre;
+        o.apellido = $scope.ope.apellido;
+        o.rut = $scope.ope.rut;
+        o.licencia = $scope.ope.licencia;
+        o.correo = $scope.ope.correo;
+        o.visible = true;
         if(accion === 1)
         {
-            c.$save({idEmpresa: 2}, function(response) {
+            o.$save({idEmpresa: 2}, function(response) {
                $uibModalInstance.close();
             });
         }else{ // Editar
-            c.$patch({idEmpresa:2, idCamion:$scope.cam.id }, function(response) {
+            o.$patch({idEmpresa:2, idOperador:$scope.ope.id }, function(response) {
                 $uibModalInstance.close();
             });
         }  
@@ -135,5 +161,4 @@ angular.module('admin-operadores')
     };
 }
 
-]) */
-;
+]);

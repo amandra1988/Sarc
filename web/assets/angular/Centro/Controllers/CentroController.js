@@ -37,11 +37,13 @@ angular.module('superadmin-centro-de-acopio')
             for(var i=0,len=$scope.centros.length; i<len;i++)
             {
                 if($scope.centros[i].id_centro === id) {
-                    $scope.centro.id  =$scope.centros[i].id_centro ;
-                    $scope.centro.nombre =$scope.centros[i].nombre_centro ;
-                    $scope.centro.direccion =$scope.centros[i].direccion_centro ;
-                    $scope.centro.numero =$scope.centros[i].numero_centro;
-                    $scope.centro.comuna =$scope.centros[i].comuna;
+                    $scope.centro.id = $scope.centros[i].id_centro ;
+                    $scope.centro.nombre = $scope.centros[i].nombre_centro ;
+                    $scope.centro.direccion = $scope.centros[i].direccion_centro ;
+                    $scope.centro.numero = $scope.centros[i].numero_centro;
+                    $scope.centro.comuna = $scope.centros[i].comuna;
+                    $scope.centro.latitud = $scope.centros[i].latitud_centro;
+                    $scope.centro.longitud = $scope.centros[i].longitud_centro;
                     break;
                 }
             }
@@ -117,6 +119,8 @@ angular.module('superadmin-centro-de-acopio')
         c.direccion = $scope.centro.direccion;
         c.numero    = $scope.centro.numero;
         c.comuna    = $scope.centro.comuna.comuna_id;
+        c.longitud  = $scope.centro.longitud;
+        c.latitud   = $scope.centro.latitud;
         c.visible = 1;
         if(accion === 1)
         {

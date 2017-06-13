@@ -12,14 +12,12 @@ class CamionRepository extends \Doctrine\ORM\EntityRepository
 {
     public function buscarSoloCamionesVisibles($idEmpresa){        
 		
-		return $this->getEntityManager()
-		->createQuery('
-						SELECT c
-						FROM AppBundle:Camion c
-						WHERE c.camVisible = 1
-						AND c.empresa = :idEmpresa
-					')
-		->setParameter('idEmpresa', $idEmpresa)
-		->getResult();
+        return $this->getEntityManager()
+                    ->createQuery(' SELECT c
+                                    FROM AppBundle:Camion c
+                                    WHERE c.camVisible = 1
+                                    AND c.empresa = :idEmpresa')
+                    ->setParameter('idEmpresa', $idEmpresa)
+                    ->getResult();
     }
 }

@@ -52,18 +52,18 @@ class Empresa
     private $empDireccion;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="emp_telefono", type="string", length=15)
+     * @ORM\Column(name="emp_telefono", type="integer", length=9, nullable=true)
      * @JMS\SerializedName("telefono_empresa")
      * @JMS\Groups({"empresa_detalle","empresa_lista"})
      */
     private $empTelefono;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="emp_celular", type="string", length=15)
+     * @ORM\Column(name="emp_celular", type="integer", length=9, nullable=true)
      * @JMS\SerializedName("celular_empresa")
      * @JMS\Groups({"empresa_detalle","empresa_lista"})
      */

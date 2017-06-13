@@ -1,35 +1,55 @@
 <div class="modal-header">
-    <h4 class="modal-title" id="myModalLabel">{{ mensaje }} camión</h4>
+    <h4 class="modal-title" id="myModalLabel">{{ mensaje }} operador</h4>
 </div>
 
 <div class="modal-body"> 
     <div class="container-fluid" ng-if="accion === 0">
-        ¿Esta seguro de eliminar el registro del camión?
+        ¿Esta seguro de eliminar el registro del operador?
     </div>
-    
-    
+
     <div class="container-fluid" ng-if="accion !== 0">
+
         <div class="form-group row">
-            <label>Tipo de carga  </label>
-            <input type="radio" ng-model="cam.tipo_carga" name="tipo_carga" value="1"> Simple
-            <input type="radio" ng-model="cam.tipo_carga" name="tipo_carga" value="2"> Peligrosa
-        </div>
-        <div class="form-group row">
-            <label class="col-2 col-form-label">Patente</label>
+            <label class="col-2 col-form-label">(*)Nombres:</label>
             <div class="col-10">
-                <input class="form-control" type="text" value="" ng-model="cam.patente" name="patente" placeholder="HTFG88">
+                <input class="form-control" type="text" value="" ng-model="ope.nombre" name="nombre">
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-2 col-form-label">Capacidad (contenedores)</label>
+            <label class="col-2 col-form-label">(*)Apellidos:</label>
             <div class="col-10">
-                <input class="form-control" type="number" value="" ng-model="cam.capacidad" name="capacidad"  placeholder="100">
+                <input class="form-control" type="text" value="" ng-model="ope.apellido" name="apellido">
             </div>
         </div>
+        <div class="form-group row">
+          <label class="col-2 col-form-label">(*)RUT</label>
+          <div class="col-10">
+            <input class="form-control" type="text" ng-model="ope.rut" name="rut" placeholder="00.000.000-0" maxlength="13">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-2 col-form-label">(*)N° de licencia</label>
+          <div class="col-10">
+            <input class="form-control" type="text" ng-model="ope.licencia" name="licencia">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-2 col-form-label">Celular</label>
+           <div class="input-group mb-2 mr-sm-2 mb-sm-0">        
+            <div class="input-group-addon">+56</div>
+            <input class="form-control col-2" type="number" ng-model="ope.celular" name="celular" placeholder="999999999">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-2 col-form-label">Correo</label>
+          <div class="col-10">
+            <input class="form-control" type="correo" ng-model="ope.correo" name="correo">
+          </div>
+        </div>
+        <div style="color:red">(*) Campo requerido </div>
     </div>
     <div class="alert alert-danger"  ng-if="error !=='' ">{{ error }}</div>
     <div class="alert alert-success" ng-if="confirm !=='' ">{{ confirm }}</div>
-    
 </div>
 
 <div class="modal-footer">

@@ -8,39 +8,41 @@
     </div>
     <div class="container-fluid" ng-if="accion === 1">
         <div class="form-group row">
-        <label for="idempresa">Seleccione Empresa </label>
+        <label for="idempresa">(*)Seleccione Empresa </label>
             <select ng-model="user.miempresa" name="miempresa" ng-options="empresa as empresa.nombre_empresa for empresa in empresas track by empresa.id_empresa"  class="form-control">
                 <option value="">--</option>
             </select>
         </div>
         <div class="form-group row">
-            <label for="username" class="col-2 col-form-label">Username</label>
+            <label for="username" class="col-2 col-form-label">(*)Username</label>
             <div class="col-10">
                 <input class="form-control" type="text" value="" ng-model="user.username" name="username">
             </div>
         </div>
         <div class="form-group row">
-            <label for="password" class="col-2 col-form-label">Password</label>
+            <label for="password" class="col-2 col-form-label">(*)Password</label>
             <div class="col-10">
                 <input class="form-control" type="password" value="" ng-model="user.password" name="password">
             </div>
         </div>
+        <div style="color:red">(*) Campo requerido </div>
     </div>
     
     
     <div class="container-fluid" ng-if="accion === 2">
         <div class="form-group row">
-            <label for="username" class="col-2 col-form-label">Nueva password</label>
+            <label for="username" class="col-2 col-form-label">(*)Nueva password</label>
             <div class="col-10">
                 <input class="form-control" type="password" value="" ng-model="user.newpass" name="newpass">
             </div>
         </div>
         <div class="form-group row">
-            <label for="password" class="col-2 col-form-label">Confirmar password</label>
+            <label for="password" class="col-2 col-form-label">(*)Confirmar password</label>
             <div class="col-10">
                 <input class="form-control" type="password" value="" ng-model="user.confirpass" name="confirpass">
             </div>
         </div>
+        <div style="color:red">(*) Campo requerido </div>
     </div>
     
     <div class="alert alert-danger"  ng-if="error !=='' ">{{ error }}</div>

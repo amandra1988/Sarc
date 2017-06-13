@@ -21,14 +21,16 @@ class CentrosController extends APIBaseController
         $centros = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->buscarSoloCentrosVisibles();
         return $this->serializedResponse($centros, $groups); 
     }
-    
+      
     /**
     * Nuevo centro de acopio
     * @param Request $request La petición
     * @return Response La respuesta serializada
     */
     public function postCentrosAction(Request $request){
-        $groups ='';
+        $groups  ='';
+        $latitud = 0;
+        $longitud= 0;
         $comuna  = $this->getDoctrine()->getRepository('AppBundle:Comuna')->find($request->get('comuna')); 
         $centro = new CentroDeAcopio();
         $centro->setCenNombre($request->get('nombre'));
@@ -36,10 +38,17 @@ class CentrosController extends APIBaseController
         $centro->setCenNumero($request->get('numero'));
         $centro->setComuna($comuna);
         $centro->setCenVisible(true);
-        //$direccion = 
-        //$comuna  = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion); 
-        $centro->setCenLongitud(0);
-        $centro->setCenLatitud(0);
+        if( null !== $request->get('latitud') ){
+            $latitud = $request->get('latitud');
+            $longitud= $request->get('longitud'); 
+        }else{
+            $direccion = $request->get('direccion').' '.$request->get('numero').', '.$comuna->getComNombre().', Chile';
+            $coordenadas = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion);        
+            $latitud = $coordenadas['latitud'];
+            $longitud= $coordenadas['longitud'];
+        }
+        $centro->setCenLatitud($latitud);
+        $centro->setCenLongitud($longitud);
         $em = $this->getDoctrine()->getManager();
         $em->persist($centro);
         $em->flush();
@@ -53,11 +62,29 @@ class CentrosController extends APIBaseController
     */
     public function patchCentrosAction(Request $request, CentroDeAcopio $centro){
         $groups ='';
-        $comuna  = $this->getDoctrine()->getRepository('AppBundle:Comuna')->find($request->get('comuna')); 
-        $centro->setCenNombre($request->get('nombre'));
-        $centro->setCenDireccion($request->get('direccion'));
-        $centro->setCenNumero($request->get('numero'));
-        $centro->setComuna($comuna);
+        $latitud = 0;
+        $longitud= 0;
+        
+        if($request->get('comuna')){
+            $comuna  = $this->getDoctrine()->getRepository('AppBundle:Comuna')->find($request->get('comuna')); 
+            $centro->setCenNombre($request->get('nombre'));
+            $centro->setCenDireccion($request->get('direccion'));
+            $centro->setCenNumero($request->get('numero'));
+            $centro->setComuna($comuna);
+            
+            if( null !== $request->get('latitud') && $request->get('latitud') !='' ){
+                $latitud = $request->get('latitud');
+                $longitud= $request->get('longitud'); 
+            }else{
+                $direccion = $request->get('direccion').' '.$request->get('numero').', '.$comuna->getComNombre().', Chile';
+                $coordenadas = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion);        
+                $latitud = $coordenadas['latitud'];
+                $longitud= $coordenadas['longitud'];
+            }
+            $centro->setCenLatitud($latitud);
+            $centro->setCenLongitud($longitud);
+        }
+        
         $centro->setCenVisible($request->get('visible'));
         $em = $this->getDoctrine()->getManager();
         $em->persist($centro);

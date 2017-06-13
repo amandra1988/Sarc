@@ -61,7 +61,7 @@ app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','
             modalInstance.result.then(function()
             {
                 var e = new EmpresaFactory();
-                e.visible = 0;
+                e.visible = false;
                 e.$patch({idEmpresa:id}, function(response) {
                     $scope.listaDeEmpresas();
                 });
@@ -98,7 +98,7 @@ app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','
     
     $scope.emp = {};
     $scope.mensaje ='';
-	$scope.error ='';
+    $scope.error ='';
     $scope.accion = accion;
     $scope.centros = centros;
     if($scope.accion === 1){
@@ -113,6 +113,7 @@ app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','
         $scope.emp.direccion = empresa.dir;
         $scope.emp.telefono = empresa.tel;
         $scope.emp.celular = empresa.cel;
+        console.log($scope.emp);
     }
 
     if($scope.accion === 0){
@@ -169,9 +170,9 @@ app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','
                $uibModalInstance.close();
             });
         }else{ // Editar
-           /* e.$patch({idEmpresa: $scope.emp.id}, function(response) {
+            e.$patch({idEmpresa: $scope.emp.id}, function(response) {
                 $uibModalInstance.close();
-            });*/
+            });
         }  
     };
     

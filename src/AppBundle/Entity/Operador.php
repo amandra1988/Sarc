@@ -63,7 +63,7 @@ class Operador
     /**
      * @var string
      *
-     * @ORM\Column(name="ope_celular", type="string", length=255)
+     * @ORM\Column(name="ope_celular", type="string", length=255, nullable=true)
      * @JMS\SerializedName("celular_operador")
      * @JMS\Groups({"operador_lista"})
      */
@@ -72,7 +72,7 @@ class Operador
     /**
      * @var string
      *
-     * @ORM\Column(name="ope_correo", type="string", length=255)
+     * @ORM\Column(name="ope_correo", type="string", length=255, nullable=true)
      * @JMS\SerializedName("correo_operador")
      * @JMS\Groups({"operador_lista"})
      */
@@ -88,6 +88,8 @@ class Operador
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="operadores" )
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="id")
+     * @JMS\SerializedName("usuario")
+     * @JMS\Groups({"operador_lista"})
      */
     protected $usuario;
 
