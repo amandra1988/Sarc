@@ -61,9 +61,9 @@ class Operador
     private $opeLicencia;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="ope_celular", type="string", length=255, nullable=true)
+     * @ORM\Column(name="ope_celular", type="integer", length=9, nullable=true)
      * @JMS\SerializedName("celular_operador")
      * @JMS\Groups({"operador_lista"})
      */
@@ -89,7 +89,7 @@ class Operador
      * @ORM\ManyToOne(targetEntity="User", inversedBy="operadores" )
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="id")
      * @JMS\SerializedName("usuario")
-     * @JMS\Groups({"operador_lista"})
+     * @JMS\Groups({"r_operador_usuario"})
      */
     protected $usuario;
 
@@ -117,8 +117,9 @@ class Operador
      */
     public function setOpeNombre($opeNombre)
     {
-        $this->opeNombre = $opeNombre;
-
+        if($opeNombre){
+            $this->opeNombre = $opeNombre;
+        }
         return $this;
     }
 
@@ -141,8 +142,9 @@ class Operador
      */
     public function setOpeApellido($opeApellido)
     {
-        $this->opeApellido = $opeApellido;
-
+        if($opeApellido) {
+            $this->opeApellido = $opeApellido;
+        }
         return $this;
     }
 
@@ -165,7 +167,9 @@ class Operador
      */
     public function setOpeRut($opeRut)
     {
-        $this->opeRut = $opeRut;
+        if($opeRut) {
+            $this->opeRut = $opeRut;
+        }
 
         return $this;
     }
@@ -189,8 +193,9 @@ class Operador
      */
     public function setOpeLicencia($opeLicencia)
     {
-        $this->opeLicencia = $opeLicencia;
-
+        if($opeLicencia) {
+            $this->opeLicencia = $opeLicencia;
+        }
         return $this;
     }
 
@@ -213,8 +218,9 @@ class Operador
      */
     public function setOpeCelular($opeCelular)
     {
-        $this->opeCelular = $opeCelular;
-
+        if($opeCelular) {
+            $this->opeCelular = $opeCelular;
+        }
         return $this;
     }
 
@@ -237,8 +243,9 @@ class Operador
      */
     public function setOpeCorreo($opeCorreo)
     {
-        $this->opeCorreo = $opeCorreo;
-
+        if($opeCorreo) {
+            $this->opeCorreo = $opeCorreo;
+        }
         return $this;
     }
 

@@ -4,7 +4,7 @@ angular.module('admin-camiones')
         return $resource(
             urlBaseApi + 'empresas/:idEmpresa/camiones/:idCamion',
             {},
-            {'query': {method: 'GET', isArray:false },'patch': {method:'PATCH'}}
+            {'query': {method: 'GET', isArray:true },'patch': {method:'PATCH'}}
          );
     }
 ]);

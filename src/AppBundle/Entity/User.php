@@ -43,7 +43,7 @@ class User implements UserInterface, \Serializable
      * @ORM\ManyToOne(targetEntity="Rol", inversedBy="usuario" )
      * @ORM\JoinColumn(name="rol_id", referencedColumnName="rol_id")
      * @JMS\SerializedName("rol")
-     * @JMS\Groups({"usuario_detalle","usuario_lista"})
+     * @JMS\Groups({"r_usuario_rol"})
      */
     protected $rol;
     
@@ -51,7 +51,7 @@ class User implements UserInterface, \Serializable
      * @ORM\ManyToOne(targetEntity="Empresa", inversedBy="usuarios" )
      * @ORM\JoinColumn(name="emp_id", referencedColumnName="emp_id")
      * @JMS\SerializedName("empresa")
-     * @JMS\Groups({"usuario_detalle","usuario_lista"})
+     * @JMS\Groups({"r_usuario_empresa"})
      */
     protected $empresa;
     

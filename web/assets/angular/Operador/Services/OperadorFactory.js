@@ -4,7 +4,7 @@ angular.module('admin-operadores')
         return $resource(
             urlBaseApi + 'empresas/:idEmpresa/operadores/:idOperador',
             {},
-            {'query': {method: 'GET', isArray:false },'patch': {method:'PATCH'}}
+            {'query': {method: 'GET', isArray:true },'patch': {method:'PATCH'}}
          );
     }
 ]);

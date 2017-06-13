@@ -1,10 +1,10 @@
 <div class="modal-header">
-    <h4 class="modal-title" id="myModalLabel">{{ mensaje }} camión</h4>
+    <h4 class="modal-title" id="myModalLabel">{{ mensaje }} cliente</h4>
 </div>
 
 <div class="modal-body"> 
     <div class="container-fluid" ng-if="accion === 0">
-        ¿Esta seguro de eliminar el registro del camión?
+        ¿Esta seguro de eliminar el registro del cliente?
     </div>
     
     
@@ -14,6 +14,19 @@
             <div class="col-10">
                 <input class="form-control" type="text" value="" ng-model="cli.nombre" name="nombre">
             </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-2 col-form-label">(*)Demanda</label>
+            <div class="col-10">
+                <input class="form-control" type="number" value="" ng-model="cli.demanda" name="demanda">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label>(*)Seleccione frecuencia:</label>
+            <select ng-model="cli.frecuencia" name="frecuencia" ng-options="frecuencia as frecuencia.frecuencia_nombre for frecuencia in frecuencias track by frecuencia.frecuencia_id"  class="form-control">
+                <option value="">--</option>
+            </select>
         </div>
         <div class="form-group row">
           <label class="col-2 col-form-label">(*)Dirección</label>
@@ -29,7 +42,7 @@
         </div>
         <div class="form-group row">
         <label>(*)Seleccione Comuna:</label>
-            <select ng-model="centro.comuna" name="comuna" ng-options="comuna as comuna.comuna_nombre for comuna in comunas track by comuna.comuna_id"  class="form-control">
+            <select ng-model="cli.comuna" name="comuna" ng-options="comuna as comuna.comuna_nombre for comuna in comunas track by comuna.comuna_id"  class="form-control">
                 <option value="">--</option>
             </select>
         </div>

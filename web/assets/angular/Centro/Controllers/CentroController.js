@@ -4,7 +4,7 @@ angular.module('superadmin-centro-de-acopio')
         $scope.centros =[];
 
         $scope.listaDeCentros= function (){
-            CentroFactory.query({'expand[]': ['comuna_detalle','provincia_detalle','region_detalle']}, function(retorno) {
+            CentroFactory.query({'expand[]': ['comuna_detalle','r_comuna_provincia','provincia_detalle','r_provincia_region','region_detalle']}, function(retorno) {
                 $scope.centros = retorno;   
             });   
         };

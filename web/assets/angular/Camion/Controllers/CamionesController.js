@@ -5,10 +5,10 @@ angular.module('admin-camiones')
 
         $scope.listaDeCamiones= function (){
             CamionFactory.query({ idEmpresa: 2 , 'expand[]': []}, function(retorno) {
-                $scope.camiones = retorno;   
-            });   
+                $scope.camiones = retorno;
+            });
         };
-        
+
         $scope.listaDeCamiones();
 
         $scope.accion = 1;
@@ -26,7 +26,7 @@ angular.module('admin-camiones')
         $scope.editarCamion = function(id) {
             $scope.accion = 2;
             $scope.camion =[];
-                   
+
             for(var i=0,len=$scope.camiones.length; i<len;i++)
             {
                 if($scope.camiones[i].id_camion === id) {
@@ -98,13 +98,17 @@ angular.module('admin-camiones')
         $scope.cam.id = $scope.camion.id;
         $scope.cam.patente = $scope.camion.patente;
         $scope.cam.capacidad = $scope.camion.capacidad;
-        $scope.cam.tipo_carga = $scope.camion.tipo_carga;
+        if($scope.camion.tipo_carga == 1){
+            $scope.cam.tipo_carga ='1';
+        }else{
+            $scope.cam.tipo_carga ='2'
+        }
     }
-    
+
     if($scope.accion === 0){
         $scope.mensaje ='Eliminar';
     }
-    
+
     $scope.guardar= function(){
         
         $scope.error ='';

@@ -71,10 +71,10 @@ class Camion
     /**
      * @ORM\ManyToOne(targetEntity="Empresa", inversedBy="camiones" )
      * @ORM\JoinColumn(name="emp_id", referencedColumnName="emp_id")
-     * @JMS\SerializedName("empresa_camion")
-     * @JMS\Groups({"camion_detalle","camion_lista"})
+     * @JMS\SerializedName("camion_empresa")
+     * @JMS\Groups({"r_camion_empresa"})
      */
-    protected $empresa;
+    private $empresa;
 
     /**
      * Get id

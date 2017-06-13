@@ -66,6 +66,14 @@ class OperadoresController extends APIBaseController
     
     public function patchEmpresasOperadoresAction(Request $request, $idEmpresa, Operador $operador ){
         $groups ='';
+        $rut = str_replace('.','', str_replace('-', '', $request->get('rut')));
+        $operador->setOpeNombre($request->get('nombre'))
+                ->setOpeApellido($request->get('apellido'))
+                ->setOpeRut($request->get('rut'))
+                ->setOpeLicencia($request->get('licencia'))
+                ->setOpeCorreo($request->get('correo'))
+                ->setOpeCelular($request->get('celular'));
+
         $operador->setOpeVisible($request->get('visible'));
         $em = $this->getDoctrine()->getManager();
         $em->persist($operador);

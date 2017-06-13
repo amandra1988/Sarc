@@ -1,5 +1,5 @@
 angular.module('admin-clientes')
-.controller('ClientesController',['$scope','ClienteFactory','$uibModal','urlBasePartials',function ($scope,ClienteFactory,$uibModal,urlBasePartials) {
+.controller('ClientesController',['$scope','ClienteFactory','$uibModal','urlBasePartials','ComunaFactory','FrecuenciaFactory',function ($scope,ClienteFactory,$uibModal,urlBasePartials,ComunaFactory,FrecuenciaFactory) {
         
         $scope.clientes =[];
 
@@ -8,14 +8,25 @@ angular.module('admin-clientes')
                 $scope.clientes = retorno;   
             });   
         };
-        
-        $scope.listaDeClientes= function (){
-            ClienteFactory.query({ idEmpresa: 2 , 'expand[]': []}, function(retorno) {
-                $scope.clientes = retorno;   
-            });   
+
+        $scope.frecuencias =[];
+        $scope.listaDeFrecuencias= function (){
+            FrecuenciaFactory.query({'expand[]': []}, function(retorno) {
+                $scope.frecuencias = retorno;
+            });
         };
-        
+
+        $scope.comunas =[];
+        $scope.listaDeComunas= function (){
+            ComunaFactory.query({'expand[]': []}, function(retorno) {
+                $scope.comunas = retorno;
+            });
+        };
+
         $scope.listaDeClientes();
+        $scope.listaDeFrecuencias();
+        $scope.listaDeComunas();
+
 
         $scope.accion = 1;
        
@@ -29,40 +40,46 @@ angular.module('admin-clientes')
             });
         };
         
-        /*$scope.editarCamion = function(id) {
+        $scope.editarCliente = function(id) {
            
             $scope.accion = 2;
-            $scope.camion =[];
+            $scope.cliente =[];
             
-            for(var i=0,len=$scope.camiones.length; i<len;i++)
+            for(var i=0,len=$scope.clientes.length; i<len;i++)
             {
-                if($scope.camiones[i].id_camion === id) {
-                    $scope.camion.id =$scope.camiones[i].id_camion ;
-                    $scope.camion.patente =$scope.camiones[i].patente_camion ;
-                    $scope.camion.capacidad =$scope.camiones[i].capacidad_camion ;
-                    $scope.camion.tipo_carga =$scope.camiones[i].tipo_carga_camion ;
+                if($scope.clientes[i].cliente_id === id) {
+                    $scope.cliente.id =$scope.clientes[i].cliente_id ;
+                    $scope.cliente.nombre =$scope.clientes[i].cliente_nombre ;
+                    $scope.cliente.direccion =$scope.clientes[i].cliente_direccion ;
+                    $scope.cliente.numero =$scope.clientes[i].cliente_numero ;
+                    $scope.cliente.telefono =$scope.clientes[i].cliente_telefono ;
+                    $scope.cliente.celular =$scope.clientes[i].cliente_celular ;
+                    $scope.cliente.correo =$scope.clientes[i].cliente_correo ;
+                    $scope.cliente.demanda =$scope.clientes[i].cliente_demanda ;
+                    $scope.cliente.frecuencia =$scope.clientes[i].cliente_frecuencia ;
+                    $scope.cliente.comuna =$scope.clientes[i].cliente_comuna ;
                     break;
                 }
             }
             var modalInstance = $scope.modal();
             modalInstance.result.then(function()
             {
-               $scope.listaDeCamiones();
+               $scope.listaDeClientes();
             });
         };
         
-        $scope.eliminarCamion =  function(id){
+        $scope.eliminarCliente =  function(id){
             $scope.accion = 0; 
             var modalInstance = $scope.modal();
             modalInstance.result.then(function()
             {
-                var c = new CamionFactory();
-                c.visible = 0;
-                c.$patch({idEmpresa:2,idCamion:id}, function(response) {
-                    $scope.listaDeCamiones();
+                var c = new ClienteFactory();
+                c.visible = false;
+                c.$patch({idEmpresa:2,idCliente:id}, function(response) {
+                    $scope.listaDeClientes();
                 });
             }); 
-        };*/
+        };
         
         $scope.modal =  function(){
              var modalInstance= $uibModal.open({
@@ -80,6 +97,14 @@ angular.module('admin-clientes')
                     cliente: function() {
                         return $scope.cliente;
                     }
+                    ,
+                    frecuencias: function() {
+                        return $scope.frecuencias;
+                    },
+                    comunas: function() {
+                        return $scope.comunas;
+                    }
+
                 }
             });
             return modalInstance;
@@ -87,51 +112,79 @@ angular.module('admin-clientes')
     }]
 )
 
-.controller('PopupModal', ['$scope','$uibModalInstance','accion','ClienteFactory','ComunaFactory','FrecuenciaFactory','cliente', function ($scope,$uibModalInstance,accion,ClienteFactory,ComunaFactory,FrecuenciaFactory,cliente) {
-    $scope.accion  = accion;
-    $scope.cliente = cliente;
-    $scope.error = '';
-    $scope.confirm = '';
-    $scope.mensaje = '';
+.controller('PopupModal', ['$scope','$uibModalInstance','accion','ClienteFactory','cliente','frecuencias','comunas', function ($scope,$uibModalInstance,accion,ClienteFactory,cliente,frecuencias,comunas) {
+    $scope.accion=accion;
+    $scope.cli=cliente;
+    $scope.frecuencias=frecuencias;
+    $scope.comunas=comunas;
+    $scope.error='';
+    $scope.confirm='';
+    $scope.mensaje='';
     
     if($scope.accion === 1){
         $scope.mensaje = 'Nuevo' ;
     }
     
-   /* if($scope.accion === 2){
+    if($scope.accion === 2){
         $scope.mensaje = 'Editar' ;
-        $scope.cam.id = $scope.camion.id;
-        $scope.cam.patente = $scope.camion.patente;
-        $scope.cam.capacidad = $scope.camion.capacidad;
-        $scope.cam.tipo_carga = $scope.camion.tipo_carga;
-    }*/
+    }
     
     if($scope.accion === 0){
         $scope.mensaje ='Eliminar';
     }
-    
-    $scope.frecuencias =[];
-    $scope.listaDeFrecuencias= function (){
-        FrecuenciaFactory.query({'expand[]': []}, function(retorno) {
-            $scope.frecuencias = retorno;   
-        });   
-    };
-    
-    $scope.comunas =[];
-    $scope.listaDeComunas= function (){
-        ComunaFactory.query({'expand[]': []}, function(retorno) {
-            $scope.comunas = retorno;   
-        });   
-    };
-    
-    $scope.listaDeComunas();
+
     
     $scope.guardar= function(){
+
+        if(!$scope.cli.nombre){
+            $scope.error = 'Ingrese nombre del cliente';
+            return;
+        }
+
+        if(!$scope.cli.demanda){
+            $scope.error = 'Ingrese demanda del cliente.';
+            return;
+        }
+
+        if(!$scope.cli.frecuencia){
+            $scope.error = 'Ingrese frecuencia del cliente';
+            return;
+        }
+
+        if(!$scope.cli.direccion){
+            $scope.error = 'Ingrese dirección del cliente';
+            return;
+        }
+
+        if(!$scope.cli.numero){
+            $scope.error = 'Ingrese número de la dirección del cliente';
+            return;
+        }
+
+        if(!$scope.cli.comuna){
+            $scope.error = 'Ingrese comuna del cliente';
+            return;
+        }
+
+        if(!$scope.cli.telefono && !$scope.cli.celular){
+            $scope.error = 'Ingrese teléfono o celular del cliente';
+            return;
+        }
+
+        $scope.error = '';
+
         var c = new ClienteFactory();
-        c.patente    = $scope.cam.patente;
-        c.capacidad  = $scope.cam.capacidad;
-        c.tipo_carga = $scope.cam.tipo_carga;
-        c.visible    = true;
+        c.nombre=$scope.cli.nombre;
+        c.frecuencia=$scope.cli.frecuencia.frecuencia_id;
+        c.direccion=$scope.cli.direccion;
+        c.numero= $scope.cli.numero;
+        c.comuna= $scope.cli.comuna.comuna_id;
+        c.telefono=$scope.cli.telefono;
+        c.celular=$scope.cli.celular;
+        c.correo=$scope.cli.correo;
+        c.demanda=$scope.cli.demanda;
+        c.visible=true;
+
         if(accion === 1)
         {
             c.$save({idEmpresa: 2}, function(response) {
@@ -141,7 +194,7 @@ angular.module('admin-clientes')
             c.$patch({idEmpresa:2, idCliente:$scope.cli.id }, function(response) {
                 $uibModalInstance.close();
             });
-        }  
+        }
     };
     
     $scope.close = function () {
