@@ -6,66 +6,24 @@ angular.module('admin-rutas')
     $scope.SelectedEvent=null;
     var isFirstTime = true ;
 
-
     $scope.events = [];
-
 
     $scope.events = [
         {
-            title: 'All Day Event',
-            start: '2017-06-01'
+            title: 'Recorrido Uno',
+            start: '2017-06-05',
+			end:   '2017-06-05'
         },
         {
-            title: 'Long Event',
+            title: 'Recorrido Dos',
             start: '2017-06-07',
-            end: '2017-06-10'
+            end: '2017-06-07'
         },
         {
-            id: 999,
-            title: 'Repeating Event',
-            start: '2017-06-06'
-        },
-        {
-            id: 999,
-            title: 'Repeating Event',
-            start: '2017-06-16'
-        },
-        {
-            title: 'Conference',
-            start: '2017-06-11',
-            end: '2017-06-13'
-        },
-        {
-            title: 'Meeting',
-            start: '2017-06-12',
-            end: '2017-06-12'
-        },
-        {
-            title: 'Lunch',
-            start: '2017-06-12'
-        },
-        {
-            title: 'Meeting',
-            start: '2017-06-12'
-        },
-        {
-            title: 'Happy Hour',
-            start: '2017-06-12'
-        },
-        {
-            title: 'Dinner',
-            start: '2017-06-12'
-        },
-        {
-            title: 'Birthday Party',
-            start: '2017-06-13'
-        },
-        {
-            title: 'Click for Google',
-            url: 'http://google.com/',
-            start: '2017-06-28'
-        }
-    ];
+            title: 'Recorrido Tres',
+            start: '2017-06-08',
+			end: '2017-06-08'
+        }];
 
     $scope.eventSources = [$scope.events];
 
@@ -96,11 +54,11 @@ angular.module('admin-rutas')
              eventClick: function(event){
                 $scope.SelectedEvent = event;
              },
-             eventAfterRender: function(){
-                 if($scope.event.length > 0 && isFirstTime){
-                   uiCalendarConfig.calendar.myCalendar.fullCalendar('gotoDate','2017-06-01' /*$scope.events[0].start*/);
+             /*eventAfterRender: function(){
+                 if($scope.events.length > 0 && isFirstTime){
+                   uiCalendarConfig.calendar.myCalendar.fullCalendar('gotoDate',$scope.events[0].start);
                  }
-             }
+             }*/
          }
      }
     }]
