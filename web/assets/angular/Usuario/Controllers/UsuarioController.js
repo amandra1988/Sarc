@@ -10,15 +10,15 @@ angular.module('superadmin-usuarios')
         });   
         
         $scope.listaDeUsuarios = function() {
-            UsuarioFactory.query({'expand[]': []}, function(retorno) {
+            UsuarioFactory.query({'expand[]': ['r_usuario_empresa','r_usuario_rol','rol_detalle']}, function(retorno) {
                 $scope.usuarios = retorno;
             });
         };
-        
+
         $scope.listaDeUsuarios();
-        
+
         $scope.eliminarUsuario =  function(id){
-            $scope.accion = 0; 
+            $scope.accion = 0;
             var modalInstance = $scope.modal();
             modalInstance.result.then(function()
             {
