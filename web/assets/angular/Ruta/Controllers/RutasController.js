@@ -1,111 +1,65 @@
 angular.module('admin-rutas')
-.controller('RutasController',['$scope','RutaFactory','$uibModal','urlBasePartials',function ($scope,RutaFactory,$uibModal,urlBasePartials) {
-        
-        $scope.rutas =[];
+.controller('RutasController',['$scope','$http','uiCalendarConfig','$uibModal','urlBasePartials',function ($scope,$http,uiCalendarConfig,$uibModal,urlBasePartials) {
 
-        $scope.listaDeRutas= function (){
-            RutaFactory.query({idEmpresa: 2 ,'expand[]': []}, function(retorno) {
-                $scope.rutas = retorno;   
-            });   
-        };
-        
-        $scope.listaDeRutas();
-		
-        /*$scope.listaDeCentros= function (){
-            CentroFactory.query({'expand[]': []}, function(retorno) {
-                $scope.centros = retorno;
-            });   
-        };
-        
-        $scope.listaDeCentros();
 
-        $scope.accion = 1;
-       
-        $scope.nuevaEmpresa = function() {
-            $scope.accion  = 1;
-            $scope.empresa =[];
-            var modalInstance = $scope.modal();
-            modalInstance.result.then(function()
-            {
-               $scope.listaDeEmpresas();
-            });
-        };
-        
-        $scope.editarEmpresa = function(id) {
-            $scope.accion = 2;
-            $scope.empresa =[];           
-            for(var i=0, len=$scope.empresas.length; i<len;i++)
-            {
-                if($scope.empresas[i].id_empresa === id) {
-                    $scope.empresa.id =$scope.empresas[i].id_empresa ;
-                    $scope.empresa.cen =$scope.empresas[i].centro_de_acopio.id_centro ;
-                    $scope.empresa.nom =$scope.empresas[i].nombre_empresa ;
-                    $scope.empresa.rut =$scope.empresas[i].rut_empresa ;
-                    $scope.empresa.dir =$scope.empresas[i].direccion_empresa;
-                    $scope.empresa.cel =$scope.empresas[i].celular_empresa;
-                    $scope.empresa.tel =$scope.empresas[i].telefono_empresa;
-                    break;
-                }
-            }
-            var modalInstance = $scope.modal();
-            modalInstance.result.then(function()
-            {
-               $scope.listaDeEmpresas();
-            });
-        };
-        
-        $scope.eliminarEmpresa =  function(id){
-            $scope.accion = 0; 
-            var modalInstance = $scope.modal();
-            modalInstance.result.then(function()
-            {
-                var e = new EmpresaFactory();
-                e.visible = 0;
-                e.$patch({idEmpresa:id}, function(response) {
-                    $scope.listaDeEmpresas();
-                });
-            }); 
-        };*/
-        
-		$scope.verMapa = function(){
-			var modalInstance = $scope.modal();	
-		};
-		
-        $scope.modal =  function(){
-             var modalInstance= $uibModal.open({
-                templateUrl: urlBasePartials+'modal_rutas.html',
-                backdrop: 'static',
-                size: 'lg',
-                animation: true,
-                ariaLabelledBy: 'modal-title',
-                ariaDescribedBy: 'modal-body',
-                controller: 'PopupModal',
-                resolve: {
-                    /*accion: function() {
-                        return $scope.accion;
-                    },
-                    empresa: function() {
-                        return $scope.empresa;
-                    },
-                    centros:function(){
-                        return $scope.centros;
-                    }*/
-                }
-            });
-            return modalInstance;
-        };
+    $scope.eventSources = [];
+    $scope.SelectedEvent=null;
+    var isFirstTime = true ;
+
+    $scope.events = [];
+
+    $scope.events = [
+        {
+            title: 'Recorrido Uno',
+            start: '2017-06-05',
+			end:   '2017-06-05'
+        },
+        {
+            title: 'Recorrido Dos',
+            start: '2017-06-07',
+            end: '2017-06-07'
+        },
+        {
+            title: 'Recorrido Tres',
+            start: '2017-06-08',
+			end: '2017-06-08'
+        }];
+
+    $scope.eventSources = [$scope.events];
+
+    $scope.uiConfig = {
+         calendar: {
+             height: 450,
+             editable: true,
+             displayEventTime:true,
+             fixedWeekCount : false,
+             header: {
+                 left:  'prev,next,today',
+                 center:'title',
+                 right: 'agendaDay,agendaWeek,month'
+             },
+             buttonText:
+             {
+                 day   : 'Día',
+                 month : 'Mes',
+                 week  : 'Semana',
+                 today : 'Hoy'
+             },
+
+             monthNames      : ['Enero' , 'Febrero' , 'Marzo' , 'Abril' , 'Mayo' , 'Junio' , 'Julio' ,'Agosto' , 'Septiembre' , 'Octubre' , 'Noviembre' , 'Diciembre' ],
+             monthNamesShort : ['Ene' , 'Feb' , 'Mar' , 'Abr' , 'May' , 'Jun' , 'Jul' ,'Ago' , 'Sep' , 'Oct' , 'Nov' , 'Dec' ],
+             dayNames        : ['Domingo','Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'],
+             dayNamesShort   : ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+
+             eventClick: function(event){
+                $scope.SelectedEvent = event;
+             },
+             /*eventAfterRender: function(){
+                 if($scope.events.length > 0 && isFirstTime){
+                   uiCalendarConfig.calendar.myCalendar.fullCalendar('gotoDate',$scope.events[0].start);
+                 }
+             }*/
+         }
+     }
     }]
-)
-
-.controller('PopupModal', ['$scope','$uibModalInstance',function ($scope,$uibModalInstance) {
-    
-    $scope.close = function () {
-        $uibModalInstance.dismiss();
-    };
-    
-    $scope.ok = function(){
-        $uibModalInstance.close();
-    };
-}
-
-]);
+);

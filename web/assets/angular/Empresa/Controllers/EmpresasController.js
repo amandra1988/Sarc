@@ -5,7 +5,7 @@ app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','
         $scope.empresas =[];
 
         $scope.listaDeEmpresas= function (){
-            EmpresaFactory.query({'expand[]': []}, function(retorno) {
+            EmpresaFactory.query({'expand[]': ['r_empresa_centro_acopio','centro_detalle']}, function(retorno) {
                 $scope.empresas = retorno;   
             });   
         };

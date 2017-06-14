@@ -95,7 +95,7 @@ class Empresa
      * @ORM\ManyToOne(targetEntity="CentroDeAcopio", inversedBy="empresas" )
      * @ORM\JoinColumn(name="cen_id", referencedColumnName="cen_id")
      * @JMS\SerializedName("centro_de_acopio")
-     * @JMS\Groups({"empresa_detalle","empresa_lista"})
+     * @JMS\Groups({"r_empresa_centro_acopio"})
      */
     protected $centroDeAcopio;
     
