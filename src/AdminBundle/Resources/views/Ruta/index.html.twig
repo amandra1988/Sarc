@@ -8,7 +8,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/vendor/ui-calendar/fullcalendar.css')}}">
 {% endblock %}
 
 {% block bodystyle%}
@@ -63,9 +63,5 @@
 {% block body %}
     <div class="jumbotron">
         {{ parent() }}
-		Comentario:
-			En esta vista el administrador de sistema puede visualizar las rutas programas durante el día.
-			Estas rutas son generadas por el sistema cada noche, según la configuración de cada cliente.
-		
     </div>
 {% endblock %}

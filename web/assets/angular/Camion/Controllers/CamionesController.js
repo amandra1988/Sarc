@@ -5,10 +5,10 @@ angular.module('admin-camiones')
 
         $scope.listaDeCamiones= function (){
             CamionFactory.query({ idEmpresa: 2 , 'expand[]': []}, function(retorno) {
-                $scope.camiones = retorno;   
-            });   
+                $scope.camiones = retorno;
+            });
         };
-        
+
         $scope.listaDeCamiones();
 
         $scope.accion = 1;
@@ -24,17 +24,16 @@ angular.module('admin-camiones')
         };
         
         $scope.editarCamion = function(id) {
-           
             $scope.accion = 2;
             $scope.camion =[];
-            
+
             for(var i=0,len=$scope.camiones.length; i<len;i++)
             {
                 if($scope.camiones[i].id_camion === id) {
-                    $scope.camion.id =$scope.camiones[i].id_camion ;
-                    $scope.camion.patente =$scope.camiones[i].patente_camion ;
-                    $scope.camion.capacidad =$scope.camiones[i].capacidad_camion ;
-                    $scope.camion.tipo_carga =$scope.camiones[i].tipo_carga_camion ;
+                    $scope.camion.id = $scope.camiones[i].id_camion ;
+                    $scope.camion.patente = $scope.camiones[i].patente_camion ;
+                    $scope.camion.capacidad = $scope.camiones[i].capacidad_camion ;
+                    $scope.camion.tipo_carga = $scope.camiones[i].tipo_carga_camion ;
                     break;
                 }
             }
@@ -83,14 +82,13 @@ angular.module('admin-camiones')
 
 .controller('PopupModal', ['$scope','$uibModalInstance','accion','CamionFactory','camion', function ($scope,$uibModalInstance,accion,CamionFactory,camion) {
 
-    $scope.mensaje = '';
     $scope.accion = accion;
     $scope.camion = camion;
-    $scope.error = '';
+    $scope.error   = '';
     $scope.confirm = '';
-    $scope.cam = {tipo_carga:1};
-    
-    console.log($scope.camion);
+    $scope.mensaje = '';
+    $scope.cam={tipo_carga:'1'};
+
     if($scope.accion === 1){
         $scope.mensaje = 'Nueva' ;
     }
@@ -100,14 +98,36 @@ angular.module('admin-camiones')
         $scope.cam.id = $scope.camion.id;
         $scope.cam.patente = $scope.camion.patente;
         $scope.cam.capacidad = $scope.camion.capacidad;
-        $scope.cam.tipo_carga = $scope.camion.tipo_carga;
+        if($scope.camion.tipo_carga == 1){
+            $scope.cam.tipo_carga ='1';
+        }else{
+            $scope.cam.tipo_carga ='2'
+        }
     }
-    
+
     if($scope.accion === 0){
         $scope.mensaje ='Eliminar';
     }
-    
+
     $scope.guardar= function(){
+        
+        $scope.error ='';
+   
+        if(!$scope.cam.tipo_carga){
+            $scope.error = 'Indique tipo de carga del camión';
+            return;
+        }
+        
+        if(!$scope.cam.patente){
+            $scope.error = 'Debe ingresa el número de patente del camión';
+            return;
+        }
+        
+        if(!$scope.cam.capacidad || $scope.cam.capacidad === 0){
+            $scope.error = 'La capacidad del camión debe ser mayor que 0';
+            return;
+        }
+        
         var c = new CamionFactory();
         c.patente    = $scope.cam.patente;
         c.capacidad  = $scope.cam.capacidad;
@@ -123,7 +143,7 @@ angular.module('admin-camiones')
             c.$patch({idEmpresa:2, idCamion:$scope.cam.id }, function(response) {
                 $uibModalInstance.close();
             });
-        }  
+        }
     };
     
     $scope.close = function () {

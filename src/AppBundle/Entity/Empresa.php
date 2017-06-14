@@ -52,18 +52,18 @@ class Empresa
     private $empDireccion;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="emp_telefono", type="string", length=15)
+     * @ORM\Column(name="emp_telefono", type="integer", length=9, nullable=true)
      * @JMS\SerializedName("telefono_empresa")
      * @JMS\Groups({"empresa_detalle","empresa_lista"})
      */
     private $empTelefono;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="emp_celular", type="string", length=15)
+     * @ORM\Column(name="emp_celular", type="integer", length=9, nullable=true)
      * @JMS\SerializedName("celular_empresa")
      * @JMS\Groups({"empresa_detalle","empresa_lista"})
      */
@@ -95,7 +95,7 @@ class Empresa
      * @ORM\ManyToOne(targetEntity="CentroDeAcopio", inversedBy="empresas" )
      * @ORM\JoinColumn(name="cen_id", referencedColumnName="cen_id")
      * @JMS\SerializedName("centro_de_acopio")
-     * @JMS\Groups({"empresa_detalle","empresa_lista"})
+     * @JMS\Groups({"r_empresa_centro_acopio"})
      */
     protected $centroDeAcopio;
     

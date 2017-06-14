@@ -13,11 +13,11 @@ class CamionesController extends APIBaseController
     * @return Response La respuesta serializada
     */ 
     public function getEmpresasCamionesAction(Request $request,$idEmpresa){
-        $groups = ['camion_lista'];
+        $groups = ['camion_detalle'];
         if(is_array($request->get('expand'))){
             $groups = array_merge($groups, $request->get('expand'));
-        }    
-        $camiones = $this->getDoctrine()->getRepository('AppBundle:Camion')->buscarSoloCamionesVisibles($idEmpresa);
+        }
+        $camiones = $this->getDoctrine()->getRepository('AppBundle:Camion')->findBy(array('empresa'=>$idEmpresa,'camVisible'=>1));
         return $this->serializedResponse($camiones, $groups); 
     }
     

@@ -1,30 +1,76 @@
 <div class="modal-header">
-    <h4 class="modal-title" id="myModalLabel">{{ mensaje }} camión</h4>
+    <h4 class="modal-title" id="myModalLabel">{{ mensaje }} cliente</h4>
 </div>
 
 <div class="modal-body"> 
     <div class="container-fluid" ng-if="accion === 0">
-        ¿Esta seguro de eliminar el registro del camión?
+        ¿Esta seguro de eliminar el registro del cliente?
     </div>
     
     
     <div class="container-fluid" ng-if="accion !== 0">
         <div class="form-group row">
-            <label>Tipo de carga  </label>
-            <input type="radio" ng-model="cam.tipo_carga" name="tipo_carga" value="1"> Simple
-            <input type="radio" ng-model="cam.tipo_carga" name="tipo_carga" value="2"> Peligrosa
-        </div>
-        <div class="form-group row">
-            <label class="col-2 col-form-label">Patente</label>
+            <label class="col-2 col-form-label">(*)Nombre</label>
             <div class="col-10">
-                <input class="form-control" type="text" value="" ng-model="cam.patente" name="patente" placeholder="HTFG88">
+                <input class="form-control" type="text" value="" ng-model="cli.nombre" name="nombre">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-2 col-form-label">(*)Demanda</label>
+            <div class="col-10">
+                <input class="form-control" type="number" value="" ng-model="cli.demanda" name="demanda">
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-2 col-form-label">Capacidad (contenedores)</label>
+            <label>(*)Seleccione frecuencia:</label>
+            <select ng-model="cli.frecuencia" name="frecuencia" ng-options="frecuencia as frecuencia.frecuencia_nombre for frecuencia in frecuencias track by frecuencia.frecuencia_id"  class="form-control">
+                <option value="">--</option>
+            </select>
+        </div>
+        <div class="form-group row">
+          <label class="col-2 col-form-label">(*)Dirección</label>
+          <div class="col-10">
+            <input class="form-control" type="text" ng-model="cli.direccion" name="direccion">
+          </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-2 col-form-label">(*)Número:</label>
             <div class="col-10">
-                <input class="form-control" type="number" value="" ng-model="cam.capacidad" name="capacidad"  placeholder="100">
+                <input class="form-control" type="text" ng-model="cli.numero" name="numero">
             </div>
+        </div>
+        <div class="form-group row">
+        <label>(*)Seleccione Comuna:</label>
+            <select ng-model="cli.comuna" name="comuna" ng-options="comuna as comuna.comuna_nombre for comuna in comunas track by comuna.comuna_id"  class="form-control">
+                <option value="">--</option>
+            </select>
+        </div>
+        <div class="form-group row">
+          <label class="col-2 col-form-label">(**)Teléfono</label>
+           <div class="input-group mb-2 mr-sm-2 mb-sm-0">        
+            <div class="input-group-addon">+56</div>
+            <input class="form-control col-2" type="number" ng-model="cli.telefono" name="telefono" placeholder="299999999">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-2 col-form-label">(**)Celular</label>
+           <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+            <div class="input-group-addon">+56</div>
+            <input class="form-control col-2"  type="number" ng-model="cli.celular" name="celular" placeholder="999999999">
+          </div>
+        </div>
+        
+        <div class="form-group row">
+            <label class="col-2 col-form-label">Correo</label>
+            <div class="col-10">
+                <input class="form-control" type="correo" value="" ng-model="cli.correo" name="correo">
+            </div>
+        </div>
+
+        <div style="color:red">
+            (*) Campo requerido<br>
+            (**)Debe ingresar teléfono o celular
         </div>
     </div>
     <div class="alert alert-danger"  ng-if="error !=='' ">{{ error }}</div>
