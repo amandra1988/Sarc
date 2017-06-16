@@ -7,33 +7,13 @@ angular.module('admin-rutas')
 
     $scope.listaDeRutas= function (){
         RutaFactory.query({idEmpresa:2,'expand[]': [/*'r_ruta_operador','operador_detalle','r_ruta_camion','camion_detalle'*/]}, function(retorno) {
-            $scope.events = retorno;
+            angular.forEach(retorno, function(value,key){
+                $scope.events.push( value );
+            });
         });
     };
-    $scope.listaDeRutas();
 
-
-    /*
-    $scope.events =[
-       {
-           "id": 1,
-           "title": "Ruta 05/06/2017",
-           "start": "2017-06-05T00:00:00+0200"
-       },
-       {
-           "id": 2,
-           "title": "Ruta 06/06/2016",
-           "start": "2017-06-06T00:00:00+0200"
-       },
-       {
-           "id": 3,
-           "title": "Ruta 06/07/2016",
-           "start": "2017-06-07T00:00:00+0200"
-       }
-    ];
-    */
-
-    $scope.eventSources = [$scope.events];
+    $scope.events = [];
 
     $scope.uiConfig = {
          calendar: {
@@ -69,5 +49,8 @@ angular.module('admin-rutas')
              }*/
          }
      }
+
+     $scope.eventSources = [$scope.events,$scope.listaDeRutas];
+
     }]
 );
