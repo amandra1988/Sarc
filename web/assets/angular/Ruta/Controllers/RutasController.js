@@ -1,37 +1,25 @@
 angular.module('admin-rutas')
-.controller('RutasController',['$scope','$http','uiCalendarConfig','$uibModal','urlBasePartials',function ($scope,$http,uiCalendarConfig,$uibModal,urlBasePartials) {
-
+.controller('RutasController',['$scope','$http','uiCalendarConfig','$uibModal','urlBasePartials','RutaFactory',function ($scope,$http,uiCalendarConfig,$uibModal,urlBasePartials,RutaFactory) {
 
     $scope.eventSources = [];
     $scope.SelectedEvent=null;
     var isFirstTime = true ;
 
+    $scope.listaDeRutas= function (){
+        RutaFactory.query({idEmpresa:2,'expand[]': [/*'r_ruta_operador','operador_detalle','r_ruta_camion','camion_detalle'*/]}, function(retorno) {
+            angular.forEach(retorno, function(value,key){
+                $scope.events.push( value );
+            });
+        });
+    };
+
     $scope.events = [];
-
-    $scope.events = [
-        {
-            title: 'Recorrido Uno',
-            start: '2017-06-05',
-			end:   '2017-06-05'
-        },
-        {
-            title: 'Recorrido Dos',
-            start: '2017-06-07',
-            end: '2017-06-07'
-        },
-        {
-            title: 'Recorrido Tres',
-            start: '2017-06-08',
-			end: '2017-06-08'
-        }];
-
-    $scope.eventSources = [$scope.events];
 
     $scope.uiConfig = {
          calendar: {
              height: 450,
              editable: true,
-             displayEventTime:true,
+             displayEventTime:false,
              fixedWeekCount : false,
              header: {
                  left:  'prev,next,today',
@@ -61,5 +49,8 @@ angular.module('admin-rutas')
              }*/
          }
      }
+
+     $scope.eventSources = [$scope.events,$scope.listaDeRutas];
+
     }]
 );

@@ -15,7 +15,7 @@ app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','u
        
         $scope.nuevoOperador = function() {
             $scope.accion =1;
-            $scope.camion =[];
+            $scope.operador =[];
             var modalInstance = $scope.modal();
             modalInstance.result.then(function()
             {
@@ -105,7 +105,7 @@ app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','u
     }
 
     $scope.guardar= function(){
-        
+
         if(!$scope.ope.nombre){
             $scope.error = 'Ingrese nombre del operador';
             return;  

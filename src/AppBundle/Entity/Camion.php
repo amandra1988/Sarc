@@ -77,6 +77,11 @@ class Camion
     private $empresa;
 
     /**
+     * @ORM\OneToMany(targetEntity="Ruta", mappedBy="camion", cascade={"persist", "remove"} )
+     */
+    protected $rutas;
+
+    /**
      * Get id
      *
      * @return int
@@ -231,5 +236,46 @@ class Camion
     public function getEmpresa()
     {
         return $this->empresa;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->rutas = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add ruta
+     *
+     * @param \AppBundle\Entity\Ruta $ruta
+     *
+     * @return Camion
+     */
+    public function addRuta(\AppBundle\Entity\Ruta $ruta)
+    {
+        $this->rutas[] = $ruta;
+
+        return $this;
+    }
+
+    /**
+     * Remove ruta
+     *
+     * @param \AppBundle\Entity\Ruta $ruta
+     */
+    public function removeRuta(\AppBundle\Entity\Ruta $ruta)
+    {
+        $this->rutas->removeElement($ruta);
+    }
+
+    /**
+     * Get rutas
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRutas()
+    {
+        return $this->rutas;
     }
 }

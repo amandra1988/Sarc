@@ -56,7 +56,7 @@ class Operador
      *
      * @ORM\Column(name="ope_licencia", type="string", length=50)
      * @JMS\SerializedName("licencia_operador")
-     * @JMS\Groups({"operador_lista"})
+     * @JMS\Groups({"operador_detalle","operador_lista"})
      */
     private $opeLicencia;
 
@@ -93,11 +93,11 @@ class Operador
      */
     protected $usuario;
 
-
 	/**
      * @ORM\OneToMany(targetEntity="Ruta", mappedBy="operador", cascade={"persist", "remove"} )
      */
     protected $rutas;
+
     /**
      * Get id
      *
