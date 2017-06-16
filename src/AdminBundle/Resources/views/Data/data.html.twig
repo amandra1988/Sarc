@@ -1,0 +1,32 @@
+#Clientes maule modelo final
+data;
+
+param m := {{ dias }};
+param n := {{ vehiculos }};
+param p := {{ infinito }};
+param e := {{ epsilon }}; # varia
+param e2 := {{ epsilonDos }}; # varia
+
+param capacidad:= #capacidad maxima del camion en contenedores
+{% for camion in camiones %}
+{{ camion.id }}  {{ camion.camCapacidad }}
+{% endfor %};
+
+set diario;
+set trisemanal;
+set disemanal := 1,2;
+set semanal   := 3,4,5,6,7,10,11,12,18,20,21,24,25,26,30,34,35,37,38,39,40,41,42,43,44,45,49,50,51,52,55,57,58,60,75,76,81,83,84,85;
+set quincenal := 9,13,15,16,19,22,23,28,29,32,33,36,46,48,54,56,59,63,65,68,72,77;
+set mensual   := 8,14,17,27,31,47,53,61,62,64,66,67,69,70,71,73,74,78,79,80,82;
+
+param theta:=
+1	74.3337954453
+;
+
+param demanda :=
+1	2.91
+;
+
+param frecuencia :=
+1	8
+;
