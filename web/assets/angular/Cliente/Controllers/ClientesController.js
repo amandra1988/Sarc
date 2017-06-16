@@ -32,7 +32,7 @@ angular.module('admin-clientes')
        
         $scope.nuevoCliente = function() {
             $scope.accion =1;
-            $scope.camion =[];
+            $scope.cliente =[];
             var modalInstance = $scope.modal();
             modalInstance.result.then(function()
             {
