@@ -12,11 +12,11 @@ class RutasController extends APIBaseController
     * @return Response La respuesta serializada
     */
     public function getEmpresasRutasAction(Request $request,$idEmpresa){
-        $groups = ['ruta_lista','cliente_detalle','operador_detalle'];
+        $groups = ['ruta_detalle'];
         if(is_array($request->get('expand'))){
             $groups = array_merge($groups, $request->get('expand'));
         }    
-        $camiones = $this->getDoctrine()->getRepository('AppBundle:Ruta')->buscarSoloRutasDeHoy($idEmpresa, '2017-06-05' /*date('Y-m-d')*/);
-        return $this->serializedResponse($camiones, $groups); 
+        $rutas = $this->getDoctrine()->getRepository('AppBundle:Ruta')->buscarRutasDelMes(date('m'),date('Y'),$idEmpresa);
+        return $this->serializedResponse($rutas, $groups);
     }
 }

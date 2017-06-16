@@ -11,18 +11,18 @@ namespace AppBundle\Repository;
 class RutaRepository extends \Doctrine\ORM\EntityRepository
 {
 	
-	public function buscarSoloRutasDeHoy($idEmpresa,$fecha){
+	public function buscarRutasDelMes($mes,$anio,$idEmpresa){
 		
 		return $this->getEntityManager()
 		->createQuery('
 						SELECT r
 						FROM AppBundle:Ruta r
-						LEFT JOIN r.cliente c
+						LEFT JOIN r.camion c
 						WHERE c.empresa = :idEmpresa
-						AND r.rtaFecha  >= :fecha
+						AND SUBSTRING(r.rtaFecha,6,2)= :mes
+						AND SUBSTRING(r.rtaFecha,1,4)= :anio
 					')
-		->setParameter('idEmpresa', $idEmpresa)
-		->setParameter('fecha', $fecha)
+		->setParameter('idEmpresa', $idEmpresa)->setParameter('mes', $mes)->setParameter('anio', $anio)
 		->getResult();
 	}
 }
