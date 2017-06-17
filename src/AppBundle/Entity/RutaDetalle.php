@@ -16,7 +16,7 @@ class RutaDetalle
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="rde_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -25,32 +25,55 @@ class RutaDetalle
     /**
      * @var string
      *
-     * @ORM\Column(name="det_latitud", type="string", length=255)
+     * @ORM\Column(name="rde_longitud", type="string", length=255)
+     * @JMS\SerializedName("longitud")
+     * @JMS\Groups({"rutaDet_detalle"})
+     */
+    private $rdeLongitud;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="rde_latitud", type="string", length=255)
      * @JMS\SerializedName("latitud")
      * @JMS\Groups({"rutaDet_detalle"})
      */
-    private $detLatitud;
+    private $rdeLatitud;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="det_longitud", type="string", length=255)
-     * @JMS\SerializedName("longitud")
+     * @ORM\Column(name="rde_comentario", type="text")
+     * @JMS\SerializedName("comentario")
      * @JMS\Groups({"rutaDet_detalle"})
      */
-    private $detLongitud;
-
+    private $rdeComentario;
+    
+    /**
+     * @var string
+     * @ORM\Column(name="rde_estado", type="string", length=255)
+     */
+    private $rdeEstado;
+    
     /**
      * @ORM\ManyToOne(targetEntity="Ruta", inversedBy="rutaDetalle" )
      * @ORM\JoinColumn(name="rta_id", referencedColumnName="rta_id")
      */
     protected $ruta;
-
+    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Cliente", inversedBy="rutas" )
+     * @ORM\JoinColumn(name="cli_id", referencedColumnName="cli_id")
+     * @JMS\SerializedName("ruta_cliente")
+     * @JMS\Groups({"r_ruta_cliente"})
+     */
+    protected $cliente;
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -58,51 +81,99 @@ class RutaDetalle
     }
 
     /**
-     * Set detLatitud
+     * Set rdeLongitud
      *
-     * @param string $detLatitud
+     * @param string $rdeLongitud
      *
      * @return RutaDetalle
      */
-    public function setDetLatitud($detLatitud)
+    public function setRdeLongitud($rdeLongitud)
     {
-        $this->detLatitud = $detLatitud;
+        $this->rdeLongitud = $rdeLongitud;
 
         return $this;
     }
 
     /**
-     * Get detLatitud
+     * Get rdeLongitud
      *
      * @return string
      */
-    public function getDetLatitud()
+    public function getRdeLongitud()
     {
-        return $this->detLatitud;
+        return $this->rdeLongitud;
     }
 
     /**
-     * Set detLongitud
+     * Set rdeLatitud
      *
-     * @param string $detLongitud
+     * @param string $rdeLatitud
      *
      * @return RutaDetalle
      */
-    public function setDetLongitud($detLongitud)
+    public function setRdeLatitud($rdeLatitud)
     {
-        $this->detLongitud = $detLongitud;
+        $this->rdeLatitud = $rdeLatitud;
 
         return $this;
     }
 
     /**
-     * Get detLongitud
+     * Get rdeLatitud
      *
      * @return string
      */
-    public function getDetLongitud()
+    public function getRdeLatitud()
     {
-        return $this->detLongitud;
+        return $this->rdeLatitud;
+    }
+
+    /**
+     * Set rdeComentario
+     *
+     * @param string $rdeComentario
+     *
+     * @return RutaDetalle
+     */
+    public function setRdeComentario($rdeComentario)
+    {
+        $this->rdeComentario = $rdeComentario;
+
+        return $this;
+    }
+
+    /**
+     * Get rdeComentario
+     *
+     * @return string
+     */
+    public function getRdeComentario()
+    {
+        return $this->rdeComentario;
+    }
+
+    /**
+     * Set rdeEstado
+     *
+     * @param string $rdeEstado
+     *
+     * @return RutaDetalle
+     */
+    public function setRdeEstado($rdeEstado)
+    {
+        $this->rdeEstado = $rdeEstado;
+
+        return $this;
+    }
+
+    /**
+     * Get rdeEstado
+     *
+     * @return string
+     */
+    public function getRdeEstado()
+    {
+        return $this->rdeEstado;
     }
 
     /**
@@ -127,5 +198,29 @@ class RutaDetalle
     public function getRuta()
     {
         return $this->ruta;
+    }
+
+    /**
+     * Set cliente
+     *
+     * @param \AppBundle\Entity\Cliente $cliente
+     *
+     * @return RutaDetalle
+     */
+    public function setCliente(\AppBundle\Entity\Cliente $cliente = null)
+    {
+        $this->cliente = $cliente;
+
+        return $this;
+    }
+
+    /**
+     * Get cliente
+     *
+     * @return \AppBundle\Entity\Cliente
+     */
+    public function getCliente()
+    {
+        return $this->cliente;
     }
 }

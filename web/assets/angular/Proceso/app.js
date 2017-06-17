@@ -1,6 +1,6 @@
 (function(angular){
     
-    angular.module('superadmin-usuarios', [ 'ui.router','ngResource','ui.bootstrap'])
+    angular.module('admin-procesos', [ 'ui.router','ngResource','ui.bootstrap'])
     
     .constant('urlBase', saConstants.urlBase)
     .constant('urlBaseImg', saConstants.urlBaseImg)
@@ -14,13 +14,13 @@
 
     .config( ['$stateProvider', '$urlRouterProvider', 'urlBasePartials',
         function  ($stateProvider ,  $urlRouterProvider ,  urlBasePartials) {
-            var listaDeUsuarios = {
-                name: 'lista_usuarios',
+            var listaDeProcesos = {
+                name: 'procesos',
                 url: '/',
-                controller: 'UsuarioController',
-                templateUrl: urlBasePartials + 'lista_usuarios.html'
+                controller: 'ProcesoController',
+                templateUrl: urlBasePartials + 'procesos.html'
             };
-            $stateProvider.state(listaDeUsuarios);
+            $stateProvider.state(listaDeProcesos);
             $urlRouterProvider.when('', '/');
         }
     ]);

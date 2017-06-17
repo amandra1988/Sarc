@@ -1,5 +1,5 @@
-angular.module('superadmin-usuarios')
-.controller('UsuarioController',['$scope','UsuarioFactory','EmpresaFactory','$uibModal','urlBasePartials',function ($scope,UsuarioFactory,EmpresaFactory,$uibModal,urlBasePartials) {
+angular.module('admin-procesos')
+.controller(ProcesoController',['$scope','UsuarioFactory','EmpresaFactory','$uibModal','urlBasePartials',function ($scope,UsuarioFactory,EmpresaFactory,$uibModal,urlBasePartials) {
        
         $scope.empresas =[];
         $scope.listaUsuarios =[];

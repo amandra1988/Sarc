@@ -4,25 +4,44 @@
 
 <div class="modal-body">
    <div class="container-fluid">
-        <table class="table">
+        <table class="table" border ="0">
             <tr>
-                <th colspan="2" style="font-size: 12px; font-weight: bold">Datos del operador</th>
-                <th colspan="2" style="font-size: 12px; font-weight: bold">Datos del camión</th>
+                <th colspan="2" class="titulo_negrita" width="50%">Datos del operador</th>
+                <th colspan="2" class="titulo_negrita" width="50%">Datos del camión</th>
             </tr>
             <tr>
-                <td style="font-size: 10px; font-weight: bold">Nombre:</td>
-                <td style="font-size: 10px;">{{evento.ruta_operador.nombre_operador}} {{evento.ruta_operador.apellido_operador}}</td>
-                <td style="font-size: 10px; font-weight: bold">Patente:</td>
-                <td style="font-size: 10px;">{{evento.ruta_camion.patente_camion}}</td>
+                <td class="titulo_negrita"  width="20%">Nombre:</td>
+                <td class="texto" width="30%">{{evento.ruta_operador.nombre_operador}} {{evento.ruta_operador.apellido_operador}}</td>
+                <td class="titulo_negrita"  width="20%">Patente:</td>
+                <td class="texto" width="30%">{{evento.ruta_camion.patente_camion}}</td>
             </tr>
             <tr>       
-                <td style="font-size: 10px; font-weight: bold">N° de licencia</td>
-                <td style="font-size: 10px;">{{evento.ruta_operador.licencia_operador}}</td>
-                <td style="font-size: 10px; font-weight: bold">Capacidad:</td>
-                <td style="font-size: 10px;">{{evento.ruta_camion.capacidad_camion}}</td>
+                <td class="titulo_negrita" width="20%">N° de licencia</td>
+                <td class="texto" width="30%">{{evento.ruta_operador.licencia_operador}}</td>
+                <td class="titulo_negrita" width="20%">Capacidad:</td>
+                <td class="texto" width="30%">{{evento.ruta_camion.capacidad_camion}}</td>
             </tr>
             
-            <tr><td colspan="4" align="center"> <img src="../../../../assets/img/mapaejemplo.png" width="300px" height="300px"> </td></tr>
+            <tr>
+                <td class="titulo_negrita" >Centro de acopio</td>
+                <td class="texto">{{evento.ruta_operador.usuario.empresa.centro_de_acopio.nombre_centro}}</td>
+                <td colspan="4" rowspan="2">
+                    <img src="../../../../assets/img/mapaejemplo.png" width="300px" height="300px">
+                </td>
+            </tr>
+            
+            <tr> 
+                <td class="titulo_negrita">Clientes:</td>
+                <td >
+                    <ul>
+                        <div ng-repeat="x in evento.ruta_detalle"> 
+                            <li class="texto">
+                                {{ x.ruta_cliente.cliente_nombre }}
+                            </li>
+                        </div>
+                    </ul> 
+                </td>
+            </tr>           
         </table>
     </div>
 </div>
