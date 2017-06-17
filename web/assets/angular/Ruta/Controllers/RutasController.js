@@ -3,10 +3,9 @@ angular.module('admin-rutas')
 
     $scope.eventSources = [];
     $scope.SelectedEvent=null;
-    var isFirstTime = true ;
 
     $scope.listaDeRutas= function (){
-        RutaFactory.query({idEmpresa:2,'expand[]': [/*'r_ruta_operador','operador_detalle','r_ruta_camion','camion_detalle'*/]}, function(retorno) {
+        RutaFactory.query({idEmpresa:2,'expand[]': ['r_ruta_operador','operador_detalle','r_ruta_camion','camion_detalle']}, function(retorno) {
             angular.forEach(retorno, function(value,key){
                 $scope.events.push( value );
             });
@@ -14,7 +13,35 @@ angular.module('admin-rutas')
     };
 
     $scope.events = [];
+    $scope.evento = [];
 
+    $scope.mostrarEvento = function(evento) {
+        $scope.evento = evento;
+        var modalInstance = $scope.modal();
+        modalInstance.result.then(function()
+        {
+           //$scope.listaDeEmpresas();
+        });
+    };
+    
+    $scope.modal =  function(){
+        var modalInstance= $uibModal.open({
+            templateUrl: urlBasePartials+'modal_rutas.html',
+            backdrop: 'static',
+            size: 'lg',
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            controller: 'PopupModal',
+            resolve: {
+                evento: function() {
+                    return $scope.evento;
+                }
+            }
+        });
+        return modalInstance;
+     };
+        
     $scope.uiConfig = {
          calendar: {
              height: 450,
@@ -40,17 +67,28 @@ angular.module('admin-rutas')
              dayNamesShort   : ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
 
              eventClick: function(event){
-                $scope.SelectedEvent = event;
+                $scope.mostrarEvento(event); 
              },
-             /*eventAfterRender: function(){
-                 if($scope.events.length > 0 && isFirstTime){
-                   uiCalendarConfig.calendar.myCalendar.fullCalendar('gotoDate',$scope.events[0].start);
-                 }
-             }*/
+             eventAfterRender: function(){
+             }
          }
-     }
+     };
 
      $scope.eventSources = [$scope.events,$scope.listaDeRutas];
 
     }]
-);
+)
+.controller('PopupModal', ['$scope','$uibModalInstance','evento',function ($scope,$uibModalInstance,evento) {
+    $scope.evento = evento;
+    
+    console.log($scope.evento);
+    
+    $scope.close = function () {
+        $uibModalInstance.dismiss();
+    };
+    
+    $scope.ok = function(){
+        $uibModalInstance.close();
+    };
+}
+]);

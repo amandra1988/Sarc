@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block angularInyect %}
-    ng-app="admin-rutas"
+    ng-app="admin-operadores"
 {% endblock %}
 
 {% block title %}SAARC{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{asset('assets/vendor/ui-calendar/fullcalendar.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
 {% endblock %}
 
 {% block bodystyle%}
@@ -36,8 +36,8 @@
                   <li><a href="{{path('camiones')}}">Camiones</a></li>
                   <li><a href="{{path('operadores')}}">Operadores</a></li> 
                   <li><a href="{{path('clientes')}}">Clientes</a></li>
-                  <li class="active"><a href="{{path('rutas')}}">Rutas</a></li>
-                  <li><a href="{{path('procesos')}}">Proceso</a></li>
+                  <li><a href="{{path('rutas')}}">Rutas</a></li>
+                  <li class="active"><a href="{{path('procesos')}}">Proceso</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="{{path('logout')}}">Cerrar sesión</a></li>
@@ -46,6 +46,7 @@
         </div>
     </nav>
 {% endblock %}
+
 
 {% block javascripts %}
     <script type="text/javascript">
@@ -58,7 +59,7 @@
         };
     </script>
    {{ parent() }}
-{% include '@Admin/Ruta/javascripts.html.twig' %}
+{% include '@Admin/Proceso/javascripts.html.twig' %}
 {% endblock %}
 
 {% block body %}
