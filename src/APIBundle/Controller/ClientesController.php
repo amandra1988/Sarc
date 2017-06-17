@@ -19,7 +19,7 @@ class ClientesController extends APIBaseController
         if(is_array($request->get('expand'))){
             $groups = array_merge($groups, $request->get('expand'));
         }
-        $clientes = $this->getDoctrine()->getRepository('AppBundle:Cliente')->buscarSoloClientesVisibles($idEmpresa);
+        $clientes = $this->getDoctrine()->getRepository('AppBundle:Cliente')->findBy(array('empresa'=>$idEmpresa,'cliVisible'=>1));
         return $this->serializedResponse($clientes, $groups); 
     }
 
@@ -47,7 +47,7 @@ class ClientesController extends APIBaseController
         return $this->serializedResponse($cliente, $groups);
     }
 
-    public function postEmpresasClientesAction(Request $request, $idEmpresa){
+    public function postEmpresasClientesAction(Request $request, Empresa $empresa){
         $groups ='';
         $frecuencia = $this->getDoctrine()->getRepository('AppBundle:Frecuencia')->find($request->get('frecuencia'));
         $comuna = $this->getDoctrine()->getRepository('AppBundle:Comuna')->find($request->get('comuna'));
@@ -61,6 +61,7 @@ class ClientesController extends APIBaseController
                 ->setFrecuencia($frecuencia)
                 ->setCliDemanda($request->get('demanda'))
                 ->setComuna($comuna)
+                ->setEmpresa($empresa)
                 ->setCliVisible($request->get('visible'));
 
         $direccion = $request->get('direccion').' '.$request->get('numero').', '.$comuna->getComNombre().', Chile';

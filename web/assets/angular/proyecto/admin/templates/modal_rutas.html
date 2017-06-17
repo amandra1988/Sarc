@@ -1,10 +1,30 @@
 <div class="modal-header">
-    <h4 class="modal-title" id="myModalLabel">Mapa ruta cliente</h4>
+    <h4 class="modal-title" id="myModalLabel">{{ evento.title }}</h4>
 </div>
 
-<div class="modal-body"> 
-
-   <img src="../../../../assets/img/mapaejemplo.png" width="400px" height="500px">
+<div class="modal-body">
+   <div class="container-fluid">
+        <table class="table">
+            <tr>
+                <th colspan="2" style="font-size: 12px; font-weight: bold">Datos del operador</th>
+                <th colspan="2" style="font-size: 12px; font-weight: bold">Datos del camión</th>
+            </tr>
+            <tr>
+                <td style="font-size: 10px; font-weight: bold">Nombre:</td>
+                <td style="font-size: 10px;">{{evento.ruta_operador.nombre_operador}} {{evento.ruta_operador.apellido_operador}}</td>
+                <td style="font-size: 10px; font-weight: bold">Patente:</td>
+                <td style="font-size: 10px;">{{evento.ruta_camion.patente_camion}}</td>
+            </tr>
+            <tr>       
+                <td style="font-size: 10px; font-weight: bold">N° de licencia</td>
+                <td style="font-size: 10px;">{{evento.ruta_operador.licencia_operador}}</td>
+                <td style="font-size: 10px; font-weight: bold">Capacidad:</td>
+                <td style="font-size: 10px;">{{evento.ruta_camion.capacidad_camion}}</td>
+            </tr>
+            
+            <tr><td colspan="4" align="center"> <img src="../../../../assets/img/mapaejemplo.png" width="300px" height="300px"> </td></tr>
+        </table>
+    </div>
 </div>
 
 <div class="modal-footer">
