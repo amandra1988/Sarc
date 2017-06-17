@@ -14,13 +14,12 @@ class RutaRepository extends \Doctrine\ORM\EntityRepository
 	public function buscarRutasDelMes($mes,$anio,$idEmpresa){
 		
 		return $this->getEntityManager()
-		->createQuery('
-						SELECT r
-						FROM AppBundle:Ruta r
-						LEFT JOIN r.camion c
-						WHERE c.empresa = :idEmpresa
-						AND SUBSTRING(r.rtaFecha,6,2)= :mes
-						AND SUBSTRING(r.rtaFecha,1,4)= :anio
+		->createQuery(' SELECT r
+                                FROM AppBundle:Ruta r
+                                LEFT JOIN r.camion c
+                                WHERE c.empresa = :idEmpresa
+                                AND SUBSTRING(r.rtaFecha,6,2)= :mes
+                                AND SUBSTRING(r.rtaFecha,1,4)= :anio
 					')
 		->setParameter('idEmpresa', $idEmpresa)->setParameter('mes', $mes)->setParameter('anio', $anio)
 		->getResult();

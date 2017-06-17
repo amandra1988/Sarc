@@ -139,6 +139,12 @@ class Cliente
      */
     protected $comuna;
 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RutaDetalle", mappedBy="cliente", cascade={"persist", "remove"} )
+     */
+    protected  $rutas;
+    
     /**
      * Get id
      *
@@ -470,5 +476,46 @@ class Cliente
     public function getCliDemanda()
     {
         return $this->cliDemanda;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->rutas = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add ruta
+     *
+     * @param \AppBundle\Entity\RutaDetalle $ruta
+     *
+     * @return Cliente
+     */
+    public function addRuta(\AppBundle\Entity\RutaDetalle $ruta)
+    {
+        $this->rutas[] = $ruta;
+
+        return $this;
+    }
+
+    /**
+     * Remove ruta
+     *
+     * @param \AppBundle\Entity\RutaDetalle $ruta
+     */
+    public function removeRuta(\AppBundle\Entity\RutaDetalle $ruta)
+    {
+        $this->rutas->removeElement($ruta);
+    }
+
+    /**
+     * Get rutas
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRutas()
+    {
+        return $this->rutas;
     }
 }

@@ -5,10 +5,15 @@ angular.module('admin-rutas')
     $scope.SelectedEvent=null;
 
     $scope.listaDeRutas= function (){
-        RutaFactory.query({idEmpresa:2,'expand[]': ['r_ruta_operador','operador_detalle','r_ruta_camion','camion_detalle']}, function(retorno) {
+        RutaFactory.query({idEmpresa:2,'expand[]': ['r_ruta_operador','operador_detalle','r_ruta_camion',
+                                                    'camion_detalle','r_operador_usuario','r_usuario_empresa',
+                                                    'r_empresa_centro_acopio','centro_detalle','r_ruta_detalle',
+                                                    'rutaDet_detalle','r_ruta_cliente','cliente_detalle'
+                                                   ]}, function(retorno) {
             angular.forEach(retorno, function(value,key){
                 $scope.events.push( value );
             });
+            console.log($scope.events);
         });
     };
 

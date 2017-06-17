@@ -78,7 +78,7 @@ class CentroDeAcopio
      *
      * @ORM\Column(name="cen_longitud", type="string", length=255)
      * @JMS\SerializedName("longitud_centro")
-     * @JMS\Groups({"centro_lista"})
+     * @JMS\Groups({"centro_detalle","centro_lista"})
      */
     private $cenLongitud;
     
@@ -87,7 +87,7 @@ class CentroDeAcopio
      *
      * @ORM\Column(name="cen_latitud", type="string", length=255)
      * @JMS\SerializedName("latitud_centro")
-     * @JMS\Groups({"centro_lista"})
+     * @JMS\Groups({"centro_detalle","centro_lista"})
      */
     private $cenLatitud;
     
