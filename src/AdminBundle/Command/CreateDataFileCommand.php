@@ -46,6 +46,10 @@ class CreateDataFileCommand extends ContainerAwareCommand
             }
         }
 
+        //siempre borramos el archivo, temas cache
+        if($fs->exists($absolutePath."data/data.dat")){
+            unlink($absolutePath."data/data.dat");
+        }
 
         //procedemos a crear el archivo de datos, si no existe
         if(!$fs->exists($absolutePath."data/data.dat")){
@@ -66,7 +70,7 @@ class CreateDataFileCommand extends ContainerAwareCommand
                         "infinito"=>360,
                         "epsilon"=>20,
                         "epsilonDos"=>7,
-                        "capacidad"=>$listCamiones->getResult()
+                        "capacidad"=>$listCamiones
                 ]);
 
         //abrimos el archivo para agregar los contenidos

@@ -8,8 +8,8 @@ param e := {{ epsilon }}; # varia
 param e2 := {{ epsilonDos }}; # varia
 
 param capacidad:= #capacidad maxima del camion en contenedores
-{% for camion in camiones %}
-{{ camion.id }}  {{ camion.camCapacidad }}
+{% for camion in capacidad %}
+{{ camion.id }} {{ camion.camCapacidad }}
 {% endfor %};
 
 set diario;
