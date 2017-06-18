@@ -1,4 +1,4 @@
-var app = angular.module('admin-operadores')
+var app = angular.module('admin-operadores');
 app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','urlBasePartials',function ($scope,OperadorFactory,$uibModal,urlBasePartials) {
         
         $scope.operadores =[];
