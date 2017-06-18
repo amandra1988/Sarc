@@ -1,10 +1,10 @@
 angular.module('admin-clientes')
-.controller('ClientesController',['$scope','ClienteFactory','$uibModal','urlBasePartials','ComunaFactory','FrecuenciaFactory',function ($scope,ClienteFactory,$uibModal,urlBasePartials,ComunaFactory,FrecuenciaFactory) {
+.controller('ClientesController',['$scope','ClienteFactory','$uibModal','urlBasePartials','ComunaFactory','FrecuenciaFactory','idEmpresa',function ($scope,ClienteFactory,$uibModal,urlBasePartials,ComunaFactory,FrecuenciaFactory,idEmpresa) {
         
         $scope.clientes =[];
 
         $scope.listaDeClientes= function (){
-            ClienteFactory.query({ idEmpresa: 2 , 'expand[]': []}, function(retorno) {
+            ClienteFactory.query({ idEmpresa: idEmpresa , 'expand[]': []}, function(retorno) {
                 $scope.clientes = retorno;   
             });   
         };
@@ -32,7 +32,7 @@ angular.module('admin-clientes')
        
         $scope.nuevoCliente = function() {
             $scope.accion =1;
-            $scope.camion =[];
+            $scope.cliente =[];
             var modalInstance = $scope.modal();
             modalInstance.result.then(function()
             {
@@ -75,7 +75,7 @@ angular.module('admin-clientes')
             {
                 var c = new ClienteFactory();
                 c.visible = false;
-                c.$patch({idEmpresa:2,idCliente:id}, function(response) {
+                c.$patch({idEmpresa:idEmpresa,idCliente:id}, function(response) {
                     $scope.listaDeClientes();
                 });
             }); 
@@ -112,7 +112,7 @@ angular.module('admin-clientes')
     }]
 )
 
-.controller('PopupModal', ['$scope','$uibModalInstance','accion','ClienteFactory','cliente','frecuencias','comunas', function ($scope,$uibModalInstance,accion,ClienteFactory,cliente,frecuencias,comunas) {
+.controller('PopupModal', ['$scope','$uibModalInstance','accion','ClienteFactory','cliente','frecuencias','comunas','idEmpresa', function ($scope,$uibModalInstance,accion,ClienteFactory,cliente,frecuencias,comunas,idEmpresa) {
     $scope.accion=accion;
     $scope.cli=cliente;
     $scope.frecuencias=frecuencias;
@@ -187,11 +187,11 @@ angular.module('admin-clientes')
 
         if(accion === 1)
         {
-            c.$save({idEmpresa: 2}, function(response) {
+            c.$save({idEmpresa:idEmpresa}, function(response) {
                $uibModalInstance.close();
             });
         }else{ // Editar
-            c.$patch({idEmpresa:2, idCliente:$scope.cli.id }, function(response) {
+            c.$patch({idEmpresa:idEmpresa, idCliente:$scope.cli.id }, function(response) {
                 $uibModalInstance.close();
             });
         }

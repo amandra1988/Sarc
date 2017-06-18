@@ -138,12 +138,13 @@ class Cliente
      * @JMS\Groups({"cliente_lista"})
      */
     protected $comuna;
-	
-	/**
-     * @ORM\OneToMany(targetEntity="Ruta", mappedBy="cliente", cascade={"persist", "remove"} )
+
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RutaDetalle", mappedBy="cliente", cascade={"persist", "remove"} )
      */
-    protected $rutas;
-	
+    protected  $rutas;
+    
     /**
      * Get id
      *
@@ -476,7 +477,6 @@ class Cliente
     {
         return $this->cliDemanda;
     }
-  
     /**
      * Constructor
      */
@@ -488,11 +488,11 @@ class Cliente
     /**
      * Add ruta
      *
-     * @param \AppBundle\Entity\Ruta $ruta
+     * @param \AppBundle\Entity\RutaDetalle $ruta
      *
      * @return Cliente
      */
-    public function addRuta(\AppBundle\Entity\Ruta $ruta)
+    public function addRuta(\AppBundle\Entity\RutaDetalle $ruta)
     {
         $this->rutas[] = $ruta;
 
@@ -502,9 +502,9 @@ class Cliente
     /**
      * Remove ruta
      *
-     * @param \AppBundle\Entity\Ruta $ruta
+     * @param \AppBundle\Entity\RutaDetalle $ruta
      */
-    public function removeRuta(\AppBundle\Entity\Ruta $ruta)
+    public function removeRuta(\AppBundle\Entity\RutaDetalle $ruta)
     {
         $this->rutas->removeElement($ruta);
     }

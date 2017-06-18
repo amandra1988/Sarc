@@ -37,3 +37,7 @@ rutas:
 frecuencias:
   type: rest
   resource: APIBundle\Controller\FrecuenciasController
+  
+procesos:
+  type: rest
+  resource: APIBundle\Controller\ProcesosController

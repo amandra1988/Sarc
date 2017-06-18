@@ -7,6 +7,7 @@
     .constant('urlBaseApi', saConstants.urlBaseApi)
     .constant('urlBasePartials', saConstants.urlBaseTmp)
     .constant('apiKey', saConstants.apiKey)
+    .constant('idEmpresa', saConstants.idEmpresa)
    
     .run(['$http', 'apiKey', function($http, apiKey) {
         $http.defaults.headers.common = {'apikey': apiKey};

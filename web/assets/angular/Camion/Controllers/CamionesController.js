@@ -1,10 +1,10 @@
 angular.module('admin-camiones')
-.controller('CamionesController',['$scope','CamionFactory','$uibModal','urlBasePartials',function ($scope,CamionFactory,$uibModal,urlBasePartials) {
+.controller('CamionesController',['$scope','CamionFactory','$uibModal','urlBasePartials','idEmpresa',function ($scope,CamionFactory,$uibModal,urlBasePartials,idEmpresa) {
         
         $scope.camiones =[];
 
         $scope.listaDeCamiones= function (){
-            CamionFactory.query({ idEmpresa: 2 , 'expand[]': []}, function(retorno) {
+            CamionFactory.query({ idEmpresa: idEmpresa , 'expand[]': []}, function(retorno) {
                 $scope.camiones = retorno;
             });
         };
@@ -51,7 +51,7 @@ angular.module('admin-camiones')
             {
                 var c = new CamionFactory();
                 c.visible = 0;
-                c.$patch({idEmpresa:2,idCamion:id}, function(response) {
+                c.$patch({idEmpresa:idEmpresa,idCamion:id}, function(response) {
                     $scope.listaDeCamiones();
                 });
             }); 
@@ -80,7 +80,7 @@ angular.module('admin-camiones')
     }]
 )
 
-.controller('PopupModal', ['$scope','$uibModalInstance','accion','CamionFactory','camion', function ($scope,$uibModalInstance,accion,CamionFactory,camion) {
+.controller('PopupModal', ['$scope','$uibModalInstance','accion','CamionFactory','camion','idEmpresa', function ($scope,$uibModalInstance,accion,CamionFactory,camion,idEmpresa) {
 
     $scope.accion = accion;
     $scope.camion = camion;
@@ -98,10 +98,10 @@ angular.module('admin-camiones')
         $scope.cam.id = $scope.camion.id;
         $scope.cam.patente = $scope.camion.patente;
         $scope.cam.capacidad = $scope.camion.capacidad;
-        if($scope.camion.tipo_carga == 1){
+        if($scope.camion.tipo_carga === 1){
             $scope.cam.tipo_carga ='1';
         }else{
-            $scope.cam.tipo_carga ='2'
+            $scope.cam.tipo_carga ='2';
         }
     }
 
@@ -136,11 +136,11 @@ angular.module('admin-camiones')
         c.visible    = 1;
         if(accion === 1)
         {
-            c.$save({idEmpresa: 2}, function(response) {
+            c.$save({idEmpresa: idEmpresa}, function(response) {
                $uibModalInstance.close();
             });
         }else{ // Editar
-            c.$patch({idEmpresa:2, idCamion:$scope.cam.id }, function(response) {
+            c.$patch({idEmpresa:idEmpresa, idCamion:$scope.cam.id }, function(response) {
                 $uibModalInstance.close();
             });
         }

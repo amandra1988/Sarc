@@ -15,9 +15,11 @@ class ClienteController extends Controller
     public function indexAction()
     {
         $usuario=$this->getUser();
+        $idEmpresa = $this->getUser()->getEmpresa()->getId();
         
         return $this->render('AdminBundle:Cliente:index.html.twig', [
             'apikey'=>$usuario->getToken(),
+            'idEmpresa'=>$idEmpresa,
             'urlBase' => $this->getUrlBase('base', 'cliente'),
             'urlBaseImagenes' => $this->getUrlBase('img', 'cliente'),
             'urlBaseTemplates' => $this->getUrlBase('templates','admin'),

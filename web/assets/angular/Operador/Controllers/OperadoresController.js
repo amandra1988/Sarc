@@ -1,10 +1,10 @@
-var app = angular.module('admin-operadores')
-app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','urlBasePartials',function ($scope,OperadorFactory,$uibModal,urlBasePartials) {
+var app = angular.module('admin-operadores');
+app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','urlBasePartials','idEmpresa',function ($scope,OperadorFactory,$uibModal,urlBasePartials,idEmpresa) {
         
         $scope.operadores =[];
 
         $scope.listaDeOperadores= function (){
-            OperadorFactory.query({ idEmpresa: 2 , 'expand[]': ['r_operador_usuario','usuario_detalle']}, function(retorno) {
+            OperadorFactory.query({ idEmpresa: idEmpresa , 'expand[]': ['r_operador_usuario','usuario_detalle']}, function(retorno) {
                 $scope.operadores = retorno;   
             });   
         };
@@ -15,7 +15,7 @@ app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','u
        
         $scope.nuevoOperador = function() {
             $scope.accion =1;
-            $scope.camion =[];
+            $scope.operador =[];
             var modalInstance = $scope.modal();
             modalInstance.result.then(function()
             {
@@ -55,7 +55,7 @@ app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','u
             {
                 var o = new OperadorFactory();
                 o.visible = false;
-                o.$patch({idEmpresa:2,idOperador:id}, function(response) {
+                o.$patch({idEmpresa:idEmpresa,idOperador:id}, function(response) {
                     $scope.listaDeOperadores();
                 });
             }); 
@@ -84,7 +84,7 @@ app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','u
     }]
 )
 
-.controller('PopupModal', ['$scope','$uibModalInstance','accion','OperadorFactory','operador','validarRut', function ($scope,$uibModalInstance,accion,OperadorFactory,operador,validarRut) {
+.controller('PopupModal', ['$scope','$uibModalInstance','accion','OperadorFactory','operador','validarRut','idEmpresa', function ($scope,$uibModalInstance,accion,OperadorFactory,operador,validarRut,idEmpresa) {
 
     $scope.mensaje = '';
     $scope.error   = '';
@@ -105,7 +105,7 @@ app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','u
     }
 
     $scope.guardar= function(){
-        
+
         if(!$scope.ope.nombre){
             $scope.error = 'Ingrese nombre del operador';
             return;  
@@ -140,11 +140,11 @@ app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','u
         o.visible = true;
         if(accion === 1)
         {
-            o.$save({idEmpresa: 2}, function(response) {
+            o.$save({idEmpresa: idEmpresa}, function(response) {
                $uibModalInstance.close();
             });
         }else{ // Editar
-            o.$patch({idEmpresa:2, idOperador:$scope.ope.id }, function(response) {
+            o.$patch({idEmpresa:idEmpresa, idOperador:$scope.ope.id }, function(response) {
                 $uibModalInstance.close();
             });
         }  

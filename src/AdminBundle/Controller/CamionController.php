@@ -15,9 +15,11 @@ class CamionController extends Controller
     public function indexAction()
     {
         $usuario=$this->getUser();
+        $idEmpresa = $this->getUser()->getEmpresa()->getId();
         
         return $this->render('AdminBundle:Camion:index.html.twig', [
             'apikey'=>$usuario->getToken(),
+            'idEmpresa'=>$idEmpresa,
             'urlBase' => $this->getUrlBase('base', 'camion'),
             'urlBaseImagenes' => $this->getUrlBase('img', 'camion'),
             'urlBaseTemplates' => $this->getUrlBase('templates','admin'),

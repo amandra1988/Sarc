@@ -1,79 +1,57 @@
 angular.module('admin-rutas')
-.controller('RutasController',['$scope','$http','uiCalendarConfig','$uibModal','urlBasePartials',function ($scope,$http,uiCalendarConfig,$uibModal,urlBasePartials) {
-
+.controller('RutasController',['$scope','$http','uiCalendarConfig','$uibModal','urlBasePartials','RutaFactory','idEmpresa',function ($scope,$http,uiCalendarConfig,$uibModal,urlBasePartials,RutaFactory,idEmpresa) {
 
     $scope.eventSources = [];
     $scope.SelectedEvent=null;
-    var isFirstTime = true ;
 
+    $scope.listaDeRutas= function (){
+        RutaFactory.query({idEmpresa:idEmpresa,'expand[]': ['r_ruta_operador','operador_detalle','r_ruta_camion',
+                                                    'camion_detalle','r_operador_usuario','r_usuario_empresa',
+                                                    'r_empresa_centro_acopio','centro_detalle','r_ruta_detalle',
+                                                    'rutaDet_detalle','r_ruta_cliente','cliente_detalle'
+                                                   ]}, function(retorno) {
+            angular.forEach(retorno, function(value,key){
+                $scope.events.push( value );
+            });
+            console.log($scope.events);
+        });
+    };
 
     $scope.events = [];
+    $scope.evento = [];
 
-
-    $scope.events = [
+    $scope.mostrarEvento = function(evento) {
+        $scope.evento = evento;
+        var modalInstance = $scope.modal();
+        modalInstance.result.then(function()
         {
-            title: 'All Day Event',
-            start: '2017-06-01'
-        },
-        {
-            title: 'Long Event',
-            start: '2017-06-07',
-            end: '2017-06-10'
-        },
-        {
-            id: 999,
-            title: 'Repeating Event',
-            start: '2017-06-06'
-        },
-        {
-            id: 999,
-            title: 'Repeating Event',
-            start: '2017-06-16'
-        },
-        {
-            title: 'Conference',
-            start: '2017-06-11',
-            end: '2017-06-13'
-        },
-        {
-            title: 'Meeting',
-            start: '2017-06-12',
-            end: '2017-06-12'
-        },
-        {
-            title: 'Lunch',
-            start: '2017-06-12'
-        },
-        {
-            title: 'Meeting',
-            start: '2017-06-12'
-        },
-        {
-            title: 'Happy Hour',
-            start: '2017-06-12'
-        },
-        {
-            title: 'Dinner',
-            start: '2017-06-12'
-        },
-        {
-            title: 'Birthday Party',
-            start: '2017-06-13'
-        },
-        {
-            title: 'Click for Google',
-            url: 'http://google.com/',
-            start: '2017-06-28'
-        }
-    ];
-
-    $scope.eventSources = [$scope.events];
-
+           //$scope.listaDeEmpresas();
+        });
+    };
+    
+    $scope.modal =  function(){
+        var modalInstance= $uibModal.open({
+            templateUrl: urlBasePartials+'modal_rutas.html',
+            backdrop: 'static',
+            size: 'lg',
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            controller: 'PopupModal',
+            resolve: {
+                evento: function() {
+                    return $scope.evento;
+                }
+            }
+        });
+        return modalInstance;
+     };
+        
     $scope.uiConfig = {
          calendar: {
              height: 450,
              editable: true,
-             displayEventTime:true,
+             displayEventTime:false,
              fixedWeekCount : false,
              header: {
                  left:  'prev,next,today',
@@ -94,14 +72,28 @@ angular.module('admin-rutas')
              dayNamesShort   : ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
 
              eventClick: function(event){
-                $scope.SelectedEvent = event;
+                $scope.mostrarEvento(event); 
              },
              eventAfterRender: function(){
-                 if($scope.event.length > 0 && isFirstTime){
-                   uiCalendarConfig.calendar.myCalendar.fullCalendar('gotoDate','2017-06-01' /*$scope.events[0].start*/);
-                 }
+                //$scope.eventSources =[];
+                //$scope.eventSources = [$scope.events,$scope.listaDeRutas];
              }
          }
-     }
+     };
+
+     $scope.eventSources = [$scope.events,$scope.listaDeRutas];
+
     }]
-);
+)
+.controller('PopupModal', ['$scope','$uibModalInstance','evento',function ($scope,$uibModalInstance,evento) {
+    $scope.evento = evento;
+
+    $scope.close = function () {
+        $uibModalInstance.dismiss();
+    };
+    
+    $scope.ok = function(){
+        $uibModalInstance.close();
+    };
+}
+]);

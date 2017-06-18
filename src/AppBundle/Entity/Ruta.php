@@ -16,10 +16,10 @@ class Ruta
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="rta_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-	 * @JMS\SerializedName("ruta_id")
+	 * @JMS\SerializedName("id")
      * @JMS\Groups({"ruta_detalle","ruta_lista"})
      */
     private $id;
@@ -27,70 +27,63 @@ class Ruta
     /**
      * @var string
      *
-     * @ORM\Column(name="rta_latitud", type="string", length=255)
-	 * @JMS\SerializedName("ruta_latitud")
+     * @ORM\Column(name="rta_titulo", type="string", length=255)
+	 * @JMS\SerializedName("title")
      * @JMS\Groups({"ruta_detalle","ruta_lista"})
      */
-    private $rtaLatitud;
+    private $rtaTitulo;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="rta_longitud", type="string", length=255)
-	 * @JMS\SerializedName("ruta_longitud")
-     * @JMS\Groups({"ruta_detalle","ruta_lista"})
-     */
-    private $rtaLongitud;
-
-    /**
-     * @var \DateTime
+     * @var \Date
      *
      * @ORM\Column(name="rta_fecha", type="date")
-	 * @JMS\SerializedName("ruta_fecha")
+	 * @JMS\SerializedName("start")
      * @JMS\Groups({"ruta_detalle","ruta_lista"})
      */
     private $rtaFecha;
-
+    
     /**
-     * @var int
-     *
-     * @ORM\Column(name="rta_realizado", type="integer")
-	 * @JMS\SerializedName("ruta_realizado")
-     * @JMS\Groups({"ruta_detalle","ruta_lista"})
+     * @ORM\ManyToOne(targetEntity="Proceso", inversedBy="ruta" )
+     * @ORM\JoinColumn(name="prc_id", referencedColumnName="prc_id")
      */
-    private $rtaRealizado;
+    protected $proceso;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="rta_observacion", type="string", length=255)
-	 * @JMS\SerializedName("ruta_observacion")
-     * @JMS\Groups({"ruta_detalle","ruta_lista"})
-     */
-    private $rtaObservacion;
-
-  
-    /**
-     * @ORM\ManyToOne(targetEntity="Cliente", inversedBy="rutas" )
-     * @ORM\JoinColumn(name="cli_id", referencedColumnName="cli_id")
-     * @JMS\SerializedName("ruta_cliente")
-     * @JMS\Groups({"ruta_detalle","ruta_lista"})
-     */
-    protected $cliente;
-	
-
+    
     /**
      * @ORM\ManyToOne(targetEntity="Operador", inversedBy="rutas" )
      * @ORM\JoinColumn(name="ope_id", referencedColumnName="ope_id")
      * @JMS\SerializedName("ruta_operador")
-     * @JMS\Groups({"ruta_detalle","ruta_lista"})
+     * @JMS\Groups({"r_ruta_operador"})
      */
     protected $operador;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Camion", inversedBy="rutas" )
+     * @ORM\JoinColumn(name="cam_id", referencedColumnName="cam_id")
+     * @JMS\SerializedName("ruta_camion")
+     * @JMS\Groups({"r_ruta_camion"})
+     */
+    protected $camion;
+
+    /**
+     * @ORM\OneToMany(targetEntity="RutaDetalle", mappedBy="ruta", cascade={"persist", "remove"} )
+     * @JMS\SerializedName("ruta_detalle")
+     * @JMS\Groups({"r_ruta_detalle"})
+     */
+    protected $rutaDetalle;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->rutaDetalle = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -98,51 +91,27 @@ class Ruta
     }
 
     /**
-     * Set rtaLatitud
+     * Set rtaTitulo
      *
-     * @param string $rtaLatitud
+     * @param string $rtaTitulo
      *
      * @return Ruta
      */
-    public function setRtaLatitud($rtaLatitud)
+    public function setRtaTitulo($rtaTitulo)
     {
-        $this->rtaLatitud = $rtaLatitud;
+        $this->rtaTitulo = $rtaTitulo;
 
         return $this;
     }
 
     /**
-     * Get rtaLatitud
+     * Get rtaTitulo
      *
      * @return string
      */
-    public function getRtaLatitud()
+    public function getRtaTitulo()
     {
-        return $this->rtaLatitud;
-    }
-
-    /**
-     * Set rtaLongitud
-     *
-     * @param string $rtaLongitud
-     *
-     * @return Ruta
-     */
-    public function setRtaLongitud($rtaLongitud)
-    {
-        $this->rtaLongitud = $rtaLongitud;
-
-        return $this;
-    }
-
-    /**
-     * Get rtaLongitud
-     *
-     * @return string
-     */
-    public function getRtaLongitud()
-    {
-        return $this->rtaLongitud;
+        return $this->rtaTitulo;
     }
 
     /**
@@ -170,75 +139,27 @@ class Ruta
     }
 
     /**
-     * Set rtaRealizado
+     * Set proceso
      *
-     * @param boolean $rtaRealizado
+     * @param \AppBundle\Entity\Proceso $proceso
      *
      * @return Ruta
      */
-    public function setRtaRealizado($rtaRealizado)
+    public function setProceso(\AppBundle\Entity\Proceso $proceso = null)
     {
-        $this->rtaRealizado = $rtaRealizado;
+        $this->proceso = $proceso;
 
         return $this;
     }
 
     /**
-     * Get rtaRealizado
+     * Get proceso
      *
-     * @return bool
+     * @return \AppBundle\Entity\Proceso
      */
-    public function getRtaRealizado()
+    public function getProceso()
     {
-        return $this->rtaRealizado;
-    }
-
-    /**
-     * Set rtaObservacion
-     *
-     * @param string $rtaObservacion
-     *
-     * @return Ruta
-     */
-    public function setRtaObservacion($rtaObservacion)
-    {
-        $this->rtaObservacion = $rtaObservacion;
-
-        return $this;
-    }
-
-    /**
-     * Get rtaObservacion
-     *
-     * @return string
-     */
-    public function getRtaObservacion()
-    {
-        return $this->rtaObservacion;
-    }
-
-    /**
-     * Set cliente
-     *
-     * @param \AppBundle\Entity\Cliente $cliente
-     *
-     * @return Ruta
-     */
-    public function setCliente(\AppBundle\Entity\Cliente $cliente = null)
-    {
-        $this->cliente = $cliente;
-
-        return $this;
-    }
-
-    /**
-     * Get cliente
-     *
-     * @return \AppBundle\Entity\Cliente
-     */
-    public function getCliente()
-    {
-        return $this->cliente;
+        return $this->proceso;
     }
 
     /**
@@ -263,5 +184,63 @@ class Ruta
     public function getOperador()
     {
         return $this->operador;
+    }
+
+    /**
+     * Set camion
+     *
+     * @param \AppBundle\Entity\Camion $camion
+     *
+     * @return Ruta
+     */
+    public function setCamion(\AppBundle\Entity\Camion $camion = null)
+    {
+        $this->camion = $camion;
+
+        return $this;
+    }
+
+    /**
+     * Get camion
+     *
+     * @return \AppBundle\Entity\Camion
+     */
+    public function getCamion()
+    {
+        return $this->camion;
+    }
+
+    /**
+     * Add rutaDetalle
+     *
+     * @param \AppBundle\Entity\RutaDetalle $rutaDetalle
+     *
+     * @return Ruta
+     */
+    public function addRutaDetalle(\AppBundle\Entity\RutaDetalle $rutaDetalle)
+    {
+        $this->rutaDetalle[] = $rutaDetalle;
+
+        return $this;
+    }
+
+    /**
+     * Remove rutaDetalle
+     *
+     * @param \AppBundle\Entity\RutaDetalle $rutaDetalle
+     */
+    public function removeRutaDetalle(\AppBundle\Entity\RutaDetalle $rutaDetalle)
+    {
+        $this->rutaDetalle->removeElement($rutaDetalle);
+    }
+
+    /**
+     * Get rutaDetalle
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRutaDetalle()
+    {
+        return $this->rutaDetalle;
     }
 }

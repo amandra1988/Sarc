@@ -103,7 +103,7 @@ angular.module('superadmin-usuarios')
         
         if(!$scope.user.newpass)
         {
-            $scope.error = 'Ingrese password.';
+            $scope.error = 'Ingrese nueva clave de acceso.';
             return;
         }
         
@@ -137,7 +137,7 @@ angular.module('superadmin-usuarios')
 
         if(!$scope.user.password)
         {
-            $scope.error = 'Ingrese password para el usuario.';
+            $scope.error = 'Ingrese clave de acceso para el usuario.';
             return;
         }
         
