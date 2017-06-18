@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Proceso
@@ -18,6 +19,8 @@ class Proceso
      * @ORM\Column(name="prc_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @JMS\SerializedName("id_proceso")
+     * @JMS\Groups({"proceso_detalle","proceso_lista"})
      */
     private $id;
 
@@ -25,6 +28,8 @@ class Proceso
      * @var datetime
      *
      * @ORM\Column(name="prc_inicio", type="datetime")
+     * @JMS\SerializedName("inicio_proceso")
+     * @JMS\Groups({"proceso_detalle","proceso_lista"})
      */
     private $prcFechaInicio;
 
@@ -33,6 +38,8 @@ class Proceso
      * @var datetime
      *
      * @ORM\Column(name="prc_termino", type="datetime")
+     * @JMS\SerializedName("termino_proceso")
+     * @JMS\Groups({"proceso_detalle","proceso_lista"})
      */
     private $prcFechaTermino;
     
@@ -40,12 +47,16 @@ class Proceso
      * @var int
      *
      * @ORM\Column(name="prc_cantidad_clientes", type="integer")
+     * @JMS\SerializedName("cant_clientes_proceso")
+     * @JMS\Groups({"proceso_detalle","proceso_lista"})
      */
     private $prcCantidadClientes;
     
      /**
      * @var string
      * @ORM\Column(name="prc_estado", type="string", length=255)
+     * @JMS\SerializedName("estado_proceso")
+     * @JMS\Groups({"proceso_detalle","proceso_lista"})
      */
     private $prcEstado;
     
@@ -53,6 +64,8 @@ class Proceso
      * @var text
      *
      * @ORM\Column(name="prc_observacion", type="text")
+     * @JMS\SerializedName("observacion_proceso")
+     * @JMS\Groups({"proceso_detalle","proceso_lista"})
      */
     private $prcObservacion;
     

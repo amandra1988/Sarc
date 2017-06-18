@@ -1,19 +1,10 @@
-angular.module('superadmin-usuarios')
+angular.module('admin-procesos')
 
-.factory('UsuarioFactory', ['$resource', 'urlBaseApi', function ($resource ,  urlBaseApi ) {
+.factory('ProcesoFactory', ['$resource', 'urlBaseApi', function ($resource ,  urlBaseApi ) {
         return $resource(
-            urlBaseApi + 'usuarios/:idUsuario',
+            urlBaseApi + 'empresas/:idEmpresa/procesos/:idProceso',
             {},
             {'query': {method: 'GET', isArray:true },'patch': {method:'PATCH'}}
-         );
-    }
-])
-
-.factory('EmpresaFactory', ['$resource', 'urlBaseApi', function ($resource ,  urlBaseApi ) {
-        return $resource(
-            urlBaseApi + 'empresas/',
-            {},
-            {'query': {method: 'GET', isArray:true }}
          );
     }
 ]);
