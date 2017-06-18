@@ -15,9 +15,11 @@ class OperadorController extends Controller
     public function indexAction()
     {
         $usuario=$this->getUser();
-        
+        $idEmpresa = $this->getUser()->getEmpresa()->getId();
+
         return $this->render('AdminBundle:Operador:index.html.twig', [
             'apikey'=>$usuario->getToken(),
+            'idEmpresa'=>$idEmpresa,
             'urlBase' => $this->getUrlBase('base', 'operador'),
             'urlBaseImagenes' => $this->getUrlBase('img', 'operador'),
             'urlBaseTemplates' => $this->getUrlBase('templates','admin'),

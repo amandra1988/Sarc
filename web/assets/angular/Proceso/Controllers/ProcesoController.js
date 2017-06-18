@@ -1,9 +1,9 @@
 var app = angular.module('admin-procesos');
-app.controller('ProcesoController',['$scope','ProcesoFactory','$uibModal','urlBasePartials',function ($scope,ProcesoFactory,$uibModal,urlBasePartials) {
+app.controller('ProcesoController',['$scope','ProcesoFactory','$uibModal','urlBasePartials','idEmpresa',function ($scope,ProcesoFactory,$uibModal,urlBasePartials,idEmpresa) {
         
         $scope.procesos =[];
         $scope.listaDeProcesos= function (){
-            ProcesoFactory.query({ idEmpresa: 2 , 'expand[]': []}, function(retorno) {
+            ProcesoFactory.query({ idEmpresa: idEmpresa , 'expand[]': []}, function(retorno) {
                 $scope.procesos = retorno;
                 console.log( $scope.procesos );
             });   

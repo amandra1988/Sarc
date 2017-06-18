@@ -1,11 +1,11 @@
 angular.module('admin-rutas')
-.controller('RutasController',['$scope','$http','uiCalendarConfig','$uibModal','urlBasePartials','RutaFactory',function ($scope,$http,uiCalendarConfig,$uibModal,urlBasePartials,RutaFactory) {
+.controller('RutasController',['$scope','$http','uiCalendarConfig','$uibModal','urlBasePartials','RutaFactory','idEmpresa',function ($scope,$http,uiCalendarConfig,$uibModal,urlBasePartials,RutaFactory,idEmpresa) {
 
     $scope.eventSources = [];
     $scope.SelectedEvent=null;
 
     $scope.listaDeRutas= function (){
-        RutaFactory.query({idEmpresa:2,'expand[]': ['r_ruta_operador','operador_detalle','r_ruta_camion',
+        RutaFactory.query({idEmpresa:idEmpresa,'expand[]': ['r_ruta_operador','operador_detalle','r_ruta_camion',
                                                     'camion_detalle','r_operador_usuario','r_usuario_empresa',
                                                     'r_empresa_centro_acopio','centro_detalle','r_ruta_detalle',
                                                     'rutaDet_detalle','r_ruta_cliente','cliente_detalle'
@@ -75,6 +75,8 @@ angular.module('admin-rutas')
                 $scope.mostrarEvento(event); 
              },
              eventAfterRender: function(){
+                //$scope.eventSources =[];
+                //$scope.eventSources = [$scope.events,$scope.listaDeRutas];
              }
          }
      };
@@ -85,9 +87,7 @@ angular.module('admin-rutas')
 )
 .controller('PopupModal', ['$scope','$uibModalInstance','evento',function ($scope,$uibModalInstance,evento) {
     $scope.evento = evento;
-    
-    console.log($scope.evento);
-    
+
     $scope.close = function () {
         $uibModalInstance.dismiss();
     };
