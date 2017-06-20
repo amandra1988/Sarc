@@ -27,7 +27,7 @@ class Frecuencia
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=255)
+     * @ORM\Column(name="fre_nombre", type="string", length=255)
      * @JMS\SerializedName("frecuencia_nombre")
      * @JMS\Groups({"frecuencia_detalle","frecuencia_lista"})
      */

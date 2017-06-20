@@ -1,20 +1,52 @@
 angular.module('admin-rutas')
-.controller('RutasController',['$scope','$http','uiCalendarConfig','$uibModal','urlBasePartials','RutaFactory',function ($scope,$http,uiCalendarConfig,$uibModal,urlBasePartials,RutaFactory) {
+.controller('RutasController',['$scope','$http','uiCalendarConfig','$uibModal','urlBasePartials','RutaFactory','idEmpresa',function ($scope,$http,uiCalendarConfig,$uibModal,urlBasePartials,RutaFactory,idEmpresa) {
 
     $scope.eventSources = [];
     $scope.SelectedEvent=null;
-    var isFirstTime = true ;
 
     $scope.listaDeRutas= function (){
-        RutaFactory.query({idEmpresa:2,'expand[]': [/*'r_ruta_operador','operador_detalle','r_ruta_camion','camion_detalle'*/]}, function(retorno) {
+        RutaFactory.query({idEmpresa:idEmpresa,'expand[]': ['r_ruta_operador','operador_detalle','r_ruta_camion',
+                                                    'camion_detalle','r_operador_usuario','r_usuario_empresa',
+                                                    'r_empresa_centro_acopio','centro_detalle','r_ruta_detalle',
+                                                    'rutaDet_detalle','r_ruta_cliente','cliente_detalle'
+                                                   ]}, function(retorno) {
             angular.forEach(retorno, function(value,key){
                 $scope.events.push( value );
             });
+            console.log($scope.events);
         });
     };
 
     $scope.events = [];
+    $scope.evento = [];
 
+    $scope.mostrarEvento = function(evento) {
+        $scope.evento = evento;
+        var modalInstance = $scope.modal();
+        modalInstance.result.then(function()
+        {
+           //$scope.listaDeEmpresas();
+        });
+    };
+    
+    $scope.modal =  function(){
+        var modalInstance= $uibModal.open({
+            templateUrl: urlBasePartials+'modal_rutas.html',
+            backdrop: 'static',
+            size: 'lg',
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            controller: 'PopupModal',
+            resolve: {
+                evento: function() {
+                    return $scope.evento;
+                }
+            }
+        });
+        return modalInstance;
+     };
+        
     $scope.uiConfig = {
          calendar: {
              height: 450,
@@ -40,17 +72,28 @@ angular.module('admin-rutas')
              dayNamesShort   : ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
 
              eventClick: function(event){
-                $scope.SelectedEvent = event;
+                $scope.mostrarEvento(event); 
              },
-             /*eventAfterRender: function(){
-                 if($scope.events.length > 0 && isFirstTime){
-                   uiCalendarConfig.calendar.myCalendar.fullCalendar('gotoDate',$scope.events[0].start);
-                 }
-             }*/
+             eventAfterRender: function(){
+                //$scope.eventSources =[];
+                //$scope.eventSources = [$scope.events,$scope.listaDeRutas];
+             }
          }
-     }
+     };
 
      $scope.eventSources = [$scope.events,$scope.listaDeRutas];
 
     }]
-);
+)
+.controller('PopupModal', ['$scope','$uibModalInstance','evento',function ($scope,$uibModalInstance,evento) {
+    $scope.evento = evento;
+
+    $scope.close = function () {
+        $uibModalInstance.dismiss();
+    };
+    
+    $scope.ok = function(){
+        $uibModalInstance.close();
+    };
+}
+]);

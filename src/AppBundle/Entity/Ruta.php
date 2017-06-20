@@ -41,7 +41,14 @@ class Ruta
      * @JMS\Groups({"ruta_detalle","ruta_lista"})
      */
     private $rtaFecha;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Proceso", inversedBy="ruta" )
+     * @ORM\JoinColumn(name="prc_id", referencedColumnName="prc_id")
+     */
+    protected $proceso;
 
+    
     /**
      * @ORM\ManyToOne(targetEntity="Operador", inversedBy="rutas" )
      * @ORM\JoinColumn(name="ope_id", referencedColumnName="ope_id")
@@ -64,6 +71,14 @@ class Ruta
      * @JMS\Groups({"r_ruta_detalle"})
      */
     protected $rutaDetalle;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->rutaDetalle = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -124,6 +139,30 @@ class Ruta
     }
 
     /**
+     * Set proceso
+     *
+     * @param \AppBundle\Entity\Proceso $proceso
+     *
+     * @return Ruta
+     */
+    public function setProceso(\AppBundle\Entity\Proceso $proceso = null)
+    {
+        $this->proceso = $proceso;
+
+        return $this;
+    }
+
+    /**
+     * Get proceso
+     *
+     * @return \AppBundle\Entity\Proceso
+     */
+    public function getProceso()
+    {
+        return $this->proceso;
+    }
+
+    /**
      * Set operador
      *
      * @param \AppBundle\Entity\Operador $operador
@@ -169,13 +208,6 @@ class Ruta
     public function getCamion()
     {
         return $this->camion;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->rutaDetalle = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

@@ -9,6 +9,11 @@
     "commit": "f5416725afefb0c8ff3beb4ed4ff4b8ab3d22f0d"
   },
   "_source": "https://github.com/jquery/jquery.git",
-  "_target": "2.x",
-  "_originalSource": "jQuery"
+  "_target": "2.x"
+}type": "version",
+    "tag": "3.2.1",
+    "commit": "77d2a51d0520d2ee44173afdf4e40a9201f5964e"
+  },
+  "_source": "https://github.com/jquery/jquery-dist.git",
+  "_target": "1.9.1 - 3"
 }

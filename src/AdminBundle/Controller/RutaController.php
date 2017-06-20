@@ -15,9 +15,11 @@ class RutaController extends Controller
     public function indexAction()
     {
         $usuario=$this->getUser();
+        $idEmpresa = $this->getUser()->getEmpresa()->getId();
         
         return $this->render('AdminBundle:Ruta:index.html.twig', [
             'apikey'=>$usuario->getToken(),
+            'idEmpresa'=>$idEmpresa,
             'urlBase' => $this->getUrlBase('base', 'ruta'),
             'urlBaseImagenes' => $this->getUrlBase('img', 'ruta'),
             'urlBaseTemplates' => $this->getUrlBase('templates','admin'),
