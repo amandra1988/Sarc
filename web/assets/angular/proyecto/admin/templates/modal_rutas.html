@@ -26,7 +26,42 @@
                 <td class="titulo_negrita" >Centro de acopio</td>
                 <td class="texto">{{evento.ruta_operador.usuario.empresa.centro_de_acopio.nombre_centro}}</td>
                 <td colspan="4" rowspan="2">
-                    <img src="../../../../assets/img/mapaejemplo.png" width="100%">
+
+                    <div ui-gmap-google-map="exp" class="col-md-10"
+                         center="map.center"
+                         zoom="map.zoom"
+                         draggable="true"
+                         ragging="map.dragging"
+                         bounds="map.bounds"
+                         events="map.events"
+                         options="map.options"
+                         pan="true"
+                         control="map.control">
+
+
+                        <ui-gmap-marker ng-repeat="m in map.markers2" coords="m" icon="m.icon" fit='true' events="markersEvents" idkey="m.id">
+                            <ui-gmap-window show="m.showWindow"  closeClick="'closeClick'" ng-cloak>
+                               <!-- <div ng-controller="InfoController">
+                                    <p>This is an info window at {{ m.latitude | number:4 }}, {{ m.longitude | number:4 }}!</p>
+                                    <p class="muted">My marker will stay open when the window is popped up!</p>
+                                </div>-->
+                            </ui-gmap-window>
+                        </ui-gmap-marker>
+
+
+                        <ui-gmap-polylines  models="map.polylines"
+                                            path="'path'"
+                                            stroke="'stroke'"
+                                            visible="'visible'"
+                                            geodesic="'geodesic'"
+                                            fit="'false'"
+                                            editable="'editable'"
+                                            draggable="'draggable'">
+
+                        </ui-gmap-polylines>
+                    </div>
+
+
                 </td>
             </tr>
             
