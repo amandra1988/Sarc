@@ -84,25 +84,22 @@ angular.module('admin-rutas')
 
     }]
 )
-.controller('PopupModal', ['$scope','$uibModalInstance','evento','$timeout', '$log', '$http', 'uiGmapLogger',function ($scope,$uibModalInstance,evento,$timeout,$log, $http,uiGmapLogger) {
+
+.controller('PopupModal', ['$scope','$uibModalInstance','evento',function ($scope,$uibModalInstance,evento) {
     $scope.evento = evento;
 
 
-    uiGmapLogger.doLog = true;
+   /* uiGmapLogger.doLog = true;
 
     angular.extend($scope, {
         example2: {
             doRebuildAll: false
         },
-        clickWindow: function () {
-            $log.info('CLICK CLICK');
-            Logger.info('CLICK CLICK');
-        },
         map: {
             control: {},
             //version: "uknown",
             center: {
-                //latitude: -33.438166,longitude:  -70.64528
+                latitude: -33.438166,longitude:  -70.64528
             },
             options: {
                 streetViewControl: false,
@@ -152,8 +149,8 @@ angular.module('admin-rutas')
             return color == 'red' ? '#6060FB' : 'red';
         }
 
-    });
-
+    });*/
+/*
     var markerToClose = null;
 
     $scope.onMarkerClicked = function (marker) {
@@ -163,7 +160,7 @@ angular.module('admin-rutas')
         $scope.$apply();
 
     };
-
+*//*
     $timeout(function () {
         $scope.map.polylines.push({
             id: 3,
@@ -192,7 +189,7 @@ angular.module('admin-rutas')
         });
     }, 2000);
 
-
+*/
 
 
 
