@@ -88,111 +88,29 @@ angular.module('admin-rutas')
 .controller('PopupModal', ['$scope','$uibModalInstance','evento',function ($scope,$uibModalInstance,evento) {
     $scope.evento = evento;
 
-
-   /* uiGmapLogger.doLog = true;
-
-    angular.extend($scope, {
-        example2: {
-            doRebuildAll: false
-        },
-        map: {
-            control: {},
-            //version: "uknown",
+    $scope.map = {
             center: {
-                latitude: -33.438166,longitude:  -70.64528
+                    latitude: 40.454018, 
+                    longitude: -3.509205
+            }, 
+            zoom: 12,
+            options : {
+                    scrollwheel: false
+            },
+            control: {}
+    };
+    $scope.marker = {
+            id: 0,
+            coords: {
+                    latitude: 40.454018,
+                    longitude: -3.509205
             },
             options: {
-                streetViewControl: false,
-                panControl: false,
-                maxZoom: 20,
-                minZoom: 3
-            },
-            zoom: 20,
-            dragging: false,
-            bounds: {},
-            events: {
-                tilesloaded: function (map, eventName, originalEventArgs) {
-                }
-            },
-            polylines: [ ],
-            markers2: [
-                {
-                    id: 1,
-                    latitude: -33.438166,longitude:  -70.64528,
-                    showWindow: false,
-                    title: 'Marker 2'
-                },
-                {
-                    id: 2,
-                    latitude: -33.447243,longitude: -70.650034,
-                    showWindow: false,
-                    title: 'Marker 2'
-                },
-                {
-                    id: 3,
-                    icon: 'assets/images/plane.png',
-                    latitude: -33.441107,longitude: -70.654256,
-                    showWindow: false,
-                    title: 'Plane'
-                }
-                ,
-                {
-                    id: 3,
-                    icon: 'assets/images/plane.png',
-                    latitude: -33.442868,longitude: -70.66005,
-                    showWindow: false,
-                    title: 'Plane'
-                }
-            ]
-        },
-        toggleColor: function (color) {
-            return color == 'red' ? '#6060FB' : 'red';
-        }
-
-    });*/
-/*
-    var markerToClose = null;
-
-    $scope.onMarkerClicked = function (marker) {
-
-        markerToClose = marker; // for next go around
-        marker.showWindow = true;
-        $scope.$apply();
-
+                    draggable: true
+            }
     };
-*//*
-    $timeout(function () {
-        $scope.map.polylines.push({
-            id: 3,
-            path: [
-                {
-                    latitude: -33.438166,longitude:  -70.64528
-                },
-                {
-                    latitude: -33.447243,longitude: -70.650034
-                },
-                {
-                    latitude: -33.441107,longitude: -70.654256
-                },
-                {
-                    latitude: -33.442868,longitude: -70.66005
-                }
-            ],
-            stroke: {
-                color: '#6060FB',
-                weight: 3
-            },
-            editable: false,
-            draggable: true,
-            geodesic: true,
-            visible: true
-        });
-    }, 2000);
-
-*/
-
-
-
+    
+    
     $scope.close = function () {
         $uibModalInstance.dismiss();
     };

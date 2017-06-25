@@ -1,6 +1,5 @@
 (function(angular){
-    
-    angular.module('admin-rutas', [ 'uiGmapgoogle-maps','ui.router','ngResource','ui.bootstrap','ui.calendar'])
+    angular.module('admin-rutas', [ 'google-maps','ui.router','ngResource','ui.bootstrap','ui.calendar'])
     
     .constant('urlBase', saConstants.urlBase)
     .constant('urlBaseImg', saConstants.urlBaseImg)
