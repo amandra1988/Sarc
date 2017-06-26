@@ -27,7 +27,7 @@ angular.module('admin-rutas')
            //$scope.listaDeEmpresas();
         });
     };
-    
+
     $scope.modal =  function(){
         var modalInstance= $uibModal.open({
             templateUrl: urlBasePartials+'modal_rutas.html',
@@ -45,7 +45,7 @@ angular.module('admin-rutas')
         });
         return modalInstance;
      };
-        
+
     $scope.uiConfig = {
          calendar: {
              height: 450,
@@ -71,7 +71,7 @@ angular.module('admin-rutas')
              dayNamesShort   : ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
 
              eventClick: function(event){
-                $scope.mostrarEvento(event); 
+                $scope.mostrarEvento(event);
              },
              eventAfterRender: function(){
                 //$scope.eventSources =[];
@@ -85,36 +85,68 @@ angular.module('admin-rutas')
     }]
 )
 
-.controller('PopupModal', ['$scope','$uibModalInstance','evento',function ($scope,$uibModalInstance,evento) {
+.controller('PopupModal', ['$scope','$uibModalInstance','evento','uiGmapGoogleMapApi',function ($scope,$uibModalInstance,evento,uiGmapGoogleMapApi) {
     $scope.evento = evento;
 
-    $scope.map = {
-            center: {
-                    latitude: 40.454018, 
-                    longitude: -3.509205
-            }, 
-            zoom: 12,
-            options : {
-                    scrollwheel: false
-            },
-            control: {}
-    };
-    $scope.marker = {
-            id: 0,
-            coords: {
-                    latitude: 40.454018,
-                    longitude: -3.509205
-            },
-            options: {
-                    draggable: true
-            }
-    };
-    
-    
+
+
+
+angular.extend($scope, {
+      map: {
+        control: {},
+        center: {
+          latitude: 45,
+          longitude: -74
+        },
+        marker: {
+          id: 0,
+          latitude: 45,
+          longitude: -74,
+          options: {
+            visible: false
+          }
+        },
+        marker2: {
+          id: 0,
+          latitude: 45.2,
+          longitude: -74.5
+        },
+        zoom: 7,
+        options: {
+          draggable:true,
+          disableDefaultUI: true,
+          panControl: false,
+          navigationControl: false,
+          scrollwheel: false,
+          scaleControl: false
+        },
+        refresh: function () {
+          $scope.map.control.refresh(origCenter);
+        }
+      }
+
+
+});
+
+
+
+
+
+    // uiGmapGoogleMapApi is a promise.
+    // The "then" callback function provides the google.maps object.
+    uiGmapGoogleMapApi.then(function(maps) {
+        console.log(maps);
+
+    maps.visualRefresh = true;
+
+});
+
+var origCenter = {latitude: $scope.map.center.latitude, longitude: $scope.map.center.longitude};
+
     $scope.close = function () {
         $uibModalInstance.dismiss();
     };
-    
+
     $scope.ok = function(){
         $uibModalInstance.close();
     };
