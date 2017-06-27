@@ -16,6 +16,8 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 
+use Symfony\Component\Console\Logger\ConsoleLogger;
+
 class SwitchProcessCommand extends ContainerAwareCommand
 {
     protected function configure()
@@ -40,56 +42,84 @@ class SwitchProcessCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        //argregamos al log todos los parametros
+        $logger = $this->getContainer()->get('logger');
+        $nameEvent = $input->getArgument('event');
+        $fileName= $input->getArgument('file_name');
 
-       $nameEvent = $input->getArgument('event');
-       $fileName= $input->getArgument('file_name');
+        //validamos el primer parámetro
+        $typeEvent = array("IN_CREATE","IN_MODIFY","IN_DELETE");
 
-/*
-		? Si es *.dat,  ejecutar saarc-proces-scipampl
-			§ Inicia scipampl, crea un archivo *.PID
-		? Si es *.PID  ejecutar saarc-update-info-process
-		? Si es *.solve ejecutar saarc-create-route
+        if (!in_array($nameEvent, $typeEvent)) {
+            $logger->info('SAARC: ERROR No existe el evento indicado' . $nameEvent . " " . $fileName);
+            throw new \RuntimeException("No existe el evento indicado ");
 
-*/
-      $str = strpos($fileName, '.');
+        }
 
-      if ($str === false) {
-         throw new \RuntimeException("El nombre del archivo debe tener el separador '.' ");
-      }else{
-         $fileExtension = substr($fileName,strrpos($fileName,'.',-1),strlen($fileName));
-echo $fileExtension;
-         if (empty($fileExtension)) {
-            throw new \RuntimeException("El nombre del archivo debe tener una exension");
-         }
+        $typeExtension= array(
+            //'.dat'=>"saarc:create-data-file", solo debe ser a traves de cron
+            '.sol'=>"saarc:create-route",
+            '.PID'=>"saarc:update-info-process"
+        );
+        //validamos el segundo parámetro
+        $str = strpos($fileName, '.');
+        //obtenemos la extensión del archivo, donde el limite es el punto en el nombre
+        $fileExtension = substr($fileName,strrpos($fileName,'.',-1),strlen($fileName));
 
-      }
+        if ($str === false) {
+            $logger->info('SAARC: ERROR El segundo parametro (nombre del archivo), debe tener el separador' . $nameEvent . " " . $fileName);
+            throw new \RuntimeException("El segundo parametro (nombre del archivo), debe tener el separador '.' ");
 
+        }else{
+            //Debe existir en el array $typeExtension
+            if (!array_key_exists($fileExtension, $typeExtension)) {
+                $logger->info('SAARC: ERROR El segundo parametro (nombre del archivo), no tiene una extension conocida ' . $nameEvent . " " . $fileName);
+                throw new \RuntimeException("El segundo parametro (nombre del archivo), no tiene una extension conocida");
 
+            }
+        }
 
        if ($nameEvent == "IN_CREATE") {
 
+            $command = $this->getApplication()->find($typeExtension[$fileExtension]);
 
+            $arguments = array(
+                'command'   => $typeExtension[$fileExtension],
+                'file_name' => $fileExtension
+            );
+
+            $logger->info('SAARC: '. $nameEvent . " " . $fileName);
        }
 
        if ($nameEvent == "IN_MODIFY") {
 
+            $command = $this->getApplication()->find('saarc:update-info-process');
+
+            $arguments = array(
+                'command'   => 'saarc-update-info-process',
+                'file_name' => $fileExtension
+            );
+
+            $logger->info('SAARC: '. $nameEvent . " " . $fileName);
        }
 
        if ($nameEvent == "IN_DELETE") {
 
-       }
+            $command = $this->getApplication()->find('saarc:terminate-process');
 
+            $arguments = array(
+                'command'   => 'saarc:terminate-process',
+                'file_name' => $fileExtension
+            );
 
-       $command = $this->getApplication()->find('saarc:create-data-file');
+            $logger->info('SAARC: '. $nameEvent . " " . $fileName);
 
-         $arguments = array(
-            'command' => 'saarc:create-data-file'
-            //'name'    => 'saarc:create-data-file',
-            //'--yell'  => true,
-         );
+        }
 
-         $greetInput = new ArrayInput($arguments);
-         $returnCode = $command->run($greetInput, $output);
+        //obtnemos los parametros del comando
+        $greetInput = new ArrayInput($arguments);
+        //ejecutamos el comando
+        $returnCode = $command->run($greetInput, $output);
 
 
 
