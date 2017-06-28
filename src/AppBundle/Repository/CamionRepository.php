@@ -10,4 +10,16 @@ namespace AppBundle\Repository;
  */
 class CamionRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function buscarCamionesDeLaEmpresa($idEmpresa){
+
+            return $this->getEntityManager()
+            ->createQuery(' SELECT c
+                            FROM AppBundle:Camion c
+                            LEFT JOIN c.operador o
+                            LEFT JOIN o.usuario u
+                            WHERE u.empresa = :idEmpresa
+                            AND c.camVisible = :visible')
+            ->setParameter('idEmpresa', $idEmpresa)->setParameter('visible', 1)
+            ->getResult();
+    }
 }

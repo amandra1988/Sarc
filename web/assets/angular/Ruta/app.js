@@ -26,7 +26,7 @@
             //config para google map
             uiGmapGoogleMapApiProvider.configure({
                 key: 'AIzaSyAQSqyqFQIfB_RPG0h7HC7-G25c7w2OkUI',
-                v: '3.20',
+                v: '3.25',
                 libraries: 'weather,geometry,visualization'
             });
 

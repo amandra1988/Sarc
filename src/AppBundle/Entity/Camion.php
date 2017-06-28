@@ -67,15 +67,14 @@ class Camion
      * @JMS\Groups({"camion_detalle","camion_lista"})
      */
     private $camEstado;
-    
+       
     /**
-     * @ORM\ManyToOne(targetEntity="Empresa", inversedBy="camiones" )
-     * @ORM\JoinColumn(name="emp_id", referencedColumnName="emp_id")
-     * @JMS\SerializedName("camion_empresa")
-     * @JMS\Groups({"r_camion_empresa"})
+     * @ORM\OneToOne(targetEntity="Operador", mappedBy="camion")
+     * @JMS\SerializedName("camion_operador")
+     * @JMS\Groups({"r_camion_operador"})
      */
-    private $empresa;
-
+    protected $operador;
+    
     /**
      * @ORM\OneToMany(targetEntity="Ruta", mappedBy="camion", cascade={"persist", "remove"} )
      */
@@ -215,29 +214,6 @@ class Camion
     }
 
     /**
-     * Set empresa
-     *
-     * @param \AppBundle\Entity\Empresa $empresa
-     *
-     * @return Camion
-     */
-    public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
-    {
-        $this->empresa = $empresa;
-
-        return $this;
-    }
-
-    /**
-     * Get empresa
-     *
-     * @return \AppBundle\Entity\Empresa
-     */
-    public function getEmpresa()
-    {
-        return $this->empresa;
-    }
-    /**
      * Constructor
      */
     public function __construct()
@@ -277,5 +253,29 @@ class Camion
     public function getRutas()
     {
         return $this->rutas;
+    }
+
+    /**
+     * Set operador
+     *
+     * @param \AppBundle\Entity\Operador $operador
+     *
+     * @return Camion
+     */
+    public function setOperador(\AppBundle\Entity\Operador $operador = null)
+    {
+        $this->operador = $operador;
+
+        return $this;
+    }
+
+    /**
+     * Get operador
+     *
+     * @return \AppBundle\Entity\Operador
+     */
+    public function getOperador()
+    {
+        return $this->operador;
     }
 }

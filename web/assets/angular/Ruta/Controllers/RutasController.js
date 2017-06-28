@@ -3,9 +3,11 @@ angular.module('admin-rutas')
 
     $scope.eventSources = [];
     $scope.SelectedEvent=null;
+    $scope.mes = 0;
+    $scope.anio= 0;
 
     $scope.listaDeRutas= function (){
-        RutaFactory.query({idEmpresa:idEmpresa,'expand[]': ['r_ruta_operador','operador_detalle','r_ruta_camion',
+        RutaFactory.query({idEmpresa:idEmpresa, mes:$scope.mes, anio:$scope.anio ,'expand[]': ['r_ruta_operador','operador_detalle','r_ruta_camion',
                                                     'camion_detalle','r_operador_usuario','r_usuario_empresa',
                                                     'r_empresa_centro_acopio','centro_detalle','r_ruta_detalle',
                                                     'rutaDet_detalle','r_ruta_cliente','cliente_detalle'
@@ -24,8 +26,14 @@ angular.module('admin-rutas')
         var modalInstance = $scope.modal();
         modalInstance.result.then(function()
         {
-           //$scope.listaDeEmpresas();
         });
+    };
+
+    $scope.eventsF = function (start, end, timezone, callback) {
+        var y = new Date(start).getFullYear();
+        var s = new Date(start).getTime() / 1000;
+        $scope.mes = s + 604800;
+        $scope.anio= y;
     };
 
     $scope.modal =  function(){
@@ -48,7 +56,7 @@ angular.module('admin-rutas')
 
     $scope.uiConfig = {
          calendar: {
-             height: 450,
+             height: 500,
              editable: true,
              displayEventTime:false,
              fixedWeekCount : false,
@@ -74,74 +82,60 @@ angular.module('admin-rutas')
                 $scope.mostrarEvento(event);
              },
              eventAfterRender: function(){
+                 
                 //$scope.eventSources =[];
                 //$scope.eventSources = [$scope.events,$scope.listaDeRutas];
              }
          }
      };
 
-     $scope.eventSources = [$scope.events,$scope.listaDeRutas];
+     $scope.eventSources = [$scope.events,$scope.eventsF,$scope.listaDeRutas];
 
     }]
 )
 
 .controller('PopupModal', ['$scope','$uibModalInstance','evento','uiGmapGoogleMapApi',function ($scope,$uibModalInstance,evento,uiGmapGoogleMapApi) {
     $scope.evento = evento;
-
-
-
-
-angular.extend($scope, {
-      map: {
-        control: {},
+  
+    $scope.map = {
         center: {
-          latitude: 45,
-          longitude: -74
-        },
-        marker: {
-          id: 0,
-          latitude: 45,
-          longitude: -74,
-          options: {
-            visible: false
-          }
-        },
-        marker2: {
-          id: 0,
-          latitude: 45.2,
-          longitude: -74.5
-        },
-        zoom: 7,
-        options: {
-          draggable:true,
-          disableDefaultUI: true,
-          panControl: false,
-          navigationControl: false,
-          scrollwheel: false,
-          scaleControl: false
-        },
-        refresh: function () {
-          $scope.map.control.refresh(origCenter);
-        }
-      }
+                    latitude: $scope.evento.ruta_operador.usuario.empresa.centro_de_acopio.latitud_centro, 
+                    longitude: $scope.evento.ruta_operador.usuario.empresa.centro_de_acopio.longitud_centro
+                }, 
+        zoom: 15,
+        bounds: {}
+    };
 
+    $scope.polylines = [];
 
-});
+    uiGmapGoogleMapApi.then(function(){
 
+        $scope.randomMarkers = $scope.evento.ruta_detalle;
+        
+        $scope.polylines = [
+        {
+            path: $scope.evento.ruta_detalle,
+            stroke: {
+                color: '#6060FB',
+                weight: 3
+            },
+            editable: false,
+            draggable: false,
+            geodesic: true,
+            visible: true
+        }];
 
+    });
 
-
-
-    // uiGmapGoogleMapApi is a promise.
-    // The "then" callback function provides the google.maps object.
+    $scope.onClick = function(marker, eventName, model) {
+        model.show = !model.show;
+    };
+        
     uiGmapGoogleMapApi.then(function(maps) {
-        console.log(maps);
+        maps.visualRefresh = true;
+    });
 
-    maps.visualRefresh = true;
-
-});
-
-var origCenter = {latitude: $scope.map.center.latitude, longitude: $scope.map.center.longitude};
+    var origCenter = {latitude: $scope.map.center.latitude, longitude: $scope.map.center.longitude};
 
     $scope.close = function () {
         $uibModalInstance.dismiss();

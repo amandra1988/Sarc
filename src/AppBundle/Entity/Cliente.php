@@ -39,7 +39,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_direccion", type="string", length=255)
      * @JMS\SerializedName("cliente_direccion")
-     * @JMS\Groups({"cliente_lista"})
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
      */
     private $cliDireccion;
 
@@ -48,7 +48,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_numero", type="string", length=255)
      * @JMS\SerializedName("cliente_numero")
-     * @JMS\Groups({"cliente_lista"})
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
      */
     private $cliNumero;
 

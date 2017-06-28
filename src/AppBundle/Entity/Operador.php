@@ -93,10 +93,16 @@ class Operador
      */
     protected $usuario;
 
-	/**
+    /**
      * @ORM\OneToMany(targetEntity="Ruta", mappedBy="operador", cascade={"persist", "remove"} )
      */
     protected $rutas;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Camion", inversedBy="operador" )
+     * @ORM\JoinColumn(name="cam_id", referencedColumnName="cam_id")
+     */
+    private $camion;
 
     /**
      * Get id
@@ -347,5 +353,29 @@ class Operador
     public function getRutas()
     {
         return $this->rutas;
+    }
+
+    /**
+     * Set camion
+     *
+     * @param \AppBundle\Entity\Camion $camion
+     *
+     * @return Operador
+     */
+    public function setCamion(\AppBundle\Entity\Camion $camion = null)
+    {
+        $this->camion = $camion;
+
+        return $this;
+    }
+
+    /**
+     * Get camion
+     *
+     * @return \AppBundle\Entity\Camion
+     */
+    public function getCamion()
+    {
+        return $this->camion;
     }
 }
