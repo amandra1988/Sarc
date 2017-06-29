@@ -52,8 +52,8 @@ class RutaDetalle
     private $rdeComentario;
     
     /**
-     * @var string
-     * @ORM\Column(name="rde_estado", type="string", length=255)
+     * @var int
+     * @ORM\Column(name="rde_estado", type="integer")
      * @JMS\SerializedName("estado")
      * @JMS\Groups({"rutaDet_detalle"})
      */
