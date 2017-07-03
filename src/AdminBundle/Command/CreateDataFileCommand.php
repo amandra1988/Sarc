@@ -12,6 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
+use Symfony\Component\Console\Input\InputArgument;
 
 class CreateDataFileCommand extends ContainerAwareCommand
 {
@@ -27,11 +28,14 @@ class CreateDataFileCommand extends ContainerAwareCommand
         // the full command description shown when running the command with
         // the "--help" option
         ->setHelp('This command allows create a data file to procesing cliente route')
+        ->addArgument('file_name', InputArgument::OPTIONAL, 'You need pass name of file')
     ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+
+
         $fs = new Filesystem();
 
         //obtenemos la ruta del modulo AdminBundle
