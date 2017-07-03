@@ -10,7 +10,6 @@
     {{ parent() }}
     <link rel="stylesheet" href="{{asset('assets/vendor/ui-calendar/fullcalendar.css')}}">
     <link rel="stylesheet" href="{{asset('assets/css/style_admin.css')}}">
-    <link href="{{asset('assets/css/example.css')}}" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block bodystyle%}
@@ -34,8 +33,8 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                  <li><a href="{{path('operadores')}}">Operadores</a></li>
                   <li><a href="{{path('camiones')}}">Camiones</a></li>
-                  <li><a href="{{path('operadores')}}">Operadores</a></li> 
                   <li><a href="{{path('clientes')}}">Clientes</a></li>
                   <li class="active"><a href="{{path('rutas')}}">Rutas</a></li>
                   <li><a href="{{path('procesos')}}">Procesos</a></li>

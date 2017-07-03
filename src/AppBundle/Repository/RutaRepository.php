@@ -16,7 +16,9 @@ class RutaRepository extends \Doctrine\ORM\EntityRepository
             ->createQuery(' SELECT r
                             FROM AppBundle:Ruta r
                             LEFT JOIN r.camion c
-                            WHERE c.empresa = :idEmpresa
+                            LEFT JOIN c.operador o
+                            LEFT JOIN o.usuario u
+                            WHERE u.empresa = :idEmpresa
                             AND SUBSTRING(r.rtaFecha,6,2)= :mes
                             AND SUBSTRING(r.rtaFecha,1,4)= :anio
                                     ')

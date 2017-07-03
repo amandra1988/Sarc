@@ -3,9 +3,11 @@ angular.module('admin-rutas')
 
     $scope.eventSources = [];
     $scope.SelectedEvent=null;
+    $scope.mes = 0;
+    $scope.anio= 0;
 
     $scope.listaDeRutas= function (){
-        RutaFactory.query({idEmpresa:idEmpresa,'expand[]': ['r_ruta_operador','operador_detalle','r_ruta_camion',
+        RutaFactory.query({idEmpresa:idEmpresa, mes:$scope.mes, anio:$scope.anio ,'expand[]': ['r_ruta_operador','operador_detalle','r_ruta_camion',
                                                     'camion_detalle','r_operador_usuario','r_usuario_empresa',
                                                     'r_empresa_centro_acopio','centro_detalle','r_ruta_detalle',
                                                     'rutaDet_detalle','r_ruta_cliente','cliente_detalle'
@@ -24,10 +26,16 @@ angular.module('admin-rutas')
         var modalInstance = $scope.modal();
         modalInstance.result.then(function()
         {
-           //$scope.listaDeEmpresas();
         });
     };
-    
+
+    $scope.eventsF = function (start, end, timezone, callback) {
+        var y = new Date(start).getFullYear();
+        var s = new Date(start).getTime() / 1000;
+        $scope.mes = s + 604800;
+        $scope.anio= y;
+    };
+
     $scope.modal =  function(){
         var modalInstance= $uibModal.open({
             templateUrl: urlBasePartials+'modal_rutas.html',
@@ -45,10 +53,10 @@ angular.module('admin-rutas')
         });
         return modalInstance;
      };
-        
+
     $scope.uiConfig = {
          calendar: {
-             height: 450,
+             height: 500,
              editable: true,
              displayEventTime:false,
              fixedWeekCount : false,
@@ -71,135 +79,68 @@ angular.module('admin-rutas')
              dayNamesShort   : ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
 
              eventClick: function(event){
-                $scope.mostrarEvento(event); 
+                $scope.mostrarEvento(event);
              },
              eventAfterRender: function(){
+                 
                 //$scope.eventSources =[];
                 //$scope.eventSources = [$scope.events,$scope.listaDeRutas];
              }
          }
      };
 
-     $scope.eventSources = [$scope.events,$scope.listaDeRutas];
+     $scope.eventSources = [$scope.events,$scope.eventsF,$scope.listaDeRutas];
 
     }]
 )
-.controller('PopupModal', ['$scope','$uibModalInstance','evento','$timeout', '$log', '$http', 'uiGmapLogger',function ($scope,$uibModalInstance,evento,$timeout,$log, $http,uiGmapLogger) {
+
+.controller('PopupModal', ['$scope','$uibModalInstance','evento','uiGmapGoogleMapApi',function ($scope,$uibModalInstance,evento,uiGmapGoogleMapApi) {
     $scope.evento = evento;
-
-
-    uiGmapLogger.doLog = true;
-
-    angular.extend($scope, {
-        example2: {
-            doRebuildAll: false
-        },
-        clickWindow: function () {
-            $log.info('CLICK CLICK');
-            Logger.info('CLICK CLICK');
-        },
-        map: {
-            control: {},
-            //version: "uknown",
-            center: {
-                //latitude: -33.438166,longitude:  -70.64528
-            },
-            options: {
-                streetViewControl: false,
-                panControl: false,
-                maxZoom: 20,
-                minZoom: 3
-            },
-            zoom: 20,
-            dragging: false,
-            bounds: {},
-            events: {
-                tilesloaded: function (map, eventName, originalEventArgs) {
-                }
-            },
-            polylines: [ ],
-            markers2: [
-                {
-                    id: 1,
-                    latitude: -33.438166,longitude:  -70.64528,
-                    showWindow: false,
-                    title: 'Marker 2'
-                },
-                {
-                    id: 2,
-                    latitude: -33.447243,longitude: -70.650034,
-                    showWindow: false,
-                    title: 'Marker 2'
-                },
-                {
-                    id: 3,
-                    icon: 'assets/images/plane.png',
-                    latitude: -33.441107,longitude: -70.654256,
-                    showWindow: false,
-                    title: 'Plane'
-                }
-                ,
-                {
-                    id: 3,
-                    icon: 'assets/images/plane.png',
-                    latitude: -33.442868,longitude: -70.66005,
-                    showWindow: false,
-                    title: 'Plane'
-                }
-            ]
-        },
-        toggleColor: function (color) {
-            return color == 'red' ? '#6060FB' : 'red';
-        }
-
-    });
-
-    var markerToClose = null;
-
-    $scope.onMarkerClicked = function (marker) {
-
-        markerToClose = marker; // for next go around
-        marker.showWindow = true;
-        $scope.$apply();
-
+  
+    $scope.map = {
+        center: {
+                    latitude: $scope.evento.ruta_operador.usuario.empresa.centro_de_acopio.latitud_centro, 
+                    longitude: $scope.evento.ruta_operador.usuario.empresa.centro_de_acopio.longitud_centro
+                }, 
+        zoom: 15,
+        bounds: {}
     };
 
-    $timeout(function () {
-        $scope.map.polylines.push({
-            id: 3,
-            path: [
-                {
-                    latitude: -33.438166,longitude:  -70.64528
-                },
-                {
-                    latitude: -33.447243,longitude: -70.650034
-                },
-                {
-                    latitude: -33.441107,longitude: -70.654256
-                },
-                {
-                    latitude: -33.442868,longitude: -70.66005
-                }
-            ],
+    $scope.polylines = [];
+
+    uiGmapGoogleMapApi.then(function(){
+
+        $scope.randomMarkers = $scope.evento.ruta_detalle;
+        
+        $scope.polylines = [
+        {
+            path: $scope.evento.ruta_detalle,
             stroke: {
                 color: '#6060FB',
                 weight: 3
             },
             editable: false,
-            draggable: true,
+            draggable: false,
             geodesic: true,
             visible: true
-        });
-    }, 2000);
+        }];
 
+    });
 
+    $scope.onClick = function(marker, eventName, model) {
+        model.show = !model.show;
+    };
+        
+    uiGmapGoogleMapApi.then(function(maps) {
+        maps.visualRefresh = true;
+    });
 
-
+    var origCenter = {latitude: $scope.map.center.latitude, longitude: $scope.map.center.longitude};
 
     $scope.close = function () {
         $uibModalInstance.dismiss();
     };
-    
+
     $scope.ok = function(){
         $uibModalInstance.close();
     };
