@@ -86,7 +86,7 @@ class Operador
     private $opeVisible;
     
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="operadores" )
+     * @ORM\OneToOne(targetEntity="User", inversedBy="operadores" )
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="id")
      * @JMS\SerializedName("usuario")
      * @JMS\Groups({"r_operador_usuario"})

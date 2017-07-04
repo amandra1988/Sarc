@@ -26,7 +26,6 @@
                 <td class="titulo_negrita" >Centro de acopio</td>
                 <td class="texto">{{evento.ruta_operador.usuario.empresa.centro_de_acopio.nombre_centro}}</td>
                 <td colspan="4" rowspan="2">
-<!-- Acá mapa -->
                 </td>
             </tr>
 
@@ -40,15 +39,11 @@
                                 <td width="10%" class="titulo_negrita">Nombre: </td> 
                                 <td width="25%" class="texto">{{ x.ruta_cliente.cliente_nombre }}</td>
                                 <td width="10%" class="titulo_negrita">Estado:</td>
-                                <td width="10%" class="texto">{{ x.estado }}</td>
-                                
-                                
-<!-- 
-<td width="10%" class="texto" ng-if="x.estado === 0">-</td>
-<td width="10%" class="texto" ng-if="x.estado === 1">Problemas</td>
-<td width="10%" class="texto" ng-if="x.estado === 2">Canceldo</td>
-<td width="10%" class="texto" ng-if="x.estado === 3">Finalizado</td>
--->
+
+                                <td width="10%" class="texto" ng-if="x.estado === 0">Abierta</td>
+                                <td width="10%" class="texto" ng-if="x.estado === 1">Problemas</td>
+                                <td width="10%" class="texto" ng-if="x.estado === 2">Canceldo</td>
+                                <td width="10%" class="texto" ng-if="x.estado === 3">Finalizado</td>
                                 
                                 <td width="10%" class="titulo_negrita">Comentario:</td>
                                 <td width="35%" class="texto">{{ x.comentario  }}</td>

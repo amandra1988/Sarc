@@ -41,3 +41,7 @@ frecuencias:
 procesos:
   type: rest
   resource: APIBundle\Controller\ProcesosController
+  
+misrutas:
+  type: rest
+  resource: APIBundle\Controller\MisRutasController
