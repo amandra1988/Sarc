@@ -85,12 +85,7 @@ class Empresa
      * @ORM\OneToMany(targetEntity="Cliente", mappedBy="empresa", cascade={"persist", "remove"} )
      */
     protected  $clientes;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="Camion", mappedBy="empresa", cascade={"persist", "remove"} )
-     */
-    protected  $camiones;
-    
+       
     /**
      * @ORM\ManyToOne(targetEntity="CentroDeAcopio", inversedBy="empresas" )
      * @ORM\JoinColumn(name="cen_id", referencedColumnName="cen_id")
@@ -358,39 +353,5 @@ class Empresa
     public function getCentroDeAcopio()
     {
         return $this->centroDeAcopio;
-    }
-
-    /**
-     * Add camione
-     *
-     * @param \AppBundle\Entity\Camion $camione
-     *
-     * @return Empresa
-     */
-    public function addCamione(\AppBundle\Entity\Camion $camione)
-    {
-        $this->camiones[] = $camione;
-
-        return $this;
-    }
-
-    /**
-     * Remove camione
-     *
-     * @param \AppBundle\Entity\Camion $camione
-     */
-    public function removeCamione(\AppBundle\Entity\Camion $camione)
-    {
-        $this->camiones->removeElement($camione);
-    }
-
-    /**
-     * Get camiones
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCamiones()
-    {
-        return $this->camiones;
     }
 }

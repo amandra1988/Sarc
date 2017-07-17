@@ -56,7 +56,7 @@ class User implements UserInterface, \Serializable
     protected $empresa;
     
     /**
-     * @ORM\OneToMany(targetEntity="Operador", mappedBy="usuario", cascade={"persist", "remove"} )
+     * @ORM\OneToOne(targetEntity="Operador", mappedBy="usuario", cascade={"persist", "remove"} )
      */
     protected  $operadores;
     

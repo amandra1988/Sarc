@@ -10,6 +10,13 @@
     
     <div class="container-fluid" ng-if="accion !== 0">
         <div class="form-group row">
+        <label>(*)Seleccione Operador</label>
+            <select ng-model="cam.operador" name="comuna" ng-options="operador as operador.nombre_operador+' '+operador.apellido_operador for operador in operadores track by operador.id_operador"  class="form-control">
+                <option value="">--</option>
+            </select>
+        </div>
+        
+        <div class="form-group row">
             <label>(*)Tipo de carga  </label>
             <input type="radio" ng-model="cam.tipo_carga" name="tipo_carga" value='1'> Simple
             <input type="radio" ng-model="cam.tipo_carga" name="tipo_carga" value='2'> Peligrosa
