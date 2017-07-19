@@ -19,6 +19,8 @@ class RutaDetalle
      * @ORM\Column(name="rde_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @JMS\SerializedName("id")
+     * @JMS\Groups({"rutaDet_detalle"})
      */
     private $id;
 
@@ -26,7 +28,7 @@ class RutaDetalle
      * @var string
      *
      * @ORM\Column(name="rde_longitud", type="string", length=255)
-     * @JMS\SerializedName("longitud")
+     * @JMS\SerializedName("longitude")
      * @JMS\Groups({"rutaDet_detalle"})
      */
     private $rdeLongitud;
@@ -35,7 +37,7 @@ class RutaDetalle
      * @var string
      *
      * @ORM\Column(name="rde_latitud", type="string", length=255)
-     * @JMS\SerializedName("latitud")
+     * @JMS\SerializedName("latitude")
      * @JMS\Groups({"rutaDet_detalle"})
      */
     private $rdeLatitud;
@@ -50,8 +52,10 @@ class RutaDetalle
     private $rdeComentario;
     
     /**
-     * @var string
-     * @ORM\Column(name="rde_estado", type="string", length=255)
+     * @var int
+     * @ORM\Column(name="rde_estado", type="integer")
+     * @JMS\SerializedName("estado")
+     * @JMS\Groups({"rutaDet_detalle"})
      */
     private $rdeEstado;
     

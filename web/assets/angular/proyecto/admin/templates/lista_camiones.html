@@ -5,6 +5,7 @@
             <table class="table table-striped table-bordered">
                 <tr>
                     <th width="5%">#</th>
+                    <th width="10%">Operador</th>
                     <th width="10%">Patente</th>
                     <th width="20%">Capacidad (contenedores)</th>
                     <th width="20%">Tipo de carga</th>
@@ -13,11 +14,12 @@
                 </tr>
                 <tr ng-repeat="x in camiones">
                     <td class="data">{{ x.id_camion }}</td> 
+                    <td class="data">{{ x.camion_operador.nombre_operador +' '+ x.camion_operador.apellido_operador}}</td>
                     <td ng-pointer class="data">{{ x.patente_camion}}</td>
                     <td ng-pointer class="data">{{ x.capacidad_camion }}</td>
                     
-                    <td ng-pointer class="data" ng-if="x.tipo_carga_camion === 1">Simple</td>
-                    <td ng-pointer class="data" ng-if="x.tipo_carga_camion === 2">Peligrosa</td>
+                    <td ng-pointer class="data">{{x.tipo_carga_camion | tipoCarga:'Especial':'Peligrosa'}}</td>
+                    <!-- <td ng-pointer class="data" ng-if="x.tipo_carga_camion === 2">Peligrosa</td>-->
                     
                     <td ng-pointer class="data" ng-if="x.estado_camion === true">Operativo</td>
                     <td ng-pointer class="data" ng-if="x.estado_camion === false">Fuera de servicio</td>

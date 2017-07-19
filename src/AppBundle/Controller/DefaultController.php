@@ -59,10 +59,16 @@ class DefaultController extends Controller
             case 'ROLE_ADMIN':
                 return $this->redirectToRoute('admin-dashboard');
                 break;
+            case 'ROLE_OPERATOR':
+                return $this->redirectToRoute('operador-dashboard');
+                break;
+            case 'ROLE_CLIENT':
+                return $this->redirectToRoute('cliente-dashboard');
+                break;
         }
     }
 
-    public function tokenAction(Request $request){
+    public function tokenAction(Request $reqEuest){
 
         if(!$request->request->has('username')){
             throw $this->createAccessDeniedException();

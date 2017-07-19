@@ -39,7 +39,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_direccion", type="string", length=255)
      * @JMS\SerializedName("cliente_direccion")
-     * @JMS\Groups({"cliente_lista"})
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
      */
     private $cliDireccion;
 
@@ -48,7 +48,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_numero", type="string", length=255)
      * @JMS\SerializedName("cliente_numero")
-     * @JMS\Groups({"cliente_lista"})
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
      */
     private $cliNumero;
 
@@ -122,6 +122,13 @@ class Cliente
      */
     protected $frecuencia;
     
+    /**
+     * @ORM\OneToOne(targetEntity="User", inversedBy="cliente" )
+     * @ORM\JoinColumn(name="usr_id", referencedColumnName="id")
+     * @JMS\SerializedName("usuario")
+     * @JMS\Groups({"r_cliente_usuario"})
+     */
+    protected $usuario;
     
     /**
      * @ORM\ManyToOne(targetEntity="Empresa", inversedBy="clientes" )
@@ -517,5 +524,29 @@ class Cliente
     public function getRutas()
     {
         return $this->rutas;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param \AppBundle\Entity\User $usuario
+     *
+     * @return Cliente
+     */
+    public function setUsuario(\AppBundle\Entity\User $usuario = null)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
     }
 }

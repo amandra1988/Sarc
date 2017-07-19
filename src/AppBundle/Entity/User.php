@@ -56,9 +56,14 @@ class User implements UserInterface, \Serializable
     protected $empresa;
     
     /**
-     * @ORM\OneToMany(targetEntity="Operador", mappedBy="usuario", cascade={"persist", "remove"} )
+     * @ORM\OneToOne(targetEntity="Operador", mappedBy="usuario", cascade={"persist", "remove"} )
      */
     protected  $operadores;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Cliente", mappedBy="usuario", cascade={"persist", "remove"} )
+     */
+    protected  $cliente;
     
 
     /**
@@ -311,5 +316,43 @@ class User implements UserInterface, \Serializable
     public function getOperadores()
     {
         return $this->operadores;
+    }
+
+    /**
+     * Set operadores
+     *
+     * @param \AppBundle\Entity\Operador $operadores
+     *
+     * @return User
+     */
+    public function setOperadores(\AppBundle\Entity\Operador $operadores = null)
+    {
+        $this->operadores = $operadores;
+
+        return $this;
+    }
+
+    /**
+     * Set cliente
+     *
+     * @param \AppBundle\Entity\Cliente $cliente
+     *
+     * @return User
+     */
+    public function setCliente(\AppBundle\Entity\Cliente $cliente = null)
+    {
+        $this->cliente = $cliente;
+
+        return $this;
+    }
+
+    /**
+     * Get cliente
+     *
+     * @return \AppBundle\Entity\Cliente
+     */
+    public function getCliente()
+    {
+        return $this->cliente;
     }
 }

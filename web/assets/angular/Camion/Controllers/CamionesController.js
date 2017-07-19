@@ -1,15 +1,24 @@
 angular.module('admin-camiones')
-.controller('CamionesController',['$scope','CamionFactory','$uibModal','urlBasePartials','idEmpresa',function ($scope,CamionFactory,$uibModal,urlBasePartials,idEmpresa) {
+.controller('CamionesController',['$scope','CamionFactory','OperadorFactory','$uibModal','urlBasePartials','idEmpresa',function ($scope,CamionFactory,OperadorFactory,$uibModal,urlBasePartials,idEmpresa) {
         
-        $scope.camiones =[];
+        $scope.camiones=[];
+        $scope.operadores=[];
 
         $scope.listaDeCamiones= function (){
-            CamionFactory.query({ idEmpresa: idEmpresa , 'expand[]': []}, function(retorno) {
+            CamionFactory.query({ idEmpresa: idEmpresa , 'expand[]': ['r_camion_operador','operador_detalle']}, function(retorno) {
                 $scope.camiones = retorno;
+                 console.log(retorno);
+            });
+        };
+        
+        $scope.listaDeOperadores= function (){
+        OperadorFactory.query({ idEmpresa: idEmpresa , 'expand[]': []}, function(retorno) {
+                $scope.operadores = retorno;
             });
         };
 
         $scope.listaDeCamiones();
+        $scope.listaDeOperadores();
 
         $scope.accion = 1;
        
@@ -34,6 +43,7 @@ angular.module('admin-camiones')
                     $scope.camion.patente = $scope.camiones[i].patente_camion ;
                     $scope.camion.capacidad = $scope.camiones[i].capacidad_camion ;
                     $scope.camion.tipo_carga = $scope.camiones[i].tipo_carga_camion ;
+                    $scope.camion.operador = $scope.camiones[i].camion_operador ;
                     break;
                 }
             }
@@ -72,6 +82,9 @@ angular.module('admin-camiones')
                     },
                     camion: function() {
                         return $scope.camion;
+                    },
+                    operadores: function() {
+                        return $scope.operadores;
                     }
                 }
             });
@@ -80,10 +93,11 @@ angular.module('admin-camiones')
     }]
 )
 
-.controller('PopupModal', ['$scope','$uibModalInstance','accion','CamionFactory','camion','idEmpresa', function ($scope,$uibModalInstance,accion,CamionFactory,camion,idEmpresa) {
+.controller('PopupModal', ['$scope','$uibModalInstance','accion','CamionFactory','camion','idEmpresa','operadores', function ($scope,$uibModalInstance,accion,CamionFactory,camion,idEmpresa,operadores) {
 
     $scope.accion = accion;
     $scope.camion = camion;
+    $scope.operadores = operadores;
     $scope.error   = '';
     $scope.confirm = '';
     $scope.mensaje = '';
@@ -98,6 +112,7 @@ angular.module('admin-camiones')
         $scope.cam.id = $scope.camion.id;
         $scope.cam.patente = $scope.camion.patente;
         $scope.cam.capacidad = $scope.camion.capacidad;
+        $scope.cam.operador = $scope.camion.operador;
         if($scope.camion.tipo_carga === 1){
             $scope.cam.tipo_carga ='1';
         }else{
@@ -128,12 +143,18 @@ angular.module('admin-camiones')
             return;
         }
         
+        if(!$scope.cam.operador){
+            $scope.error = 'Debe seleccionar el operador del camión';
+            return;
+        }
         var c = new CamionFactory();
         c.patente    = $scope.cam.patente;
         c.capacidad  = $scope.cam.capacidad;
         c.tipo_carga = $scope.cam.tipo_carga;
+        c.operador   = $scope.cam.operador.id_operador;
         c.estado     = 1;
         c.visible    = 1;
+
         if(accion === 1)
         {
             c.$save({idEmpresa: idEmpresa}, function(response) {
