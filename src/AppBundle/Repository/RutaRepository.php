@@ -26,6 +26,16 @@ class RutaRepository extends \Doctrine\ORM\EntityRepository
             ->getResult();
     }
 
+    public function buscarVisitas($cliente){
+
+            return $this->getEntityManager()
+            ->createQuery(' SELECT r
+                            FROM AppBundle:Ruta r
+                            LEFT JOIN r.rutaDetalle rd
+                            WHERE rd.cliente = :idCliente')
+            ->setParameter('idCliente', $cliente->getId())
+            ->getResult();
+    }
     public function buscarRutasDelDia($dia,$mes,$anio,$idEmpresa){
 
             return $this->getEntityManager()

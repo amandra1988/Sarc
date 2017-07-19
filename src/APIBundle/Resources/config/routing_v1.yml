@@ -45,3 +45,7 @@ procesos:
 misrutas:
   type: rest
   resource: APIBundle\Controller\MisRutasController
+
+visitas:
+  type: rest
+  resource: APIBundle\Controller\VisitasController
