@@ -52,18 +52,18 @@ class Empresa
     private $empDireccion;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="emp_telefono", type="string", length=15)
+     * @ORM\Column(name="emp_telefono", type="integer", length=9, nullable=true)
      * @JMS\SerializedName("telefono_empresa")
      * @JMS\Groups({"empresa_detalle","empresa_lista"})
      */
     private $empTelefono;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="emp_celular", type="string", length=15)
+     * @ORM\Column(name="emp_celular", type="integer", length=9, nullable=true)
      * @JMS\SerializedName("celular_empresa")
      * @JMS\Groups({"empresa_detalle","empresa_lista"})
      */
@@ -85,17 +85,12 @@ class Empresa
      * @ORM\OneToMany(targetEntity="Cliente", mappedBy="empresa", cascade={"persist", "remove"} )
      */
     protected  $clientes;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="Camion", mappedBy="empresa", cascade={"persist", "remove"} )
-     */
-    protected  $camiones;
-    
+       
     /**
      * @ORM\ManyToOne(targetEntity="CentroDeAcopio", inversedBy="empresas" )
      * @ORM\JoinColumn(name="cen_id", referencedColumnName="cen_id")
      * @JMS\SerializedName("centro_de_acopio")
-     * @JMS\Groups({"empresa_detalle","empresa_lista"})
+     * @JMS\Groups({"r_empresa_centro_acopio"})
      */
     protected $centroDeAcopio;
     
@@ -358,39 +353,5 @@ class Empresa
     public function getCentroDeAcopio()
     {
         return $this->centroDeAcopio;
-    }
-
-    /**
-     * Add camione
-     *
-     * @param \AppBundle\Entity\Camion $camione
-     *
-     * @return Empresa
-     */
-    public function addCamione(\AppBundle\Entity\Camion $camione)
-    {
-        $this->camiones[] = $camione;
-
-        return $this;
-    }
-
-    /**
-     * Remove camione
-     *
-     * @param \AppBundle\Entity\Camion $camione
-     */
-    public function removeCamione(\AppBundle\Entity\Camion $camione)
-    {
-        $this->camiones->removeElement($camione);
-    }
-
-    /**
-     * Get camiones
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCamiones()
-    {
-        return $this->camiones;
     }
 }

@@ -6,10 +6,12 @@
                 <tr>
                     <th width="5%">#</th>
                     <th width="20%">Nombre</th>
-                    <th width="30%">Dirección</th>
+                    <th width="20%">Dirección</th>
                     <th width="5%">Número</th>
                     <th width="10%">Comuna</th>
-                    <th width="5%">Region</th>
+                    <th width="5%">Región</th>
+                    <th width="10%" colspan="2">Coordenadas GPS</th>
+                    
                     <th width="10%">Acciones</th>
                 </tr>
                 <tr ng-repeat="x in centros">
@@ -19,6 +21,9 @@
                     <td ng-pointer class="data">{{ x.numero_centro }}</td>
                     <td ng-pointer class="data">{{ x.comuna.comuna_nombre }}</td>
                     <td ng-pointer class="data">{{ x.comuna.provincia.region.region_nombre }}</td>
+
+                    <td ng-pointer class="data" colspan="2">{{ 'Lat:' + x.latitud_centro  + ' Long:'+  x.longitud_centro }}</td>
+
                     <td  align='center'>
                         <i class="fa fa-edit" ng-click="editarCentro( x.id_centro )"></i>
                         <i class="fa fa-trash" ng-click="eliminarCentro( x.id_centro )"></i>

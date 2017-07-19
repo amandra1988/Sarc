@@ -38,7 +38,7 @@ class Provincia
      * @ORM\ManyToOne(targetEntity="Region", inversedBy="provincias" )
      * @ORM\JoinColumn(name="reg_id", referencedColumnName="reg_id")
      * @JMS\SerializedName("region")
-     * @JMS\Groups({"provincia_detalle","provincia_lista"})
+     * @JMS\Groups({"r_provincia_region"})
      */
     protected $region;
     

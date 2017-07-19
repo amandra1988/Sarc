@@ -67,14 +67,18 @@ class Camion
      * @JMS\Groups({"camion_detalle","camion_lista"})
      */
     private $camEstado;
+       
+    /**
+     * @ORM\OneToOne(targetEntity="Operador", mappedBy="camion")
+     * @JMS\SerializedName("camion_operador")
+     * @JMS\Groups({"r_camion_operador"})
+     */
+    protected $operador;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Empresa", inversedBy="camiones" )
-     * @ORM\JoinColumn(name="emp_id", referencedColumnName="emp_id")
-     * @JMS\SerializedName("empresa_camion")
-     * @JMS\Groups({"camion_detalle","camion_lista"})
+     * @ORM\OneToMany(targetEntity="Ruta", mappedBy="camion", cascade={"persist", "remove"} )
      */
-    protected $empresa;
+    protected $rutas;
 
     /**
      * Get id
@@ -210,26 +214,68 @@ class Camion
     }
 
     /**
-     * Set empresa
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->rutas = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add ruta
      *
-     * @param \AppBundle\Entity\Empresa $empresa
+     * @param \AppBundle\Entity\Ruta $ruta
      *
      * @return Camion
      */
-    public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
+    public function addRuta(\AppBundle\Entity\Ruta $ruta)
     {
-        $this->empresa = $empresa;
+        $this->rutas[] = $ruta;
 
         return $this;
     }
 
     /**
-     * Get empresa
+     * Remove ruta
      *
-     * @return \AppBundle\Entity\Empresa
+     * @param \AppBundle\Entity\Ruta $ruta
      */
-    public function getEmpresa()
+    public function removeRuta(\AppBundle\Entity\Ruta $ruta)
     {
-        return $this->empresa;
+        $this->rutas->removeElement($ruta);
+    }
+
+    /**
+     * Get rutas
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRutas()
+    {
+        return $this->rutas;
+    }
+
+    /**
+     * Set operador
+     *
+     * @param \AppBundle\Entity\Operador $operador
+     *
+     * @return Camion
+     */
+    public function setOperador(\AppBundle\Entity\Operador $operador = null)
+    {
+        $this->operador = $operador;
+
+        return $this;
+    }
+
+    /**
+     * Get operador
+     *
+     * @return \AppBundle\Entity\Operador
+     */
+    public function getOperador()
+    {
+        return $this->operador;
     }
 }

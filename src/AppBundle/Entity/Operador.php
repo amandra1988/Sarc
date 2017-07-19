@@ -56,14 +56,14 @@ class Operador
      *
      * @ORM\Column(name="ope_licencia", type="string", length=50)
      * @JMS\SerializedName("licencia_operador")
-     * @JMS\Groups({"operador_lista"})
+     * @JMS\Groups({"operador_detalle","operador_lista"})
      */
     private $opeLicencia;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="ope_celular", type="string", length=255)
+     * @ORM\Column(name="ope_celular", type="integer", length=9, nullable=true)
      * @JMS\SerializedName("celular_operador")
      * @JMS\Groups({"operador_lista"})
      */
@@ -72,7 +72,7 @@ class Operador
     /**
      * @var string
      *
-     * @ORM\Column(name="ope_correo", type="string", length=255)
+     * @ORM\Column(name="ope_correo", type="string", length=255, nullable=true)
      * @JMS\SerializedName("correo_operador")
      * @JMS\Groups({"operador_lista"})
      */
@@ -86,16 +86,24 @@ class Operador
     private $opeVisible;
     
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="operadores" )
+     * @ORM\OneToOne(targetEntity="User", inversedBy="operadores" )
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="id")
+     * @JMS\SerializedName("usuario")
+     * @JMS\Groups({"r_operador_usuario"})
      */
     protected $usuario;
 
-
-	/**
+    /**
      * @ORM\OneToMany(targetEntity="Ruta", mappedBy="operador", cascade={"persist", "remove"} )
      */
     protected $rutas;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Camion", inversedBy="operador" )
+     * @ORM\JoinColumn(name="cam_id", referencedColumnName="cam_id")
+     */
+    private $camion;
+
     /**
      * Get id
      *
@@ -115,8 +123,9 @@ class Operador
      */
     public function setOpeNombre($opeNombre)
     {
-        $this->opeNombre = $opeNombre;
-
+        if($opeNombre){
+            $this->opeNombre = $opeNombre;
+        }
         return $this;
     }
 
@@ -139,8 +148,9 @@ class Operador
      */
     public function setOpeApellido($opeApellido)
     {
-        $this->opeApellido = $opeApellido;
-
+        if($opeApellido) {
+            $this->opeApellido = $opeApellido;
+        }
         return $this;
     }
 
@@ -163,7 +173,9 @@ class Operador
      */
     public function setOpeRut($opeRut)
     {
-        $this->opeRut = $opeRut;
+        if($opeRut) {
+            $this->opeRut = $opeRut;
+        }
 
         return $this;
     }
@@ -187,8 +199,9 @@ class Operador
      */
     public function setOpeLicencia($opeLicencia)
     {
-        $this->opeLicencia = $opeLicencia;
-
+        if($opeLicencia) {
+            $this->opeLicencia = $opeLicencia;
+        }
         return $this;
     }
 
@@ -211,8 +224,9 @@ class Operador
      */
     public function setOpeCelular($opeCelular)
     {
-        $this->opeCelular = $opeCelular;
-
+        if($opeCelular) {
+            $this->opeCelular = $opeCelular;
+        }
         return $this;
     }
 
@@ -235,8 +249,9 @@ class Operador
      */
     public function setOpeCorreo($opeCorreo)
     {
-        $this->opeCorreo = $opeCorreo;
-
+        if($opeCorreo) {
+            $this->opeCorreo = $opeCorreo;
+        }
         return $this;
     }
 
@@ -338,5 +353,29 @@ class Operador
     public function getRutas()
     {
         return $this->rutas;
+    }
+
+    /**
+     * Set camion
+     *
+     * @param \AppBundle\Entity\Camion $camion
+     *
+     * @return Operador
+     */
+    public function setCamion(\AppBundle\Entity\Camion $camion = null)
+    {
+        $this->camion = $camion;
+
+        return $this;
+    }
+
+    /**
+     * Get camion
+     *
+     * @return \AppBundle\Entity\Camion
+     */
+    public function getCamion()
+    {
+        return $this->camion;
     }
 }

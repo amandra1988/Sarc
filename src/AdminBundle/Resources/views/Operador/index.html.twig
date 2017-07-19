@@ -28,15 +28,15 @@
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">SAARC</a>
+                <a class="navbar-brand" href="{{path('admin-dashboard')}}">Home</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                  <li><a href="{{ path('admin-dashboard') }}">Home</a></li>
-                  <li><a href="{{path('camiones')}}">Camiones</a></li>
-                  <li class="active"><a href="{{path('operadores')}}">Operadores</a></li> 
+                  <li class="active"><a href="{{path('operadores')}}">Operadores</a></li>
+                   <li><a href="{{path('camiones')}}">Camiones</a></li>
                   <li><a href="{{path('clientes')}}">Clientes</a></li>
                   <li><a href="{{path('rutas')}}">Rutas</a></li>
+                  <li><a href="{{path('procesos')}}">Procesos</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="{{path('logout')}}">Cerrar sesión</a></li>
@@ -54,7 +54,8 @@
             urlBaseImg: "{{ urlBaseImagenes }}",
             urlBaseApi: "{{ urlBaseApi }}",
             urlBaseTmp: "{{ urlBaseTemplates }}",
-            apiKey: "{{ apikey }}"
+            apiKey: "{{ apikey }}",
+            idEmpresa:"{{ idEmpresa }}"
         };
     </script>
    {{ parent() }}

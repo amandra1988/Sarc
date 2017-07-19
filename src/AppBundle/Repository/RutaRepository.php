@@ -10,19 +10,48 @@ namespace AppBundle\Repository;
  */
 class RutaRepository extends \Doctrine\ORM\EntityRepository
 {
-	
-	public function buscarSoloRutasDeHoy($idEmpresa,$fecha){
-		
-		return $this->getEntityManager()
-		->createQuery('
-						SELECT r
-						FROM AppBundle:Ruta r
-						LEFT JOIN r.cliente c
-						WHERE c.empresa = :idEmpresa
-						AND r.rtaFecha  >= :fecha
-					')
-		->setParameter('idEmpresa', $idEmpresa)
-		->setParameter('fecha', $fecha)
-		->getResult();
-	}
+    public function buscarRutasDelMes($mes,$anio,$idEmpresa){
+
+            return $this->getEntityManager()
+            ->createQuery(' SELECT r
+                            FROM AppBundle:Ruta r
+                            LEFT JOIN r.camion c
+                            LEFT JOIN c.operador o
+                            LEFT JOIN o.usuario u
+                            WHERE u.empresa = :idEmpresa
+                            AND SUBSTRING(r.rtaFecha,6,2)= :mes
+                            AND SUBSTRING(r.rtaFecha,1,4)= :anio
+                                    ')
+            ->setParameter('idEmpresa', $idEmpresa)->setParameter('mes', $mes)->setParameter('anio', $anio)
+            ->getResult();
+    }
+
+    public function buscarVisitas($cliente){
+
+            return $this->getEntityManager()
+            ->createQuery(' SELECT r
+                            FROM AppBundle:Ruta r
+                            LEFT JOIN r.rutaDetalle rd
+                            WHERE rd.cliente = :idCliente')
+            ->setParameter('idCliente', $cliente->getId())
+            ->getResult();
+    }
+    public function buscarRutasDelDia($dia,$mes,$anio,$idEmpresa){
+
+            return $this->getEntityManager()
+            ->createQuery(' SELECT r
+                            FROM AppBundle:Ruta r
+                            LEFT JOIN r.camion c
+                            LEFT JOIN c.operador o
+                            LEFT JOIN o.usuario u
+                            WHERE u.empresa = :idEmpresa
+                            AND SUBSTRING(r.rtaFecha,1,4)= :anio
+                            AND SUBSTRING(r.rtaFecha,6,2)= :mes
+                            AND SUBSTRING(r.rtaFecha,9,2)= :dia')
+            ->setParameter('idEmpresa', $idEmpresa)
+            ->setParameter('anio', $anio)
+            ->setParameter('mes', $mes)
+            ->setParameter('dia', $dia)
+            ->getResult();
+    }
 }

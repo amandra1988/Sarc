@@ -39,7 +39,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_direccion", type="string", length=255)
      * @JMS\SerializedName("cliente_direccion")
-     * @JMS\Groups({"cliente_lista"})
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
      */
     private $cliDireccion;
 
@@ -48,23 +48,23 @@ class Cliente
      *
      * @ORM\Column(name="cli_numero", type="string", length=255)
      * @JMS\SerializedName("cliente_numero")
-     * @JMS\Groups({"cliente_lista"})
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
      */
     private $cliNumero;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="cli_telefono", type="string", length=15)
+     * @ORM\Column(name="cli_telefono", type="integer", length=9, nullable=true)
      * @JMS\SerializedName("cliente_telefono")
      * @JMS\Groups({"cliente_lista"})
      */
     private $cliTelefono;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="cli_celular", type="string", length=15)
+     * @ORM\Column(name="cli_celular", type="integer", length=9, nullable=true)
      * @JMS\SerializedName("cliente_celular")
      * @JMS\Groups({"cliente_lista"})
      */
@@ -73,7 +73,7 @@ class Cliente
     /**
      * @var string
      *
-     * @ORM\Column(name="cli_correo", type="string", length=100)
+     * @ORM\Column(name="cli_correo", type="string", length=100, nullable=true)
      * @JMS\SerializedName("cliente_correo")
      * @JMS\Groups({"cliente_lista"})
      */
@@ -122,12 +122,19 @@ class Cliente
      */
     protected $frecuencia;
     
+    /**
+     * @ORM\OneToOne(targetEntity="User", inversedBy="cliente" )
+     * @ORM\JoinColumn(name="usr_id", referencedColumnName="id")
+     * @JMS\SerializedName("usuario")
+     * @JMS\Groups({"r_cliente_usuario"})
+     */
+    protected $usuario;
     
     /**
      * @ORM\ManyToOne(targetEntity="Empresa", inversedBy="clientes" )
      * @ORM\JoinColumn(name="emp_id", referencedColumnName="emp_id")
      * @JMS\SerializedName("cliente_empresa")
-     * @JMS\Groups({"cliente_lista"})
+     * @JMS\Groups({"r_empresa_cliente"})
      */
     protected $empresa;
     
@@ -138,12 +145,13 @@ class Cliente
      * @JMS\Groups({"cliente_lista"})
      */
     protected $comuna;
-	
-	/**
-     * @ORM\OneToMany(targetEntity="Ruta", mappedBy="cliente", cascade={"persist", "remove"} )
+
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RutaDetalle", mappedBy="cliente", cascade={"persist", "remove"} )
      */
-    protected $rutas;
-	
+    protected  $rutas;
+    
     /**
      * Get id
      *
@@ -187,7 +195,9 @@ class Cliente
      */
     public function setCliDireccion($cliDireccion)
     {
-        $this->cliDireccion = $cliDireccion;
+        if($cliDireccion){
+            $this->cliDireccion = $cliDireccion;
+        }
 
         return $this;
     }
@@ -211,8 +221,9 @@ class Cliente
      */
     public function setCliNumero($cliNumero)
     {
-        $this->cliNumero = $cliNumero;
-
+        if($cliNumero) {
+            $this->cliNumero = $cliNumero;
+        }
         return $this;
     }
 
@@ -235,8 +246,9 @@ class Cliente
      */
     public function setCliTelefono($cliTelefono)
     {
-        $this->cliTelefono = $cliTelefono;
-
+        if($cliTelefono) {
+            $this->cliTelefono = $cliTelefono;
+        }
         return $this;
     }
 
@@ -259,8 +271,9 @@ class Cliente
      */
     public function setCliCelular($cliCelular)
     {
-        $this->cliCelular = $cliCelular;
-
+        if($cliCelular) {
+            $this->cliCelular = $cliCelular;
+        }
         return $this;
     }
 
@@ -283,7 +296,9 @@ class Cliente
      */
     public function setCliCorreo($cliCorreo)
     {
-        $this->cliCorreo = $cliCorreo;
+        if($cliCorreo) {
+            $this->cliCorreo = $cliCorreo;
+        }
 
         return $this;
     }
@@ -379,7 +394,9 @@ class Cliente
      */
     public function setFrecuencia(\AppBundle\Entity\Frecuencia $frecuencia = null)
     {
-        $this->frecuencia = $frecuencia;
+        if($frecuencia) {
+            $this->frecuencia = $frecuencia;
+        }
 
         return $this;
     }
@@ -427,8 +444,9 @@ class Cliente
      */
     public function setComuna(\AppBundle\Entity\Comuna $comuna = null)
     {
-        $this->comuna = $comuna;
-
+        if($comuna) {
+            $this->comuna = $comuna;
+        }
         return $this;
     }
 
@@ -451,8 +469,9 @@ class Cliente
      */
     public function setCliDemanda($cliDemanda)
     {
-        $this->cliDemanda = $cliDemanda;
-
+        if($cliDemanda) {
+            $this->cliDemanda = $cliDemanda;
+        }
         return $this;
     }
 
@@ -465,7 +484,6 @@ class Cliente
     {
         return $this->cliDemanda;
     }
-  
     /**
      * Constructor
      */
@@ -477,11 +495,11 @@ class Cliente
     /**
      * Add ruta
      *
-     * @param \AppBundle\Entity\Ruta $ruta
+     * @param \AppBundle\Entity\RutaDetalle $ruta
      *
      * @return Cliente
      */
-    public function addRuta(\AppBundle\Entity\Ruta $ruta)
+    public function addRuta(\AppBundle\Entity\RutaDetalle $ruta)
     {
         $this->rutas[] = $ruta;
 
@@ -491,9 +509,9 @@ class Cliente
     /**
      * Remove ruta
      *
-     * @param \AppBundle\Entity\Ruta $ruta
+     * @param \AppBundle\Entity\RutaDetalle $ruta
      */
-    public function removeRuta(\AppBundle\Entity\Ruta $ruta)
+    public function removeRuta(\AppBundle\Entity\RutaDetalle $ruta)
     {
         $this->rutas->removeElement($ruta);
     }
@@ -506,5 +524,29 @@ class Cliente
     public function getRutas()
     {
         return $this->rutas;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param \AppBundle\Entity\User $usuario
+     *
+     * @return Cliente
+     */
+    public function setUsuario(\AppBundle\Entity\User $usuario = null)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
     }
 }

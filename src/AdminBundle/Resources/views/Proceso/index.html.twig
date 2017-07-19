@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block angularInyect %}
+    ng-app="admin-procesos"
+{% endblock %}
+
+{% block title %}SAARC{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
+{% endblock %}
+
+{% block bodystyle%}
+    style="background-image: url({{ asset('assets/img/admin.jpg') }});
+    background-repeat:no-repeat;
+    background-position: center top;
+    background-size: 100% auto;"
+{% endblock %}
+
+{% block header %}
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{path('admin-dashboard')}}">Home</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                  <li><a href="{{path('operadores')}}">Operadores</a></li>
+                  <li><a href="{{path('camiones')}}">Camiones</a></li>
+                  <li><a href="{{path('clientes')}}">Clientes</a></li>
+                  <li><a href="{{path('rutas')}}">Rutas</a></li>
+                  <li class="active"><a href="{{path('procesos')}}">Procesos</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{{path('logout')}}">Cerrar sesión</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+
+{% block javascripts %}
+    <script type="text/javascript">
+        saConstants = {
+            urlBase: "{{ urlBase }}",
+            urlBaseImg: "{{ urlBaseImagenes }}",
+            urlBaseApi: "{{ urlBaseApi }}",
+            urlBaseTmp: "{{ urlBaseTemplates }}",
+            apiKey: "{{ apikey }}",
+            idEmpresa:"{{ idEmpresa }}"
+        };
+    </script>
+   {{ parent() }}
+{% include '@Admin/Proceso/javascripts.html.twig' %}
+{% endblock %}
+
+{% block body %}
+    <div class="jumbotron">
+        {{ parent() }}
+    </div>
+{% endblock %}

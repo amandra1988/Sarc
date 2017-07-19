@@ -10,15 +10,15 @@ angular.module('superadmin-usuarios')
         });   
         
         $scope.listaDeUsuarios = function() {
-            UsuarioFactory.query({'expand[]': []}, function(retorno) {
+            UsuarioFactory.query({'expand[]': ['r_usuario_empresa','r_usuario_rol','rol_detalle']}, function(retorno) {
                 $scope.usuarios = retorno;
             });
         };
-        
+
         $scope.listaDeUsuarios();
-        
+
         $scope.eliminarUsuario =  function(id){
-            $scope.accion = 0; 
+            $scope.accion = 0;
             var modalInstance = $scope.modal();
             modalInstance.result.then(function()
             {
@@ -100,7 +100,13 @@ angular.module('superadmin-usuarios')
         
         $scope.error = '';
         $scope.confirm = '';
-    
+        
+        if(!$scope.user.newpass)
+        {
+            $scope.error = 'Ingrese nueva clave de acceso.';
+            return;
+        }
+        
         if($scope.user.newpass !== $scope.user.confirpass )
         {
             $scope.error = "Las claves ingresadas no coinciden";
@@ -116,6 +122,25 @@ angular.module('superadmin-usuarios')
     };
     
     $scope.guardar= function(){
+        
+        if(!$scope.user.miempresa)
+        {
+            $scope.error = 'Seleccione una empresa para el nuevo usuario.';
+            return;
+        }
+
+        if(!$scope.user.username)
+        {
+            $scope.error = 'Ingrese nombre de usuario.';
+            return;
+        }
+
+        if(!$scope.user.password)
+        {
+            $scope.error = 'Ingrese clave de acceso para el usuario.';
+            return;
+        }
+        
         var u = new UsuarioFactory();
         u.idempresa= $scope.user.miempresa.id_empresa;
         u.username = $scope.user.username;

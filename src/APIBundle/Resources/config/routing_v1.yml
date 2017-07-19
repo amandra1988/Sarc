@@ -33,3 +33,19 @@ clientes:
 rutas:
   type: rest
   resource: APIBundle\Controller\RutasController
+  
+frecuencias:
+  type: rest
+  resource: APIBundle\Controller\FrecuenciasController
+  
+procesos:
+  type: rest
+  resource: APIBundle\Controller\ProcesosController
+  
+misrutas:
+  type: rest
+  resource: APIBundle\Controller\MisRutasController
+
+visitas:
+  type: rest
+  resource: APIBundle\Controller\VisitasController
