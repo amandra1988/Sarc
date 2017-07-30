@@ -18,8 +18,8 @@
                     <td ng-pointer class="data">{{ x.patente_camion}}</td>
                     <td ng-pointer class="data">{{ x.capacidad_camion }}</td>
                     
-                    <td ng-pointer class="data" ng-if="x.tipo_carga_camion === 1">Simple</td>
-                    <td ng-pointer class="data" ng-if="x.tipo_carga_camion === 2">Peligrosa</td>
+                    <td ng-pointer class="data">{{x.tipo_carga_camion | tipoCarga:'Especial':'Peligrosa'}}</td>
+                    <!-- <td ng-pointer class="data" ng-if="x.tipo_carga_camion === 2">Peligrosa</td>-->
                     
                     <td ng-pointer class="data" ng-if="x.estado_camion === true">Operativo</td>
                     <td ng-pointer class="data" ng-if="x.estado_camion === false">Fuera de servicio</td>

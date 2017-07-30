@@ -100,7 +100,7 @@ angular.module('admin-rutas')
     $scope.map = {
         center: {
                     latitude: $scope.evento.ruta_operador.usuario.empresa.centro_de_acopio.latitud_centro, 
-                    longitude: $scope.evento.ruta_operador.usuario.empresa.centro_de_acopio.longitud_centro
+                    longitude: $scope.evento.ruta_operador.usuario.empresa.centro_de_acopio.longitud_centro  
                 }, 
         zoom: 15,
         bounds: {}

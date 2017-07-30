@@ -1,3 +1,8 @@
+cliente:
+    resource: "@ClienteBundle/Controller/"
+    type:     annotation
+    prefix:   /secured/cliente
+
 operador:
     resource: "@OperadorBundle/Controller/"
     type:     annotation

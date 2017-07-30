@@ -1,19 +1,12 @@
 {% extends 'base.html.twig' %}
-
-{% block angularInyect %}
-    ng-app="operador-mis-rutas"
-{% endblock %}
-
 {% block title %}SAARC{% endblock %}
-
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{asset('assets/vendor/ui-calendar/fullcalendar.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/style_admin.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
 {% endblock %}
 
 {% block bodystyle%}
-    style="background-image: url({{ asset('assets/img/operador.jpg') }});
+    style="background-image: url({{ asset('assets/img/cliente.jpg') }});
     background-repeat:no-repeat;
     background-position: center top;
     background-size: 100% auto;"
@@ -29,11 +22,11 @@
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{path('operador-dashboard')}}">Home</a>
+                <a class="navbar-brand" href="{{path('cliente-dashboard')}}">Home</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                  <li class="active"><a href="{{path('mis-rutas')}}">Mis rutas</a></li>
+                  <li><a href="{{path('visitas')}}">Visitas</a></li>
                   <li><a href="">Cambiar mi clave</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -44,24 +37,14 @@
     </nav>
 {% endblock %}
 
-{% block javascripts %}
-    <script type="text/javascript">
-        saConstants = {
-            urlBase: "{{ urlBase }}",
-            urlBaseImg: "{{ urlBaseImagenes }}",
-            urlBaseApi: "{{ urlBaseApi }}",
-            urlBaseTmp: "{{ urlBaseTemplates }}",
-            apiKey: "{{ apikey }}",
-            idEmpresa:"{{ idEmpresa }}",
-            idOperador:"{{ idOperador }}"
-        };
-    </script>
-   {{ parent() }}
-{% include '@Operador/MisRutas/javascripts.html.twig' %}
-{% endblock %}
-
 {% block body %}
     <div class="jumbotron">
-        {{ parent() }}
+        <h2>Cliente</h2>
+        <p>
+        </p>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
 {% endblock %}
