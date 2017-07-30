@@ -37,6 +37,7 @@ angular.module('admin-clientes')
             modalInstance.result.then(function()
             {
                $scope.listaDeClientes();
+            }, function () {
             });
         };
         
@@ -65,6 +66,7 @@ angular.module('admin-clientes')
             modalInstance.result.then(function()
             {
                $scope.listaDeClientes();
+            }, function () {
             });
         };
         
@@ -78,6 +80,7 @@ angular.module('admin-clientes')
                 c.$patch({idEmpresa:idEmpresa,idCliente:id}, function(response) {
                     $scope.listaDeClientes();
                 });
+            }, function () {
             }); 
         };
         

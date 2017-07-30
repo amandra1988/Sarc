@@ -7,7 +7,6 @@ angular.module('admin-camiones')
         $scope.listaDeCamiones= function (){
             CamionFactory.query({ idEmpresa: idEmpresa , 'expand[]': ['r_camion_operador','operador_detalle']}, function(retorno) {
                 $scope.camiones = retorno;
-                 console.log(retorno);
             });
         };
         
@@ -29,6 +28,7 @@ angular.module('admin-camiones')
             modalInstance.result.then(function()
             {
                $scope.listaDeCamiones();
+            }, function () {
             });
         };
         
@@ -51,6 +51,7 @@ angular.module('admin-camiones')
             modalInstance.result.then(function()
             {
                $scope.listaDeCamiones();
+            }, function () {
             });
         };
         
@@ -64,6 +65,7 @@ angular.module('admin-camiones')
                 c.$patch({idEmpresa:idEmpresa,idCamion:id}, function(response) {
                     $scope.listaDeCamiones();
                 });
+            }, function () {
             }); 
         };
         

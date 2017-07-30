@@ -26,6 +26,7 @@ angular.module('admin-rutas')
         var modalInstance = $scope.modal();
         modalInstance.result.then(function()
         {
+        }, function () {
         });
     };
 

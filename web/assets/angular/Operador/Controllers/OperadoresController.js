@@ -20,6 +20,7 @@ app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','u
             modalInstance.result.then(function()
             {
                $scope.listaDeOperadores();
+            }, function () {
             });
         };
 
@@ -45,6 +46,7 @@ app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','u
             modalInstance.result.then(function()
             {
                $scope.listaDeOperadores();
+            }, function () {
             });
         };
         
@@ -58,6 +60,7 @@ app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','u
                 o.$patch({idEmpresa:idEmpresa,idOperador:id}, function(response) {
                     $scope.listaDeOperadores();
                 });
+            }, function () {
             }); 
         };
         

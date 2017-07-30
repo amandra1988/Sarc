@@ -29,6 +29,7 @@ angular.module('superadmin-centro-de-acopio')
             modalInstance.result.then(function()
             {
                $scope.listaDeCentros();
+            }, function () {
             });
         };
        
@@ -51,6 +52,7 @@ angular.module('superadmin-centro-de-acopio')
             modalInstance.result.then(function()
             {
                $scope.listaDeCentros();
+            }, function () {
             });
         };
         
@@ -64,7 +66,8 @@ angular.module('superadmin-centro-de-acopio')
                 c.$patch({idCentro:id}, function(response) {
                     $scope.listaDeCentros();
                 });
-            }); 
+            }, function () {
+            });
         };
         
         $scope.modal =  function(){

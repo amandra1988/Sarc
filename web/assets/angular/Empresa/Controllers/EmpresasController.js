@@ -29,6 +29,7 @@ app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','
             modalInstance.result.then(function()
             {
                $scope.listaDeEmpresas();
+            }, function () {
             });
         };
         
@@ -52,6 +53,7 @@ app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','
             modalInstance.result.then(function()
             {
                $scope.listaDeEmpresas();
+            }, function () {
             });
         };
         
@@ -65,7 +67,8 @@ app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','
                 e.$patch({idEmpresa:id}, function(response) {
                     $scope.listaDeEmpresas();
                 });
-            }); 
+            }, function () {
+            });
         };
         
         $scope.modal =  function(){
@@ -113,7 +116,6 @@ app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','
         $scope.emp.direccion = empresa.dir;
         $scope.emp.telefono = empresa.tel;
         $scope.emp.celular = empresa.cel;
-        console.log($scope.emp);
     }
 
     if($scope.accion === 0){

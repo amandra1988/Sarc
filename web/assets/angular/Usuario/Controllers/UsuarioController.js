@@ -27,13 +27,19 @@ angular.module('superadmin-usuarios')
                 u.$patch({idUsuario:id}, function(response) {
                     $scope.listaDeUsuarios();
                 });
-            }); 
+            }, function () {
+            });
         };
         
          $scope.cambiarClave = function(id) {
             $scope.iduser = id;
             $scope.accion  = 2;
-            $scope.modal();
+           
+            var modalInstance = $scope.modal();
+            modalInstance.result.then(function()
+            {
+            }, function () {
+            });
         };
     
         $scope.nuevoUsuario = function() {
@@ -42,6 +48,7 @@ angular.module('superadmin-usuarios')
             modalInstance.result.then(function()
             {
                $scope.listaDeUsuarios();
+            }, function () {
             });
         };
         
