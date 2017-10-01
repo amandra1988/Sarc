@@ -107,7 +107,7 @@ class Cliente
      /**
      * @var int
      *
-     * @ORM\Column(name="cli_demanda", type="integer")
+     * @ORM\Column(name="cli_demanda", type="string", length=5 )
      * @JMS\SerializedName("cliente_demanda")
      * @JMS\Groups({"cliente_lista"})
      */
@@ -129,15 +129,7 @@ class Cliente
      * @JMS\Groups({"r_cliente_usuario"})
      */
     protected $usuario;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Empresa", inversedBy="clientes" )
-     * @ORM\JoinColumn(name="emp_id", referencedColumnName="emp_id")
-     * @JMS\SerializedName("cliente_empresa")
-     * @JMS\Groups({"r_empresa_cliente"})
-     */
-    protected $empresa;
-    
+        
     /**
      * @ORM\ManyToOne(targetEntity="Comuna", inversedBy="clientes" )
      * @ORM\JoinColumn(name="com_id", referencedColumnName="com_id")

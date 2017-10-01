@@ -80,11 +80,6 @@ class Empresa
      * @ORM\OneToMany(targetEntity="User", mappedBy="empresa", cascade={"persist", "remove"} )
      */
     protected  $usuarios;
-
-     /**
-     * @ORM\OneToMany(targetEntity="Cliente", mappedBy="empresa", cascade={"persist", "remove"} )
-     */
-    protected  $clientes;
        
     /**
      * @ORM\ManyToOne(targetEntity="CentroDeAcopio", inversedBy="empresas" )
