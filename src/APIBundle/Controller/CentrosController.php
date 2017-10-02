@@ -36,8 +36,10 @@ class CentrosController extends APIBaseController
         $centro->setCenNombre($request->get('nombre'));
         $centro->setCenDireccion($request->get('direccion'));
         $centro->setCenNumero($request->get('numero'));
+        $centro->setCenTheta($request->get('tetha'));
         $centro->setComuna($comuna);
         $centro->setCenVisible(true);
+        
         if( null !== $request->get('latitud') ){
             $latitud = $request->get('latitud');
             $longitud= $request->get('longitud'); 
@@ -70,6 +72,7 @@ class CentrosController extends APIBaseController
             $centro->setCenNombre($request->get('nombre'));
             $centro->setCenDireccion($request->get('direccion'));
             $centro->setCenNumero($request->get('numero'));
+            $centro->setCenTheta($request->get('tetha'));
             $centro->setComuna($comuna);
             
             if( null !== $request->get('latitud') && $request->get('latitud') !='' ){

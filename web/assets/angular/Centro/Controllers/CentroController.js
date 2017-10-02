@@ -5,7 +5,7 @@ angular.module('superadmin-centro-de-acopio')
 
         $scope.listaDeCentros= function (){
             CentroFactory.query({'expand[]': ['comuna_detalle','r_comuna_provincia','provincia_detalle','r_provincia_region','region_detalle']}, function(retorno) {
-                $scope.centros = retorno;   
+                $scope.centros = retorno;
             });   
         };
         
@@ -43,6 +43,7 @@ angular.module('superadmin-centro-de-acopio')
                     $scope.centro.direccion = $scope.centros[i].direccion_centro ;
                     $scope.centro.numero = $scope.centros[i].numero_centro;
                     $scope.centro.comuna = $scope.centros[i].comuna;
+                    $scope.centro.tetha = $scope.centros[i].theta_centro;
                     $scope.centro.latitud = $scope.centros[i].latitud_centro;
                     $scope.centro.longitud = $scope.centros[i].longitud_centro;
                     break;
@@ -105,11 +106,11 @@ angular.module('superadmin-centro-de-acopio')
     $scope.centro  = centro;
 
     if($scope.accion === 1){
-        $scope.mensaje = 'Nuevo' ;
+        $scope.mensaje = 'Nuevo';
     }
   
     if($scope.accion === 2){
-        $scope.mensaje = 'Editar' ;
+        $scope.mensaje = 'Editar';
     }
   
     if($scope.accion === 0){
@@ -122,6 +123,7 @@ angular.module('superadmin-centro-de-acopio')
         c.direccion = $scope.centro.direccion;
         c.numero    = $scope.centro.numero;
         c.comuna    = $scope.centro.comuna.comuna_id;
+        c.tetha     = $scope.centro.tetha;
         c.longitud  = $scope.centro.longitud;
         c.latitud   = $scope.centro.latitud;
         c.visible = 1;
