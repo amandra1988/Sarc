@@ -48,6 +48,7 @@ class ClientesController extends APIBaseController
                 ->setCliTelefono($request->get('telefono'))
                 ->setFrecuencia($frecuencia)
                 ->setCliDemanda($request->get('demanda'))
+                ->setCliTheta($request->get('theta'))
                 ->setComuna($comuna)
                 ->setCliVisible($request->get('visible'));
 
@@ -73,6 +74,7 @@ class ClientesController extends APIBaseController
                 ->setCliCelular($request->get('celular'))
                 ->setCliCorreo($request->get('correo'))
                 ->setCliTelefono($request->get('telefono'))
+                ->setCliTheta($request->get('theta'))
                 ->setFrecuencia($frecuencia)
                 ->setCliDemanda(str_replace(",",".",$request->get('demanda')))
                 ->setComuna($comuna)

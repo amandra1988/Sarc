@@ -103,6 +103,16 @@ class Cliente
      * @JMS\Groups({"cliente_lista"})
      */
     private $cliLatitud;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cli_theta", type="string", length=20)
+     * @JMS\SerializedName("cliente_theta")
+     * @JMS\Groups({"cliente_lista"})
+     */
+     private $cliTheta;
+
     
      /**
      * @var int
@@ -540,5 +550,29 @@ class Cliente
     public function getUsuario()
     {
         return $this->usuario;
+    }
+
+    /**
+     * Set cliTheta
+     *
+     * @param string $cliTheta
+     *
+     * @return Cliente
+     */
+    public function setCliTheta($cliTheta)
+    {
+        $this->cliTheta = $cliTheta;
+
+        return $this;
+    }
+
+    /**
+     * Get cliTheta
+     *
+     * @return string
+     */
+    public function getCliTheta()
+    {
+        return $this->cliTheta;
     }
 }

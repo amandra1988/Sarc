@@ -5,7 +5,7 @@ angular.module('admin-clientes')
 
         $scope.listaDeClientes= function (){
             ClienteFactory.query({ idEmpresa: idEmpresa , 'expand[]': []}, function(retorno) {
-                $scope.clientes = retorno;   
+                $scope.clientes = retorno;
             });   
         };
 
@@ -26,7 +26,6 @@ angular.module('admin-clientes')
         $scope.listaDeClientes();
         $scope.listaDeFrecuencias();
         $scope.listaDeComunas();
-
 
         $scope.accion = 1;
        
@@ -58,6 +57,7 @@ angular.module('admin-clientes')
                     $scope.cliente.correo =$scope.clientes[i].cliente_correo ;
                     $scope.cliente.demanda =$scope.clientes[i].cliente_demanda ;
                     $scope.cliente.frecuencia =$scope.clientes[i].cliente_frecuencia ;
+                    $scope.cliente.theta =$scope.clientes[i].cliente_theta ;
                     $scope.cliente.comuna =$scope.clientes[i].cliente_comuna ;
                     break;
                 }
@@ -186,8 +186,8 @@ angular.module('admin-clientes')
         c.celular=$scope.cli.celular;
         c.correo=$scope.cli.correo;
         c.demanda=$scope.cli.demanda;
+        c.theta=$scope.cli.theta;
         c.visible=true;
-
         if(accion === 1)
         {
             c.$save({idEmpresa:idEmpresa}, function(response) {
