@@ -1,4 +1,12 @@
 angular.module('cliente-visitas')
+
+.filter('estadoVisita', function() {
+	return function(numero) {
+        var estados = [ 'Por realizar','En proceso','Con problemas','Cancelada','Realizada' ]; 
+		return estados[numero];
+	}
+})
+
 .controller('VisitasController',['$scope','$http','uiCalendarConfig','$uibModal','urlBasePartials','VisitasFactory','idEmpresa','idCliente',function ($scope,$http,uiCalendarConfig,$uibModal,urlBasePartials,VisitasFactory,idEmpresa,idCliente) {
 
 	$scope.eventSources = [];
@@ -22,7 +30,8 @@ angular.module('cliente-visitas')
 	    var modalInstance = $scope.modal();
 	    modalInstance.result.then(function()
 	    {
-	    });
+	    }, function () {
+		});
 	};
 
 	$scope.eventsF = function (start, end, timezone, callback) {
@@ -87,13 +96,28 @@ angular.module('cliente-visitas')
 	  
     }]
 )
-.controller('PopupModal', ['$scope','$uibModalInstance','evento',function ($scope,$uibModalInstance,evento) {
-    $scope.evento = evento;
-    $scope.estados =[{id:0, nombre:'Abierta'},
-                     {id:1, nombre:'Problemas'},
-                     {id:2, nombre:'Cancelado'},
-                     {id:3, nombre:'Finalizado'}
-                    ];
+.controller('PopupModal', ['idCliente','CometarioVisitasFactory','$scope','$uibModalInstance','evento',function (idCliente,CometarioVisitasFactory,$scope,$uibModalInstance,evento) {
+	
+	$scope.evento = evento;
+
+    CometarioVisitasFactory.query({idCliente:idCliente, idRuta:$scope.evento.id ,'expand[]': ['r_ruta_operador','operador_detalle','r_ruta_camion','camion_detalle','r_operador_usuario','r_usuario_empresa','r_empresa_centro_acopio','centro_detalle','r_ruta_detalle','rutaDet_detalle','r_ruta_cliente','cliente_detalle']}, function(retorno) {
+		/*angular.forEach(retorno, function(value,key){
+			$scope.events.push( value );
+		});*/
+
+		console.log(retorno);
+	});
+
+
+
+/*
+	$scope.centro = evento.ruta_operador.usuario.empresa.centro_de_acopio.nombre_centro;
+	$scope.estado = evento.ruta_detalle.estado;
+	$scope.comentario = evento.ruta_detalle.comentario;
+	console.log(evento);
+	console.log($scope.centro);
+	console.log($scope.estado);
+	console.log($scope.comentario);
 
     $scope.close = function () {
         $uibModalInstance.dismiss();
@@ -101,6 +125,6 @@ angular.module('cliente-visitas')
 
     $scope.ok = function(){
         $uibModalInstance.close();
-    };
+    };*/
 }
 ]);

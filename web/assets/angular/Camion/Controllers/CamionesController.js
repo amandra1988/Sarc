@@ -106,7 +106,7 @@ angular.module('admin-camiones')
     $scope.cam={tipo_carga:'1'};
 
     if($scope.accion === 1){
-        $scope.mensaje = 'Nueva' ;
+        $scope.mensaje = 'Nuevo' ;
     }
     
     if($scope.accion === 2){

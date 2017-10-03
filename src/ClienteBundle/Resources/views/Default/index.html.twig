@@ -6,10 +6,7 @@
 {% endblock %}
 
 {% block bodystyle%}
-    style="background-image: url({{ asset('assets/img/cliente.jpg') }});
-    background-repeat:no-repeat;
-    background-position: center top;
-    background-size: 100% auto;"
+    style="background-color:black"
 {% endblock %}
 
 {% block header %}
@@ -27,7 +24,7 @@
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                   <li><a href="{{path('visitas')}}">Visitas</a></li>
-                  <li><a href="">Cambiar mi clave</a></li>
+                  <!-- <li><a href="">Cambiar mi clave</a></li>-->
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="{{path('logout')}}">Cerrar sesión</a></li>
@@ -39,9 +36,9 @@
 
 {% block body %}
     <div class="jumbotron">
-        <h2>Cliente</h2>
-        <p>
-        </p>
+        <div class="contenedor">
+            <h2>Bienvenido</h2>
+        </div>
     </div>
 {% endblock %}
 

@@ -10,27 +10,27 @@
     
     <div class="container-fluid" ng-if="accion !== 0">
         <div class="form-group row">
-        <label>(*)Seleccione Operador</label>
+        <label>(*) Seleccione operador encargado del camión</label>
             <select ng-model="cam.operador" name="comuna" ng-options="operador as operador.nombre_operador+' '+operador.apellido_operador for operador in operadores track by operador.id_operador"  class="form-control">
                 <option value="">--</option>
             </select>
         </div>
         
         <div class="form-group row">
-            <label>(*)Tipo de carga  </label>
+            <label>(*) Tipo de carga  </label>
             <input type="radio" ng-model="cam.tipo_carga" name="tipo_carga" value='1'> Especial
             <input type="radio" ng-model="cam.tipo_carga" name="tipo_carga" value='2'> Peligrosa
         </div>
         <div class="form-group row">
-            <label class="col-2 col-form-label">(*)Patente</label>
+            <label class="col-2 col-form-label">(*) N° de patente del camión</label>
             <div class="col-10">
-                <input class="form-control" type="text" value="" ng-model="cam.patente" name="patente" placeholder="Ejemplo: HTFG88">
+                <input class="form-control" type="text" value="" ng-model="cam.patente" name="patente" placeholder="Ejemplo: HTFG88" title="Ingrese número de patente del camión">
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-2 col-form-label">(*)Capacidad (contenedores)</label>
+            <label class="col-2 col-form-label">(*) Capacidad máxima de contenedores</label>
             <div class="col-10">
-                <input class="form-control" type="number" value="" ng-model="cam.capacidad" name="capacidad"  placeholder="Ejemplo: 100">
+                <input class="form-control" type="number" value="" ng-model="cam.capacidad" name="capacidad"  placeholder="Ejemplo: 100" title="Indique cantidad máxima de contenedores del camión">
             </div>
         </div>
         <div style="color:red">(*) Campo requerido </div>

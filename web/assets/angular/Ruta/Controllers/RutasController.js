@@ -1,4 +1,12 @@
 angular.module('admin-rutas')
+
+.filter('estadoVisita', function() {
+	return function(numero) {
+        var estados = [ 'Por realizar','En proceso','Con problemas','Cancelada','Realizada' ]; 
+		return estados[numero];
+	}
+})
+
 .controller('RutasController',['$scope','$http','uiCalendarConfig','$uibModal','urlBasePartials','RutaFactory','idEmpresa',function ($scope,$http,uiCalendarConfig,$uibModal,urlBasePartials,RutaFactory,idEmpresa) {
 
     $scope.eventSources = [];
@@ -81,16 +89,11 @@ angular.module('admin-rutas')
 
              eventClick: function(event){
                 $scope.mostrarEvento(event);
-             },
-             eventAfterRender: function(){
-                 
-                //$scope.eventSources =[];
-                //$scope.eventSources = [$scope.events,$scope.listaDeRutas];
              }
          }
      };
 
-     $scope.eventSources = [$scope.events,$scope.eventsF,$scope.listaDeRutas];
+    $scope.eventSources = [$scope.events,$scope.eventsF,$scope.listaDeRutas];
 
     }]
 )
