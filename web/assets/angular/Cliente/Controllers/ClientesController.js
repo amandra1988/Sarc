@@ -6,6 +6,7 @@ angular.module('admin-clientes')
         $scope.listaDeClientes= function (){
             ClienteFactory.query({ idEmpresa: idEmpresa , 'expand[]': []}, function(retorno) {
                 $scope.clientes = retorno;
+                console.log(retorno);
             });   
         };
 
@@ -19,7 +20,7 @@ angular.module('admin-clientes')
         $scope.comunas =[];
         $scope.listaDeComunas= function (){
             ComunaFactory.query({'expand[]': []}, function(retorno) {
-                $scope.comunas = retorno;
+                $scope.comunas = retorno;      
             });
         };
 
@@ -58,7 +59,7 @@ angular.module('admin-clientes')
                     $scope.cliente.demanda =$scope.clientes[i].cliente_demanda ;
                     $scope.cliente.frecuencia =$scope.clientes[i].cliente_frecuencia ;
                     $scope.cliente.theta =$scope.clientes[i].cliente_theta ;
-                    $scope.cliente.comuna =$scope.clientes[i].cliente_comuna ;
+                    $scope.cliente.comuna =$scope.clientes[i].comuna ;
                     break;
                 }
             }

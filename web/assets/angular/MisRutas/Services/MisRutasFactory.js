@@ -7,4 +7,13 @@ angular.module('operador-mis-rutas')
             {'query': {method: 'GET', isArray:true },'patch': {method:'PATCH'}}
          );
     }
+])
+
+.factory('DetalleRutaFactory',['$resource', 'urlBaseApi', function ($resource ,  urlBaseApi ) {
+    return $resource(
+        urlBaseApi + 'rutas/:idRuta',
+        {},
+        {/*'query': { method: 'GET', isArray:false },'patch': { method:'PATCH' }*/}
+    );
+}
 ]);

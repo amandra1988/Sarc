@@ -18,7 +18,7 @@ class ClientesController extends APIBaseController
     */ 
     public function getEmpresasClientesAction(Request $request, $idEmpresa){
         
-        $groups = ['cliente_lista','comuna_detalle','frecuencia_detalle'];
+        $groups = ['cliente_lista','r_cliente_comuna','comuna_detalle','frecuencia_detalle'];
         if(is_array($request->get('expand'))){
             $groups = array_merge($groups, $request->get('expand'));
         }

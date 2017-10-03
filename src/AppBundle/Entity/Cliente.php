@@ -57,7 +57,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_telefono", type="integer", length=9, nullable=true)
      * @JMS\SerializedName("cliente_telefono")
-     * @JMS\Groups({"cliente_lista"})
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
      */
     private $cliTelefono;
 
@@ -66,7 +66,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_celular", type="integer", length=9, nullable=true)
      * @JMS\SerializedName("cliente_celular")
-     * @JMS\Groups({"cliente_lista"})
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
      */
     private $cliCelular;
 
@@ -75,7 +75,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_correo", type="string", length=100, nullable=true)
      * @JMS\SerializedName("cliente_correo")
-     * @JMS\Groups({"cliente_lista"})
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
      */
     private $cliCorreo;
 
@@ -143,8 +143,8 @@ class Cliente
     /**
      * @ORM\ManyToOne(targetEntity="Comuna", inversedBy="clientes" )
      * @ORM\JoinColumn(name="com_id", referencedColumnName="com_id")
-     * @JMS\SerializedName("cliente_comuna")
-     * @JMS\Groups({"cliente_lista"})
+     * @JMS\SerializedName("comuna")
+     * @JMS\Groups({"r_cliente_comuna"})
      */
     protected $comuna;
 
