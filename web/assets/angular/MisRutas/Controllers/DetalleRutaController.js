@@ -5,6 +5,11 @@ angular.module('operador-mis-rutas')
         var estados = [ 'Por realizar','En proceso','Con problemas','Cancelada','Realizada' ]; 
 		return estados[numero];
 	}
+}).filter('classestado', function() {
+	return function(numero) {
+        var estados = [ 'warning','info','danger','danger','success' ]; 
+		return estados[numero];
+	}
 })
 
 .controller('DetalleRutaController',['DetalleRutaFactory','urlBasePartials','uiGmapGoogleMapApi','$scope','$state','$http','$uibModal',
@@ -66,8 +71,7 @@ angular.module('operador-mis-rutas')
                 modalInstance.result.then(function()
                 {
                     $scope.detalleDeLaRuta();
-                }, function () {
-                    // Cancelar
+                }, function () {  
                 });
             };
 

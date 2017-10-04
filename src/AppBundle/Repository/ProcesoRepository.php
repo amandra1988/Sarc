@@ -10,16 +10,5 @@ namespace AppBundle\Repository;
  */
 class ProcesoRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function buscarProcesosDeLaEmpresa($idEmpresa){
 
-            return $this->getEntityManager()
-            ->createQuery(' SELECT p
-                            FROM AppBundle:Proceso p
-                            LEFT JOIN p.ruta r
-                            LEFT JOIN r.rutaDetalle rd
-                            LEFT JOIN rd.cliente c
-                            WHERE c.empresa = :idEmpresa')
-            ->setParameter('idEmpresa',$idEmpresa)
-            ->getResult();
-	}
 }

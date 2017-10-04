@@ -4,16 +4,16 @@
             <a href="{{path('mis-rutas')}}"><i class="fa fa-reply-all fa-2x"></i></a>
             <br><br>
             <table class="table" width="100%">
-                <tr>
-                    <th class="texto" width="70%">Cliente</th>
-                    <th class="texto" width="20%">Estado</th>
-                    <th class="texto" width="10%">Acciones</th>
+                <tr >
+                    <th width="70%">Cliente</th>
+                    <th width="20%">Estado</th>
+                    <th width="10%">Acciones</th>
                 </tr>
-                <tr ng-repeat="x in ruta.ruta_detalle">
-                    <td class="texto">{{$index + 1}}.- {{x.ruta_cliente.cliente_nombre }}</td> 
-                    <td class="texto">{{x.estado | estadoVisita}}</option>
-                    <td class="texto">
-                        <i class="fa fa-comment fa-lg pointer" ng-click="comentario(x)"></i>
+                <tr ng-repeat="x in ruta.ruta_detalle" class="alert alert-{{x.estado|classestado}}">
+                    <td>{{$index + 1}}.- {{x.ruta_cliente.cliente_nombre }}</td> 
+                    <td><b>{{x.estado|estadoVisita}}</b></option>
+                    <td title="Agregar comentario">
+                        <i class="fa fa-comment fa-lg" ng-click="comentario(x)"></i>
                     </td>
                 </tr>
             </table>

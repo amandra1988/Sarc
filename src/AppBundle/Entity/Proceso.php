@@ -25,23 +25,13 @@ class Proceso
     private $id;
 
     /**
-     * @var datetime
+     * @var date
      *
-     * @ORM\Column(name="prc_inicio", type="datetime")
-     * @JMS\SerializedName("inicio_proceso")
+     * @ORM\Column(name="prc_fecha", type="date")
+     * @JMS\SerializedName("fecha_proceso")
      * @JMS\Groups({"proceso_detalle","proceso_lista"})
      */
-    private $prcFechaInicio;
-
-
-    /**
-     * @var datetime
-     *
-     * @ORM\Column(name="prc_termino", type="datetime")
-     * @JMS\SerializedName("termino_proceso")
-     * @JMS\Groups({"proceso_detalle","proceso_lista"})
-     */
-    private $prcFechaTermino;
+    private $prcFecha;
     
     /**
      * @var int
@@ -54,12 +44,24 @@ class Proceso
     
      /**
      * @var string
-     * @ORM\Column(name="prc_estado", type="string", length=255)
+     * Estados del proceso [0=>'En espera', 1=>'En proceso', 2=>'Error', 3=>'Finalizado']
+     * @ORM\Column(name="prc_estado", type="integer")
      * @JMS\SerializedName("estado_proceso")
      * @JMS\Groups({"proceso_detalle","proceso_lista"})
      */
     private $prcEstado;
-    
+
+
+    /**
+     * @var string
+     * [0=>'No', 1=>'Si']
+     * @ORM\Column(name="prc_validado", type="boolean")
+     * @JMS\SerializedName("validado_proceso")
+     * @JMS\Groups({"proceso_detalle","proceso_lista"})
+     */
+     private $prcValidado;
+
+
     /**
      * @var text
      *
@@ -68,18 +70,29 @@ class Proceso
      * @JMS\Groups({"proceso_detalle","proceso_lista"})
      */
     private $prcObservacion;
-    
+
+    /**
+     * @var datetime
+     *
+     * @ORM\Column(name="prc_termino", type="datetime")
+     * @JMS\SerializedName("termino_proceso")
+     * @JMS\Groups({"proceso_detalle","proceso_lista"})
+     */
+     private $prcTernimo;
+
     /**
      * @ORM\OneToMany(targetEntity="Ruta", mappedBy="proceso", cascade={"persist", "remove"} )
      */
     protected  $ruta;
+
     /**
-     * Constructor
+     * @ORM\ManyToOne(targetEntity="Empresa", inversedBy="procesos" )
+     * @ORM\JoinColumn(name="emp_id", referencedColumnName="emp_id")
+     * @JMS\SerializedName("empresa")
+     * @JMS\Groups({"r_procesos_empresa"})
      */
-    public function __construct()
-    {
-        $this->ruta = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+    protected $empresa;
+
 
     /**
      * Get id
@@ -92,51 +105,27 @@ class Proceso
     }
 
     /**
-     * Set prcFechaInicio
+     * Set prcFecha
      *
-     * @param \DateTime $prcFechaInicio
+     * @param \DateTime $prcFecha
      *
      * @return Proceso
      */
-    public function setPrcFechaInicio($prcFechaInicio)
+    public function setPrcFecha($prcFecha)
     {
-        $this->prcFechaInicio = $prcFechaInicio;
+        $this->prcFecha = $prcFecha;
 
         return $this;
     }
 
     /**
-     * Get prcFechaInicio
+     * Get prcFecha
      *
      * @return \DateTime
      */
-    public function getPrcFechaInicio()
+    public function getPrcFecha()
     {
-        return $this->prcFechaInicio;
-    }
-
-    /**
-     * Set prcFechaTermino
-     *
-     * @param \DateTime $prcFechaTermino
-     *
-     * @return Proceso
-     */
-    public function setPrcFechaTermino($prcFechaTermino)
-    {
-        $this->prcFechaTermino = $prcFechaTermino;
-
-        return $this;
-    }
-
-    /**
-     * Get prcFechaTermino
-     *
-     * @return \DateTime
-     */
-    public function getPrcFechaTermino()
-    {
-        return $this->prcFechaTermino;
+        return $this->prcFecha;
     }
 
     /**
@@ -166,7 +155,7 @@ class Proceso
     /**
      * Set prcEstado
      *
-     * @param string $prcEstado
+     * @param integer $prcEstado
      *
      * @return Proceso
      */
@@ -180,7 +169,7 @@ class Proceso
     /**
      * Get prcEstado
      *
-     * @return string
+     * @return integer
      */
     public function getPrcEstado()
     {
@@ -209,6 +198,61 @@ class Proceso
     public function getPrcObservacion()
     {
         return $this->prcObservacion;
+    }
+
+    /**
+     * Set prcTernimo
+     *
+     * @param \DateTime $prcTernimo
+     *
+     * @return Proceso
+     */
+    public function setPrcTernimo($prcTernimo)
+    {
+        $this->prcTernimo = $prcTernimo;
+
+        return $this;
+    }
+
+    /**
+     * Get prcTernimo
+     *
+     * @return \DateTime
+     */
+    public function getPrcTernimo()
+    {
+        return $this->prcTernimo;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->ruta = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set prcValidado
+     *
+     * @param boolean $prcValidado
+     *
+     * @return Proceso
+     */
+    public function setPrcValidado($prcValidado)
+    {
+        $this->prcValidado = $prcValidado;
+
+        return $this;
+    }
+
+    /**
+     * Get prcValidado
+     *
+     * @return boolean
+     */
+    public function getPrcValidado()
+    {
+        return $this->prcValidado;
     }
 
     /**
@@ -243,5 +287,29 @@ class Proceso
     public function getRuta()
     {
         return $this->ruta;
+    }
+
+    /**
+     * Set empresa
+     *
+     * @param \AppBundle\Entity\Empresa $empresa
+     *
+     * @return Proceso
+     */
+    public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
+    {
+        $this->empresa = $empresa;
+
+        return $this;
+    }
+
+    /**
+     * Get empresa
+     *
+     * @return \AppBundle\Entity\Empresa
+     */
+    public function getEmpresa()
+    {
+        return $this->empresa;
     }
 }

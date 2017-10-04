@@ -1,6 +1,29 @@
 var app = angular.module('admin-operadores');
 app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','urlBasePartials','idEmpresa',function ($scope,OperadorFactory,$uibModal,urlBasePartials,idEmpresa) {
         
+        $scope.help =  function(modulo){
+        $scope.modulo = modulo;
+        var modalInstance= $uibModal.open({
+                templateUrl: urlBasePartials+'../../help.html',
+                backdrop: 'static',
+                size: 'lg',
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                controller: 'Help',
+                resolve: {
+                    modulo: function() {
+                        return $scope.modulo;
+                    }
+                }
+            });
+            return modalInstance;
+        };
+
+        $("#help").click( function(){
+            $scope.help('Operadores');
+        });
+        
         $scope.operadores =[];
 
         $scope.listaDeOperadores= function (){

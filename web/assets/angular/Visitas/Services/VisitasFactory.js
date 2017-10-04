@@ -11,7 +11,7 @@ angular.module('cliente-visitas')
 
 	.factory('CometarioVisitasFactory', ['$resource', 'urlBaseApi', function ($resource ,  urlBaseApi ) {
 		return $resource(
-			urlBaseApi + 'visitas/:idCliente/ruta/:idRuta',
+			urlBaseApi + 'comentarios/:idCliente/rutas/:idRuta',
 			{},
 			{'query': {method: 'GET', isArray:true },'patch': {method:'PATCH'}}
 		);

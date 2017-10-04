@@ -8,7 +8,31 @@ angular.module('admin-rutas')
 })
 
 .controller('RutasController',['$scope','$http','uiCalendarConfig','$uibModal','urlBasePartials','RutaFactory','idEmpresa',function ($scope,$http,uiCalendarConfig,$uibModal,urlBasePartials,RutaFactory,idEmpresa) {
+    
+    $scope.help =  function(modulo){
+    $scope.modulo = modulo;
+    var modalInstance= $uibModal.open({
+            templateUrl: urlBasePartials+'../../help.html',
+            backdrop: 'static',
+            size: 'lg',
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            controller: 'Help',
+            resolve: {
+                modulo: function() {
+                    return $scope.modulo;
+                }
+            }
+        });
+        return modalInstance;
+    };
 
+    $("#help").click( function(){
+        $scope.help('Rutas');
+    });
+
+    
     $scope.eventSources = [];
     $scope.SelectedEvent=null;
     $scope.mes = 0;
