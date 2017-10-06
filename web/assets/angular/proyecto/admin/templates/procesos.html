@@ -3,37 +3,32 @@
         <div class="scroll">
             <table class="table table-striped table-bordered">
                 <tr>
-                    <th width="5%">#</th>
-                    <th width="10%">Fecha del proceso</th>
-                    <th width="10%">Fecha del termino</th>
-                    <th width="10%">Cantidad de clientes</th>
-                    <th width="20%">Estado</th>
-                    <th width="10%">Validado</th>
-                    <th width="35%">Observación</th>
+                    <th width="5%"  style="text-align: center !important;">#</th>
+                    <th width="10%" style="text-align: center !important;">Fecha creación</th>
+                    <th width="10%" style="text-align: center !important;">Fecha de termino</th>
+                    <th width="10%" style="text-align: center !important;">Cantidad de clientes</th>
+                    <th width="10%" style="text-align: center !important;">Estado</th>
+                    <th width="10%" style="text-align: center !important;">Validado</th>
+                    <th width="45%" style="text-align: center !important;">Observación</th>
                 </tr>
                 <tr ng-repeat="x in procesos">
-                    <td>{{ x.id_proceso }}</td>
-                    <td>{{x.fecha_proceso|date:'dd/MM/yyyy'}}</td>
-                    <td>{{x.termino_proceso|date:'dd/MM/yyyy  HH:mm:ss'}}</td>
-                    <td>{{x.cant_clientes_proceso}}</td>  
-                    <td>
-                        
+                    <td style="text-align: center !important;">{{ x.id_proceso }}</td>
+                    <td style="text-align: center !important;">{{x.fecha_proceso|date:'dd/MM/yyyy'}}</td>
+                    <td style="text-align: center !important;">{{x.termino_proceso|date:'dd/MM/yyyy  HH:mm:ss'}}</td>
+                    <td style="text-align: center !important;">{{x.cant_clientes_proceso}}</td>  
+                    <td style="text-align: center !important;">
                         <div ng-if="x.estado_proceso === 0" style="color:#DBA901"><b>{{x.estado_proceso|estadoproceso}}</b></div>
                         <div ng-if="x.estado_proceso === 1" style="color:blue"><b>{{x.estado_proceso|estadoproceso}}</b></div>
                         <div ng-if="x.estado_proceso === 2" style="color:red"><b>{{x.estado_proceso|estadoproceso}}</b></div>
-                        <div ng-if="x.estado_proceso === 3" style="color:green"><b>{{x.estado_proceso|estadoproceso}}</b></div>
+                        <div ng-if="x.estado_proceso === 3" ><b>{{x.estado_proceso|estadoproceso}}</b></div>
                     </td>  
-
-                    <td>
+                    <td style="text-align: center !important;">
                         <div ng-if="x.estado_proceso === 0">
-                            <button type="button" class="btn btn-danger" ng-if="x.validado_proceso === false">Validar</button>
-                            <button type="button" class="btn btn-success" ng-if="x.validado_proceso === true && x.estado_proceso === 0">Desvalidar</button>
+                            <button type="button" class="btn btn-danger"  ng-if="x.validado_proceso === false" ng-click="validacion(x.id_proceso,1)">Validar</button>
+                            <button type="button" class="btn btn-success" ng-if="x.validado_proceso === true && x.estado_proceso === 0"  ng-click="validacion(x.id_proceso,0)">Invalidar</button>
                         </div>
-
-                        <div ng-if="x.estado_proceso > 0">
-                                <div class="alert alert-success">
-                                        <strong>Validado</strong>
-                                      </div>
+                        <div ng-if="x.estado_proceso > 0">  
+                            <i class="fa fa-check-circle-o fa-2x" aria-hidden="true" ></i>
                         </div>
                     </td>
                     <td>{{x.observacion_proceso}}</td>

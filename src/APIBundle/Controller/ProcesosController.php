@@ -17,8 +17,26 @@ class ProcesosController extends APIBaseController
         if(is_array($request->get('expand'))){
             $groups = array_merge($groups, $request->get('expand'));
         }
-        $procesos = $this->getDoctrine()->getRepository('AppBundle:Proceso')->findBy(array('empresa'=>$empresa));
+        $procesos = $this->getDoctrine()->getRepository('AppBundle:Proceso')->obtenerProcesosDeLaEmpresa($empresa->getId());
         return $this->serializedResponse($procesos, $groups);
 
+    }
+
+    public function patchEmpresasProcesosAction(Request $request,Empresa $empresa){
+        $groups = ['proceso_detalle'];
+
+        $proceso = $this->getDoctrine()->getRepository('AppBundle:Proceso')->find($request->get('idproceso'));
+
+        $proceso->setPrcValidado($request->get('validar'));
+        if($request->get('validar'))
+            $proceso->setPrcObservacion('Proceso a la espera de ejecución');
+        else
+            $proceso->setPrcObservacion('');
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($proceso);
+        $em->flush();
+        
+        return $this->serializedResponse($proceso, $groups);
     }
 }

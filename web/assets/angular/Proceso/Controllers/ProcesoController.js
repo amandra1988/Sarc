@@ -30,13 +30,20 @@ app.controller('ProcesoController',['$scope','ProcesoFactory','$uibModal','urlBa
         $("#help").click( function(){
             $scope.help('Procesos');
         });
-    
+
+        $scope.validacion = function(proceso,valido){
+            var v = new ProcesoFactory();
+            v.validar = valido;
+            v.idproceso = proceso;
+            v.$patch({idEmpresa:idEmpresa }, function(response) {
+                $scope.listaDeProcesos();
+            });
+        };
     
         $scope.procesos =[];
         $scope.listaDeProcesos= function (){
             ProcesoFactory.query({ idEmpresa: idEmpresa , 'expand[]': []}, function(retorno) {
                 $scope.procesos = retorno;
-                console.log( $scope.procesos );
             });   
         };
         $scope.listaDeProcesos();

@@ -25,9 +25,9 @@ class Proceso
     private $id;
 
     /**
-     * @var date
+     * @var datetime
      *
-     * @ORM\Column(name="prc_fecha", type="date")
+     * @ORM\Column(name="prc_fecha", type="datetime")
      * @JMS\SerializedName("fecha_proceso")
      * @JMS\Groups({"proceso_detalle","proceso_lista"})
      */
@@ -78,7 +78,7 @@ class Proceso
      * @JMS\SerializedName("termino_proceso")
      * @JMS\Groups({"proceso_detalle","proceso_lista"})
      */
-     private $prcTernimo;
+     private $prcTermino;
 
     /**
      * @ORM\OneToMany(targetEntity="Ruta", mappedBy="proceso", cascade={"persist", "remove"} )
@@ -201,27 +201,27 @@ class Proceso
     }
 
     /**
-     * Set prcTernimo
+     * Set prcTermino
      *
-     * @param \DateTime $prcTernimo
+     * @param \DateTime $prcTermino
      *
      * @return Proceso
      */
-    public function setPrcTernimo($prcTernimo)
+    public function setPrcTermino($prcTermino)
     {
-        $this->prcTernimo = $prcTernimo;
+        $this->prcTermino = $prcTermino;
 
         return $this;
     }
 
     /**
-     * Get prcTernimo
+     * Get prcTermino
      *
      * @return \DateTime
      */
-    public function getPrcTernimo()
+    public function getPrcTermino()
     {
-        return $this->prcTernimo;
+        return $this->prcTermino;
     }
     /**
      * Constructor

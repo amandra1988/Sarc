@@ -1,6 +1,30 @@
 angular.module('superadmin-usuarios')
 .controller('UsuarioController',['$scope','UsuarioFactory','EmpresaFactory','$uibModal','urlBasePartials',function ($scope,UsuarioFactory,EmpresaFactory,$uibModal,urlBasePartials) {
        
+        $scope.help =  function(modulo){
+            $scope.modulo = modulo;
+            var modalInstance= $uibModal.open({
+                templateUrl: urlBasePartials+'../../help.html',
+                backdrop: 'static',
+                size: 'lg',
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                controller: 'Help',
+                resolve: {
+                    modulo: function() {
+                        return $scope.modulo;
+                    }
+                }
+            });
+            return modalInstance;
+        };
+    
+        $("#help").click( function(){
+            $scope.help('Usuarios');
+        });
+    
+
         $scope.empresas =[];
         $scope.listaUsuarios =[];
         $scope.iduser = '';

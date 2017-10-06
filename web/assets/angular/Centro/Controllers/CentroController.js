@@ -1,6 +1,30 @@
 angular.module('superadmin-centro-de-acopio')
 .controller('CentroController',['$scope','CentroFactory','$uibModal','urlBasePartials','ComunaFactory',function ($scope,CentroFactory, $uibModal,urlBasePartials,ComunaFactory) {
         
+    $scope.help =  function(modulo){
+        $scope.modulo = modulo;
+        var modalInstance= $uibModal.open({
+                templateUrl: urlBasePartials+'../../help.html',
+                backdrop: 'static',
+                size: 'lg',
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                controller: 'Help',
+                resolve: {
+                    modulo: function() {
+                        return $scope.modulo;
+                    }
+                }
+            });
+            return modalInstance;
+        };
+    
+        $("#help").click( function(){
+            $scope.help('Centros de acopio');
+        });
+    
+
         $scope.centros =[];
 
         $scope.listaDeCentros= function (){

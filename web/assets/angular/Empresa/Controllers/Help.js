@@ -1,4 +1,4 @@
-angular.module('operador-mis-rutas')
+angular.module('superadmin-empresas')
 
 .controller('Help', function(modulo,$uibModalInstance,$scope) {
     $scope.modulo = modulo;

@@ -29,7 +29,6 @@ angular.module('admin-clientes')
         $scope.listaDeClientes= function (){
             ClienteFactory.query({ idEmpresa: idEmpresa , 'expand[]': []}, function(retorno) {
                 $scope.clientes = retorno;
-                console.log(retorno);
             });   
         };
 
