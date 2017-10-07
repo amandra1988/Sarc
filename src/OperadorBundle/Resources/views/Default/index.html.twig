@@ -1,15 +1,12 @@
 {% extends 'base.html.twig' %}
-{% block title %}SAARC{% endblock %}
+{% block title %}SARC{% endblock %}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
 {% endblock %}
 
 {% block bodystyle%}
-    style="background-image: url({{ asset('assets/img/operador.jpg') }});
-    background-repeat:no-repeat;
-    background-position: center top;
-    background-size: 100% auto;"
+    style="background-color:black;"
 {% endblock %}
 
 {% block header %}
@@ -27,7 +24,7 @@
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                   <li><a href="{{path('mis-rutas')}}">Mis rutas</a></li>
-                  <li><a href="">Cambiar mi clave</a></li>
+                 <!-- <li><a href="">Cambiar mi clave</a></li>-->
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="{{path('logout')}}">Cerrar sesión</a></li>
@@ -39,9 +36,10 @@
 
 {% block body %}
     <div class="jumbotron">
-        <h2>Bienvenido operador</h2>
-        <p>
-        </p>
+        <div class="contenedor">
+            <h2>Bienvenido</h2>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+        </div>
     </div>
 {% endblock %}
 

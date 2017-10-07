@@ -4,107 +4,112 @@ namespace APIBundle\Controller;
 
 use AppBundle\Entity\Empresa;
 use AppBundle\Entity\Cliente;
+use AppBundle\Entity\User;
 use AppBundle\Entity\Ruta;
 use AppBundle\Entity\RutaDetalle;
+use AppBundle\Entity\Proceso;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ClientesController extends APIBaseController
 {
     /**
-    * Obtener lista de operadores
+    * Obtener lista de clientes de la empresa
     * @return Response La respuesta serializada
     */ 
     public function getEmpresasClientesAction(Request $request, $idEmpresa){
         
-        $groups = ['cliente_lista','comuna_detalle','frecuencia_detalle'];
+        $groups = ['cliente_lista','r_cliente_comuna','comuna_detalle','frecuencia_detalle'];
         if(is_array($request->get('expand'))){
             $groups = array_merge($groups, $request->get('expand'));
         }
-        $clientes = $this->getDoctrine()->getRepository('AppBundle:Cliente')->findBy(array('empresa'=>$idEmpresa,'cliVisible'=>1));
+
+        $clientes = $this->getDoctrine()->getRepository('AppBundle:Cliente')
+                         ->obtenerClientesDeLaEmpresa($idEmpresa);
+
         return $this->serializedResponse($clientes, $groups); 
     }
 
     /**
-     *  Editar Cliente
-     * @return Response La respuesta serializada
-     */
-    public function patchEmpresasClientesAction(Request $request, $idEmpresa, Cliente $cliente ){
-        $groups ='';
-        $frecuencia = $this->getDoctrine()->getRepository('AppBundle:Frecuencia')->find($request->get('frecuencia'));
-        $comuna = $this->getDoctrine()->getRepository('AppBundle:Comuna')->find($request->get('comuna'));
-        $cliente->setCliNombre($request->get('nombre'))
-            ->setCliDireccion($request->get('direccion'))
-            ->setCliNumero($request->get('numero'))
-            ->setCliCelular($request->get('celular'))
-            ->setCliCorreo($request->get('correo'))
-            ->setCliTelefono($request->get('telefono'))
-            ->setFrecuencia($frecuencia)
-            ->setCliDemanda($request->get('demanda'))
-            ->setComuna($comuna)
-            ->setCliVisible($request->get('visible'));
+    * Editar Cliente
+    * @return Response La respuesta serializada
+    */
+    public function patchEmpresasClientesAction(Request $request,Empresa $empresa, Cliente $cliente ){
+        
+        $groups =['cliente_detalle'];
         $em = $this->getDoctrine()->getManager();
+
+        if($request->get('visible')){
+            $frecuencia = $this->getDoctrine()->getRepository('AppBundle:Frecuencia')->find($request->get('frecuencia'));
+            $comuna = $this->getDoctrine()->getRepository('AppBundle:Comuna')->find($request->get('comuna'));
+
+            $cliente->setCliNombre($request->get('nombre'))
+                    ->setCliDireccion($request->get('direccion'))
+                    ->setCliNumero($request->get('numero'))
+                    ->setCliCelular($request->get('celular'))
+                    ->setCliCorreo($request->get('correo'))
+                    ->setCliTelefono($request->get('telefono'))
+                    ->setFrecuencia($frecuencia)
+                    ->setCliDemanda($request->get('demanda'))
+                    ->setCliTheta($request->get('theta'))
+                    ->setComuna($comuna);
+        }
+
+        $cliente->setCliVisible($request->get('visible'));
         $em->persist($cliente);
         $em->flush();
-        return $this->serializedResponse($cliente, $groups);
+
+        $clientes= $this->getDoctrine()->getRepository('AppBundle:Cliente')->obtenerClientesDeLaEmpresa($empresa->getId());
+        $proceso = $this->getDoctrine()->getRepository('AppBundle:Proceso')->agregarActualizarProceso($empresa,$clientes);
+
+        return  $this->serializedResponse($cliente, $groups) ; 
     }
 
     public function postEmpresasClientesAction(Request $request, Empresa $empresa){
-        $groups ='';
-        $frecuencia = $this->getDoctrine()->getRepository('AppBundle:Frecuencia')->find($request->get('frecuencia'));
+        $groups=['cliente_detalle'];
+        $frecuencia = $this->getDoctrine()->getRepository('AppBundle:Frecuencia')->find($request->get('frecuencia')); 
         $comuna = $this->getDoctrine()->getRepository('AppBundle:Comuna')->find($request->get('comuna'));
-        
+        $em = $this->getDoctrine()->getManager();
+
         $cliente = new Cliente();
-        $cliente->setCliNombre($request->get('nombre'))->setCliDireccion($request->get('direccion'))
-        ->setCliNumero($request->get('numero'))->setCliCelular($request->get('celular'))->setCliCorreo($request->get('correo'))
-        ->setCliTelefono($request->get('telefono'))->setFrecuencia($frecuencia)->setCliDemanda($request->get('demanda'))
-        ->setComuna($comuna)->setEmpresa($empresa)->setCliVisible($request->get('visible'));
+        $cliente->setCliNombre($request->get('nombre'))
+                ->setCliDireccion($request->get('direccion'))
+                ->setCliNumero($request->get('numero'))
+                ->setCliCelular($request->get('celular'))
+                ->setCliCorreo($request->get('correo'))
+                ->setCliTelefono($request->get('telefono'))
+                ->setCliTheta($request->get('theta'))
+                ->setFrecuencia($frecuencia)
+                ->setCliDemanda(str_replace(",",".",$request->get('demanda')))
+                ->setComuna($comuna)
+                ->setCliVisible($request->get('visible'));
     
         $direccion = $request->get('direccion').' '.$request->get('numero').', '.$comuna->getComNombre().', Chile';
         $coordenadas = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion);
-        $cliente->setCliLatitud($coordenadas['latitud'])->setCliLongitud($coordenadas['longitud']);
-
-        $em = $this->getDoctrine()->getManager();
+        $cliente->setCliLatitud($coordenadas['latitud'])
+                ->setCliLongitud($coordenadas['longitud']);
         $em->persist($cliente);
         $em->flush();
 
-/*  ==============================================================================================================
-            EXTRA
-                Al crear cliente, se agrega a una ruta detalle para generar datos para el calendario
-                Esta funcionalidad es temporal.
-    ==============================================================================================================
-*/
-        // Obtener ruta del dia
-        $dia  = date('d');
-        $anio = date('Y');
-        $mes  = date('m');
+        //Crear usuario del cliente
+        $usuario = new User();
+        $rol = $this->getDoctrine()->getRepository('AppBundle:Rol')->find(3); 
+        $token = $this->getDoctrine()->getRepository('AppBundle:User')->obtenerTokenParaElUsuario();
+        
+        $username = "cliente-".$cliente->getId();
+        $pass = $this->container->get('security.password_encoder');
+        $password = $pass->encodePassword($usuario,12345);
+        
+        $usuario->setEmpresa($empresa)->setRol($rol)->setUsername($username)->setPassword($password)->setToken($token);
+        $em->persist($usuario);
 
-        $ruta= $this->getDoctrine()->getRepository('AppBundle:Ruta')->buscarRutasDelDia($dia,$mes,$anio,$empresa->getId());
-        if(count($ruta) == 0){
-            // Crear la ruta
-            $proceso = $this->getDoctrine()->getRepository('AppBundle:Proceso')->find(1);
-            $operador= $this->getDoctrine()->getRepository('AppBundle:Operador')->find(1);
-
-            $ruta = new Ruta();
-            $ruta->setRtaTitulo('Ruta '.$dia.'/'.$mes.'/'.$anio)->setRtaFecha( new \DateTime(date('Y-m-d')) )
-            ->setProceso($proceso)->setOperador($operador)->setCamion($operador->getCamion());
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($ruta);
-            $em->flush();
-        }else{
-            $ruta = $ruta[0];
-        }
-        // Crear ruta detalle
-        $rutadetalle = new RutaDetalle();
-        $rutadetalle->setCliente($cliente)->setRdeLongitud($cliente->getCliLongitud())->setRdeLatitud($cliente->getCliLatitud())->setRuta($ruta)->setRdeEstado(0)->setRdeComentario('-');
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($rutadetalle);
+        $cliente->setUsuario($usuario);
+        $em->persist($cliente);
         $em->flush();
 
-/*  ==============================================================================================================
-    ==============================================================================================================
-*/
+        $clientes= $this->getDoctrine()->getRepository('AppBundle:Cliente')->obtenerClientesDeLaEmpresa($empresa->getId());
+        $proceso = $this->getDoctrine()->getRepository('AppBundle:Proceso')->agregarActualizarProceso($empresa,$clientes);
+
         return $this->serializedResponse($cliente, $groups);
     }
 }

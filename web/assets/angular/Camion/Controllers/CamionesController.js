@@ -1,13 +1,36 @@
 angular.module('admin-camiones')
 .controller('CamionesController',['$scope','CamionFactory','OperadorFactory','$uibModal','urlBasePartials','idEmpresa',function ($scope,CamionFactory,OperadorFactory,$uibModal,urlBasePartials,idEmpresa) {
         
+        $scope.help =  function(modulo){
+        $scope.modulo = modulo;
+        var modalInstance= $uibModal.open({
+                templateUrl: urlBasePartials+'../../help.html',
+                backdrop: 'static',
+                size: 'lg',
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                controller: 'Help',
+                resolve: {
+                    modulo: function() {
+                        return $scope.modulo;
+                    }
+                }
+            });
+            return modalInstance;
+        };
+    
+        $("#help").click( function(){
+            $scope.help('Camiones');
+        });
+    
+    
         $scope.camiones=[];
         $scope.operadores=[];
 
         $scope.listaDeCamiones= function (){
             CamionFactory.query({ idEmpresa: idEmpresa , 'expand[]': ['r_camion_operador','operador_detalle']}, function(retorno) {
                 $scope.camiones = retorno;
-                 console.log(retorno);
             });
         };
         
@@ -29,6 +52,7 @@ angular.module('admin-camiones')
             modalInstance.result.then(function()
             {
                $scope.listaDeCamiones();
+            }, function () {
             });
         };
         
@@ -51,6 +75,7 @@ angular.module('admin-camiones')
             modalInstance.result.then(function()
             {
                $scope.listaDeCamiones();
+            }, function () {
             });
         };
         
@@ -64,6 +89,7 @@ angular.module('admin-camiones')
                 c.$patch({idEmpresa:idEmpresa,idCamion:id}, function(response) {
                     $scope.listaDeCamiones();
                 });
+            }, function () {
             }); 
         };
         
@@ -104,7 +130,7 @@ angular.module('admin-camiones')
     $scope.cam={tipo_carga:'1'};
 
     if($scope.accion === 1){
-        $scope.mensaje = 'Nueva' ;
+        $scope.mensaje = 'Nuevo' ;
     }
     
     if($scope.accion === 2){

@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
+use AppBundle\Entity\User;
 
 /**
  * UserRepository
@@ -29,5 +30,5 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         $token = md5(time().'..'.'prysaarc'.'.,'.date('Ymdhis'));
         return $token;
     }
-    
+
 }

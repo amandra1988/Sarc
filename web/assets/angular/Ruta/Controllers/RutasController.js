@@ -1,6 +1,38 @@
 angular.module('admin-rutas')
-.controller('RutasController',['$scope','$http','uiCalendarConfig','$uibModal','urlBasePartials','RutaFactory','idEmpresa',function ($scope,$http,uiCalendarConfig,$uibModal,urlBasePartials,RutaFactory,idEmpresa) {
 
+.filter('estadoVisita', function() {
+	return function(numero) {
+        var estados = [ 'Por realizar','En proceso','Con problemas','Cancelada','Realizada' ]; 
+		return estados[numero];
+	}
+})
+
+.controller('RutasController',['$scope','$http','uiCalendarConfig','$uibModal','urlBasePartials','RutaFactory','idEmpresa',function ($scope,$http,uiCalendarConfig,$uibModal,urlBasePartials,RutaFactory,idEmpresa) {
+    
+    $scope.help =  function(modulo){
+    $scope.modulo = modulo;
+    var modalInstance= $uibModal.open({
+            templateUrl: urlBasePartials+'../../help.html',
+            backdrop: 'static',
+            size: 'lg',
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            controller: 'Help',
+            resolve: {
+                modulo: function() {
+                    return $scope.modulo;
+                }
+            }
+        });
+        return modalInstance;
+    };
+
+    $("#help").click( function(){
+        $scope.help('Rutas');
+    });
+
+    
     $scope.eventSources = [];
     $scope.SelectedEvent=null;
     $scope.mes = 0;
@@ -26,6 +58,7 @@ angular.module('admin-rutas')
         var modalInstance = $scope.modal();
         modalInstance.result.then(function()
         {
+        }, function () {
         });
     };
 
@@ -80,16 +113,11 @@ angular.module('admin-rutas')
 
              eventClick: function(event){
                 $scope.mostrarEvento(event);
-             },
-             eventAfterRender: function(){
-                 
-                //$scope.eventSources =[];
-                //$scope.eventSources = [$scope.events,$scope.listaDeRutas];
              }
          }
      };
 
-     $scope.eventSources = [$scope.events,$scope.eventsF,$scope.listaDeRutas];
+    $scope.eventSources = [$scope.events,$scope.eventsF,$scope.listaDeRutas];
 
     }]
 )

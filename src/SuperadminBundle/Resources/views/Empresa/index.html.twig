@@ -4,7 +4,7 @@
     ng-app="superadmin-empresas"
 {% endblock %}
 
-{% block title %}SAARC{% endblock %}
+{% block title %}SARC{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -12,10 +12,7 @@
 {% endblock %}
 
 {% block bodystyle%}
-    style="background-image: url({{ asset('assets/img/superadmin.jpg') }});
-    background-repeat:no-repeat;
-    background-position: center top;
-    background-size: 100% auto;"
+   style="background-color: black;"
 {% endblock %}
 
 {% block header %}
@@ -28,7 +25,7 @@
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">SAARC</a>
+                <a class="navbar-brand" href="#">SARC</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -38,7 +35,12 @@
                   <li><a href="{{ path('usuarios') }}">Usuarios</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                  <li><a href="{{path('logout')}}">Cerrar sesión</a></li>
+                    <li>
+                        <a href="#" title="Ayuda">
+                            <i class="fa fa-question-circle-o fa-lg" aria-hidden="true" id="help"></i>
+                        </a>
+                    </li>
+                    <li><a href="{{path('logout')}}">Cerrar sesión</a></li>
                 </ul>
             </div>
         </div>
@@ -62,6 +64,8 @@
 
 {% block body %}
     <div class="jumbotron">
-        {{ parent() }}
+        <div class="contenedor">
+            {{ parent() }}
+        </div>
     </div>
 {% endblock %}

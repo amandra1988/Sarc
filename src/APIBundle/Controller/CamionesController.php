@@ -49,23 +49,29 @@ class CamionesController extends APIBaseController
     
     public function patchEmpresasCamionesAction(Request $request,$idEmpresa, Camion $camion){
         $groups ='';
-        $camion->setCamPatente($request->get('patente'));
-        $camion->setCamCapacidad($request->get('capacidad'));
-        $camion->setCamEstado($request->get('estado'));
-        $camion->setCamTipoCarga($request->get('tipo_carga'));
-        $camion->setCamVisible($request->get('visible'));
+
+        $camion->setCamPatente($request->get('patente'))
+               ->setCamCapacidad($request->get('capacidad'))
+               ->setCamEstado($request->get('estado'))
+               ->setCamTipoCarga($request->get('tipo_carga'))
+               ->setCamVisible($request->get('visible'));
+        
+        if( $request->get('visible') === 0){
+            $camion->setOperador(NULL);
+        }
         
         $em = $this->getDoctrine()->getManager();
         $em->persist($camion);
         $em->flush();
-        
-        if($request->get('operador')){
+
+        if($request->get('operador') &&  $request->get('visible') === 1 ){
             $operador =  $this->getDoctrine()->getRepository('AppBundle:Operador')->find($request->get('operador'));
             $operador->setCamion($camion);   
             $em = $this->getDoctrine()->getManager();
             $em->persist($operador);
             $em->flush();
         }
+
         return $this->serializedResponse($camion, $groups);
     }
 }

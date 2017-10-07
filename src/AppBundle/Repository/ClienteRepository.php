@@ -10,4 +10,14 @@ namespace AppBundle\Repository;
  */
 class ClienteRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function obtenerClientesDeLaEmpresa($idEmpresa){
+        return $this->getEntityManager()
+                    ->createQuery(' SELECT c
+                                    FROM AppBundle:Cliente c
+                                    LEFT JOIN c.usuario u
+                                    WHERE c.cliVisible = 1
+                                    AND u.empresa = :idEmpresa')
+                    ->setParameter('idEmpresa',$idEmpresa)
+                    ->getResult();
+    }
 }

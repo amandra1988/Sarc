@@ -57,7 +57,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_telefono", type="integer", length=9, nullable=true)
      * @JMS\SerializedName("cliente_telefono")
-     * @JMS\Groups({"cliente_lista"})
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
      */
     private $cliTelefono;
 
@@ -66,7 +66,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_celular", type="integer", length=9, nullable=true)
      * @JMS\SerializedName("cliente_celular")
-     * @JMS\Groups({"cliente_lista"})
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
      */
     private $cliCelular;
 
@@ -75,7 +75,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_correo", type="string", length=100, nullable=true)
      * @JMS\SerializedName("cliente_correo")
-     * @JMS\Groups({"cliente_lista"})
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
      */
     private $cliCorreo;
 
@@ -103,11 +103,21 @@ class Cliente
      * @JMS\Groups({"cliente_lista"})
      */
     private $cliLatitud;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cli_theta", type="string", length=20)
+     * @JMS\SerializedName("cliente_theta")
+     * @JMS\Groups({"cliente_lista"})
+     */
+     private $cliTheta;
+
     
      /**
      * @var int
      *
-     * @ORM\Column(name="cli_demanda", type="integer")
+     * @ORM\Column(name="cli_demanda", type="string", length=5 )
      * @JMS\SerializedName("cliente_demanda")
      * @JMS\Groups({"cliente_lista"})
      */
@@ -129,20 +139,12 @@ class Cliente
      * @JMS\Groups({"r_cliente_usuario"})
      */
     protected $usuario;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Empresa", inversedBy="clientes" )
-     * @ORM\JoinColumn(name="emp_id", referencedColumnName="emp_id")
-     * @JMS\SerializedName("cliente_empresa")
-     * @JMS\Groups({"r_empresa_cliente"})
-     */
-    protected $empresa;
-    
+        
     /**
      * @ORM\ManyToOne(targetEntity="Comuna", inversedBy="clientes" )
      * @ORM\JoinColumn(name="com_id", referencedColumnName="com_id")
-     * @JMS\SerializedName("cliente_comuna")
-     * @JMS\Groups({"cliente_lista"})
+     * @JMS\SerializedName("comuna")
+     * @JMS\Groups({"r_cliente_comuna"})
      */
     protected $comuna;
 
@@ -548,5 +550,29 @@ class Cliente
     public function getUsuario()
     {
         return $this->usuario;
+    }
+
+    /**
+     * Set cliTheta
+     *
+     * @param string $cliTheta
+     *
+     * @return Cliente
+     */
+    public function setCliTheta($cliTheta)
+    {
+        $this->cliTheta = $cliTheta;
+
+        return $this;
+    }
+
+    /**
+     * Get cliTheta
+     *
+     * @return string
+     */
+    public function getCliTheta()
+    {
+        return $this->cliTheta;
     }
 }

@@ -2,6 +2,31 @@ var app = angular.module('superadmin-empresas');
 
 app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','$uibModal','urlBasePartials',function ($scope,EmpresaFactory,CentroFactory,$uibModal,urlBasePartials) {
         
+        $scope.help =  function(modulo){
+        $scope.modulo = modulo;
+        var modalInstance= $uibModal.open({
+                templateUrl: urlBasePartials+'../../help.html',
+                backdrop: 'static',
+                size: 'lg',
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                controller: 'Help',
+                resolve: {
+                    modulo: function() {
+                        return $scope.modulo;
+                    }
+                }
+            });
+            return modalInstance;
+        };
+        
+        $("#help").click( function(){
+            $scope.help('Empresas');
+        });
+    
+
+        
         $scope.empresas =[];
 
         $scope.listaDeEmpresas= function (){
@@ -29,6 +54,7 @@ app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','
             modalInstance.result.then(function()
             {
                $scope.listaDeEmpresas();
+            }, function () {
             });
         };
         
@@ -52,6 +78,7 @@ app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','
             modalInstance.result.then(function()
             {
                $scope.listaDeEmpresas();
+            }, function () {
             });
         };
         
@@ -65,7 +92,8 @@ app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','
                 e.$patch({idEmpresa:id}, function(response) {
                     $scope.listaDeEmpresas();
                 });
-            }); 
+            }, function () {
+            });
         };
         
         $scope.modal =  function(){
@@ -113,7 +141,6 @@ app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','
         $scope.emp.direccion = empresa.dir;
         $scope.emp.telefono = empresa.tel;
         $scope.emp.celular = empresa.cel;
-        console.log($scope.emp);
     }
 
     if($scope.accion === 0){
