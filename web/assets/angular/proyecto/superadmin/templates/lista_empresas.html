@@ -22,8 +22,8 @@
                     <td ng-pointer class="data">{{ x.telefono_empresa }}</td>
                     <td ng-pointer class="data">{{ x.celular_empresa }}</td>
                     <td  align='center'>
-                        <i class="fa fa-edit" ng-click="editarEmpresa( x.id_empresa )" ng-if="x.id_empresa !== 1"></i>
-                        <i class="fa fa-trash" ng-click="eliminarEmpresa( x.id_empresa )" ng-if="x.id_empresa !== 1"></i>
+                        <i class="fa fa-edit fa-2x pointer" ng-click="editarEmpresa(x.id_empresa)" ng-if="x.id_empresa !== 1"  title="Editar empresa"></i>
+                        <i class="fa fa-trash fa-2x pointer" ng-click="eliminarEmpresa(x.id_empresa)" ng-if="x.id_empresa !== 1" title="Eliminar empresa"></i>
                     </td>
                 </tr>
             </table>

@@ -70,9 +70,7 @@ class CentroDeAcopio
      * @ORM\OneToMany(targetEntity="Empresa", mappedBy="centroDeAcopio", cascade={"persist", "remove"} )
      */
     protected  $empresas;
-    
-    
-    
+       
     /**
      * @var string
      *
@@ -90,6 +88,16 @@ class CentroDeAcopio
      * @JMS\Groups({"centro_detalle","centro_lista"})
      */
     private $cenLatitud;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cen_theta", type="string", length=20)
+     * @JMS\SerializedName("theta_centro")
+     * @JMS\Groups({"centro_detalle","centro_lista"})
+     */
+     private $cenTheta;
+
     
     /**
      * Get id
@@ -309,5 +317,29 @@ class CentroDeAcopio
     public function getCenLatitud()
     {
         return $this->cenLatitud;
+    }
+
+    /**
+     * Set cenTheta
+     *
+     * @param string $cenTheta
+     *
+     * @return CentroDeAcopio
+     */
+    public function setCenTheta($cenTheta)
+    {
+        $this->cenTheta = $cenTheta;
+
+        return $this;
+    }
+
+    /**
+     * Get cenTheta
+     *
+     * @return string
+     */
+    public function getCenTheta()
+    {
+        return $this->cenTheta;
     }
 }

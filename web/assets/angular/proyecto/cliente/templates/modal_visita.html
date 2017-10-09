@@ -3,39 +3,32 @@
 </div>
 
 <div class="modal-body">
-   <div class="container-fluid">
-        <table class="table" border ="0">
+   <div class="container-fluid"></div>
+        <table class="table" width="100%">
             <tr>
-                <td width="15%" class="titulo_negrita" >Centro de acopio: </td>
-                <td width="85%" class="texto">{{evento.ruta_operador.usuario.empresa.centro_de_acopio.nombre_centro}}</td> 
+                <td width="29%"><b>Centro de acopio</b></td>
+                <td width="1%" ><b>:</b></td> 
+                <td width="70%">{{centro}}</td>
+            </tr>
+            <tr class="alert alert-{{ estado | classestado}} ">
+                <td width="29%"><b>Estado de la visita</b></td>
+                <td width="1%" ><b>:</b></td> 
+                <td width="70%">{{estado | estadoVisita}}</td>
             </tr>
             <tr>
-                <td colspan="2" class="titulo_negrita">Comentario de la visita hecho por el operador:</td>
-            </tr>    
+                <td colspan="3"><b>Comentario realizado por el operador:</b></td>     
+            </tr>
             <tr>
-                <td  colspan="2">
-                    <div>
-                        <table width="100%">
-                            <tr>
-                                <td width="10%" class="titulo_negrita">Estado:</td>
-                                <td width="20%" class="texto">
-                                    <select ng-model="estado" ng-options="estado as estado.nombre for estado in estados track by estado.id">
-                                        <option value="">--</option>
-                                    </select>             
-                                </td>        
-                                <td width="10%" class="titulo_negrita">Comentario:</td>
-                                <td width="30%" class="texto">
-                                    <textarea  cols="40"></textarea>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+                <td colspan="3">
+                    <textarea  title="Ingrese comentario de la visita" ng-model="comentario" class="form-control" name="comentario"></textarea>
                 </td>
             </tr>
         </table>
+
+
     </div>
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-danger"  type="button" ng-click="close()">Cancelar</button>
+    <button class="btn btn-danger"  type="button" ng-click="close()">Cerrar</button>
 </div>

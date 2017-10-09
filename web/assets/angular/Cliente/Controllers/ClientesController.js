@@ -1,11 +1,34 @@
 angular.module('admin-clientes')
 .controller('ClientesController',['$scope','ClienteFactory','$uibModal','urlBasePartials','ComunaFactory','FrecuenciaFactory','idEmpresa',function ($scope,ClienteFactory,$uibModal,urlBasePartials,ComunaFactory,FrecuenciaFactory,idEmpresa) {
-        
+    $scope.help =  function(modulo){
+        $scope.modulo = modulo;
+        var modalInstance= $uibModal.open({
+                templateUrl: urlBasePartials+'../../help.html',
+                backdrop: 'static',
+                size: 'lg',
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                controller: 'Help',
+                resolve: {
+                    modulo: function() {
+                        return $scope.modulo;
+                    }
+                }
+            });
+            return modalInstance;
+        };
+    
+        $("#help").click( function(){
+            $scope.help('Clientes');
+        });
+    
+    
         $scope.clientes =[];
 
         $scope.listaDeClientes= function (){
             ClienteFactory.query({ idEmpresa: idEmpresa , 'expand[]': []}, function(retorno) {
-                $scope.clientes = retorno;   
+                $scope.clientes = retorno;
             });   
         };
 
@@ -19,14 +42,13 @@ angular.module('admin-clientes')
         $scope.comunas =[];
         $scope.listaDeComunas= function (){
             ComunaFactory.query({'expand[]': []}, function(retorno) {
-                $scope.comunas = retorno;
+                $scope.comunas = retorno;      
             });
         };
 
         $scope.listaDeClientes();
         $scope.listaDeFrecuencias();
         $scope.listaDeComunas();
-
 
         $scope.accion = 1;
        
@@ -58,7 +80,8 @@ angular.module('admin-clientes')
                     $scope.cliente.correo =$scope.clientes[i].cliente_correo ;
                     $scope.cliente.demanda =$scope.clientes[i].cliente_demanda ;
                     $scope.cliente.frecuencia =$scope.clientes[i].cliente_frecuencia ;
-                    $scope.cliente.comuna =$scope.clientes[i].cliente_comuna ;
+                    $scope.cliente.theta =$scope.clientes[i].cliente_theta ;
+                    $scope.cliente.comuna =$scope.clientes[i].comuna ;
                     break;
                 }
             }
@@ -186,8 +209,8 @@ angular.module('admin-clientes')
         c.celular=$scope.cli.celular;
         c.correo=$scope.cli.correo;
         c.demanda=$scope.cli.demanda;
+        c.theta=$scope.cli.theta;
         c.visible=true;
-
         if(accion === 1)
         {
             c.$save({idEmpresa:idEmpresa}, function(response) {

@@ -15,10 +15,13 @@ class MisRutasController extends APIBaseController
     public function getEmpresasOperadoresMisrutasAction(Request $request, Empresa $empresa, Operador $operador){
         
         $groups = ['ruta_lista'];
+        
         if(is_array($request->get('expand'))){
             $groups = array_merge($groups, $request->get('expand'));
         }
+
         $misrutas = $this->getDoctrine()->getRepository('AppBundle:Ruta')->findBy(array('operador'=>$operador));
+        
         return $this->serializedResponse($misrutas, $groups);
     }
 }

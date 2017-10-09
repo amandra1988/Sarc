@@ -21,4 +21,5 @@ class VisitasController extends APIBaseController
         $misrutas = $this->getDoctrine()->getRepository('AppBundle:Ruta')->buscarVisitas($cliente);
         return $this->serializedResponse($misrutas, $groups);
     }
+
 }

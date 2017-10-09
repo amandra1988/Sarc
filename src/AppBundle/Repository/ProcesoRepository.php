@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Proceso;
+
 /**
  * ProcesoRepository
  *
@@ -10,16 +12,37 @@ namespace AppBundle\Repository;
  */
 class ProcesoRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function buscarProcesosDeLaEmpresa($idEmpresa){
+    public function obtenerProcesosDeLaEmpresa($idEmpresa){
 
-            return $this->getEntityManager()
-            ->createQuery(' SELECT p
-                            FROM AppBundle:Proceso p
-                            LEFT JOIN p.ruta r
-                            LEFT JOIN r.rutaDetalle rd
-                            LEFT JOIN rd.cliente c
-                            WHERE c.empresa = :idEmpresa')
-            ->setParameter('idEmpresa',$idEmpresa)
-            ->getResult();
-	}
+        $query = $this->createQueryBuilder('p')
+                ->where('p.empresa = ?1')
+                ->orderBy('p.id', 'DESC')
+                ->setParameter(1, $idEmpresa);      
+        return $query->getQuery()->getResult();
+    }
+
+
+    public function agregarActualizarProceso($empresa,$clientes){
+        
+        $proceso = $this->findBy(array('empresa'=>$empresa,'prcEstado'=>0)); 
+        $totalcli = count($clientes);
+            
+        if(count($proceso) === 0)
+            $proceso =  new Proceso(); 
+        else
+            $proceso = $proceso[0]; 
+
+        $proceso->setPrcCantidadClientes($totalcli)
+                ->setPrcFecha(new \DateTime(date('Y-m-d H:s:i')))
+                ->setPrcEstado(0)
+                ->setPrcValidado(false)
+                ->setEmpresa($empresa)
+                ->setPrcObservacion('')
+                ->setPrcTermino(new \DateTime(date('Y-m-d H:s:i')));  
+
+        $em = $this->getEntityManager();
+        $em->persist($proceso);
+        $em->flush();
+    }
+
 }

@@ -39,6 +39,11 @@
                   <li><a href="{{path('procesos')}}">Procesos</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" title="Ayuda">
+                            <i class="fa fa-question-circle-o fa-lg" aria-hidden="true" id="help"></i>
+                        </a>
+                    </li>
                     <li><a href="{{path('logout')}}">Cerrar sesión</a></li>
                 </ul>
             </div>
@@ -64,6 +69,8 @@
 
 {% block body %}
     <div class="jumbotron">
-        {{ parent() }}
+        <div class="contenedor">
+            {{ parent() }}
+        </div>
     </div>
 {% endblock %}

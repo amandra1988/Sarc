@@ -1,6 +1,30 @@
 angular.module('admin-camiones')
 .controller('CamionesController',['$scope','CamionFactory','OperadorFactory','$uibModal','urlBasePartials','idEmpresa',function ($scope,CamionFactory,OperadorFactory,$uibModal,urlBasePartials,idEmpresa) {
         
+        $scope.help =  function(modulo){
+        $scope.modulo = modulo;
+        var modalInstance= $uibModal.open({
+                templateUrl: urlBasePartials+'../../help.html',
+                backdrop: 'static',
+                size: 'lg',
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                controller: 'Help',
+                resolve: {
+                    modulo: function() {
+                        return $scope.modulo;
+                    }
+                }
+            });
+            return modalInstance;
+        };
+    
+        $("#help").click( function(){
+            $scope.help('Camiones');
+        });
+    
+    
         $scope.camiones=[];
         $scope.operadores=[];
 
@@ -106,7 +130,7 @@ angular.module('admin-camiones')
     $scope.cam={tipo_carga:'1'};
 
     if($scope.accion === 1){
-        $scope.mensaje = 'Nueva' ;
+        $scope.mensaje = 'Nuevo' ;
     }
     
     if($scope.accion === 2){
