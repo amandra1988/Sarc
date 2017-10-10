@@ -17,8 +17,8 @@ class SwitchProcessCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-        ->setName('saarc:switch-process')//Nombre del comando (La parte despues de "bin/console")
-        ->setDescription('Switch between diferent process of SAARC.')// the short description shown while running "php bin/console list"
+        ->setName('sarc:switch-process')//Nombre del comando (La parte despues de "bin/console")
+        ->setDescription('Switch between diferent process of SARC.')// the short description shown while running "php bin/console list"
         ->setHelp('This command allows switching between diferent process')// the full command description shown when running the command with. The "--help" option
         ->addArgument('event', InputArgument::REQUIRED, 'You need pass name of events')
         ->addArgument('file_name', InputArgument::REQUIRED, 'You need pass name of file');
@@ -34,14 +34,14 @@ class SwitchProcessCommand extends ContainerAwareCommand
         $typeEvent = array("IN_CREATE","IN_MODIFY","IN_DELETE");//validamos el primer paramétro
 
         if (!in_array($nameEvent, $typeEvent)) {
-            $logger->info('SAARC: ERROR No existe el evento indicado'.$nameEvent." ".$fileName);
+            $logger->info('SARC: ERROR No existe el evento indicado'.$nameEvent." ".$fileName);
             throw new \RuntimeException("No existe el evento indicado ");
         }
 
         $typeExtension= array(
-            '.dat'=>"saarc:create-data-file", //solo debe ser a traves de cron
-            '.sol'=>"saarc:create-route",
-            '.PID'=>"saarc:update-info-process"
+            '.dat'=>"sarc:create-data-file", //solo debe ser a traves de cron
+            '.sol'=>"sarc:create-route",
+            '.PID'=>"sarc:update-info-process"
         );
         
         //validamos el segundo parámetro
@@ -50,12 +50,12 @@ class SwitchProcessCommand extends ContainerAwareCommand
         $fileExtension = substr($fileName,strrpos($fileName,'.',-1),strlen($fileName));
 
         if ($str === false) {
-            $logger->info('SAARC: ERROR El segundo parametro (nombre del archivo), debe tener el separador' . $nameEvent . " " . $fileName);
+            $logger->info('SARC: ERROR El segundo parametro (nombre del archivo), debe tener el separador' . $nameEvent . " " . $fileName);
             throw new \RuntimeException("El segundo parametro (nombre del archivo), debe tener el separador '.' ");
         }else{
             //Debe existir en el array $typeExtension
             if (!array_key_exists($fileExtension, $typeExtension)) {
-                $logger->info('SAARC: ERROR El segundo parametro (nombre del archivo), no tiene una extension conocida ' . $nameEvent . " " . $fileName);
+                $logger->info('SARC: ERROR El segundo parametro (nombre del archivo), no tiene una extension conocida ' . $nameEvent . " " . $fileName);
                 throw new \RuntimeException("El segundo parametro (nombre del archivo), no tiene una extension conocida");
             }
         }
@@ -66,25 +66,25 @@ class SwitchProcessCommand extends ContainerAwareCommand
                 'command'   => $typeExtension[$fileExtension],
                 'file_name' => $fileExtension
             );
-            $logger->info('SAARC: '. $nameEvent . " " . $fileName);
+            $logger->info('SARC: '. $nameEvent . " " . $fileName);
        }
 
        if ($nameEvent == "IN_MODIFY"){
-            $command = $this->getApplication()->find('saarc:update-info-process');
+            $command = $this->getApplication()->find('sarc:update-info-process');
             $arguments = array(
-                'command'   => 'saarc-update-info-process',
+                'command'   => 'sarc-update-info-process',
                 'file_name' => $fileExtension
             );
-            $logger->info('SAARC: '. $nameEvent . " " . $fileName);
+            $logger->info('SARC: '. $nameEvent . " " . $fileName);
        }
 
        if ($nameEvent == "IN_DELETE"){
-            $command = $this->getApplication()->find('saarc:terminate-process');
+            $command = $this->getApplication()->find('sarc:terminate-process');
             $arguments = array(
-                'command'   => 'saarc:terminate-process',
+                'command'   => 'sarc:terminate-process',
                 'file_name' => $fileExtension
             );
-            $logger->info('SAARC: '. $nameEvent . " " . $fileName);
+            $logger->info('SARC: '. $nameEvent . " " . $fileName);
         }
 
         //obtnemos los parametros del comando

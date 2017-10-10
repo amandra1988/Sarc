@@ -20,7 +20,7 @@ class UpdateDataFileCommand extends ContainerAwareCommand
     {
         $this
         // the name of the command (the part after "bin/console")
-        ->setName('saarc:update-info-process')
+        ->setName('sarc:update-info-process')
 
         // the short description shown while running "php bin/console list"
         ->setDescription('Creates data file for procesing client routes.')
