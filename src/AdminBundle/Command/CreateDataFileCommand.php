@@ -59,10 +59,6 @@ class CreateDataFileCommand extends ContainerAwareCommand
         //En este punto es donde me doy cuenta que la generación de rutas es solo para una empresa
         if(count($proceso)>0)
         {
-            $proceso[0]->setPrcEstado(1)->setPrcObservacion('Generando planificación de rutas de trabajo...');  
-            $manager->persist($proceso[0]);
-            $manager->flush();
-
             $empresa  = $proceso[0]->getEmpresa();
             $camiones = $manager->getRepository("AppBundle:Camion")->buscarCamionesDeLaEmpresa($empresa);
             $clientes = $manager->getRepository("AppBundle:Cliente")->obtenerClientesDeLaEmpresa($empresa);
