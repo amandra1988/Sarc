@@ -15,8 +15,8 @@ class UpdateInfoProcessCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this->setName('sarc:update-info-process')
-             ->setDescription('Creates data file for procesing client routes.')
-             ->setHelp('This command allows create a data file to procesing cliente route')
+             ->setDescription('Create .PID file to tell you how to find it running a process')
+             ->setHelp('This command creates .PID file, this way it indicates that a process is running.')
              ->addArgument('file_name', InputArgument::OPTIONAL, 'You need pass name of file');
     }
 

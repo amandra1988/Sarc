@@ -15,8 +15,8 @@ class TerminateProcessCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this->setName('sarc:terminate-process')
-             ->setDescription('Creates data file for procesing client routes.')
-             ->setHelp('This command allows create a data file to procesing cliente route')
+             ->setDescription('Removes .PID file to terminate a process')
+             ->setHelp('This command deletes a .PID file to terminate a process and changes the state in the database.')
              ->addArgument('file_name', InputArgument::OPTIONAL, 'You need pass name of file');
     }
 
