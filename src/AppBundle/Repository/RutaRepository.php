@@ -20,14 +20,13 @@ class RutaRepository extends \Doctrine\ORM\EntityRepository
                             LEFT JOIN o.usuario u
                             WHERE u.empresa = :idEmpresa
                             AND SUBSTRING(r.rtaFecha,6,2)= :mes
-                            AND SUBSTRING(r.rtaFecha,1,4)= :anio
-                                    ')
+                            AND SUBSTRING(r.rtaFecha,1,4)= :anio')
             ->setParameter('idEmpresa', $idEmpresa)->setParameter('mes', $mes)->setParameter('anio', $anio)
             ->getResult();
     }
 
     public function buscarVisitas($cliente){
-
+        
             return $this->getEntityManager()
             ->createQuery(' SELECT r
                             FROM AppBundle:Ruta r
@@ -36,6 +35,7 @@ class RutaRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('idCliente', $cliente->getId())
             ->getResult();
     }
+    
     public function buscarRutasDelDia($dia,$mes,$anio,$idEmpresa){
 
             return $this->getEntityManager()
