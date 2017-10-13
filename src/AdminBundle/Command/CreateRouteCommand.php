@@ -30,22 +30,23 @@ class CreateRouteCommand extends ContainerAwareCommand
     {
         $fs = new Filesystem();
         $absolutePath =$this->getContainer()->get('kernel')->locateResource('@AdminBundle/Resources/');
-        if($fs->exists($absolutePath."data/out.txt")){
 
+        if($fs->exists($absolutePath."data/out.txt"))
+        {
             $manager = $this->getContainer()->get('doctrine.orm.default_entity_manager');
-            //Buscar proceso en procesod de ejecucion.
+
+            //Buscar proceso en espera de ejecucion.
             $proceso = $manager->getRepository("AppBundle:Proceso")->procesoEnEsperaDeEjecucion(1,1);
-            
             if( count($proceso) > 0)
             {
                 $cantClientes = $proceso[0]->getPrcCantidadClientes();
-               
+        
                 $planificacion = $camiones = $trabajo = $datos = [];
                 $camion = $l = 0;
                 $caracter = ['y','[','*',',',']'];
                 $replace  = ['','','','',''];
 
-/* ***************************************************************************************** */
+                // Leer una vez el archivo para obtener posicion de los datos que necesitamos
                 $file = fopen($absolutePath."data/out.txt",'r');
                 while(!feof($file)){
                     $l++;
@@ -61,9 +62,9 @@ class CreateRouteCommand extends ContainerAwareCommand
                     }
                 }
                 fclose($file);
-/* ***************************************************************************************** */
 
-/* ***************************************************************************************** */
+
+                // Con los datos identificados anteriormente, abrir nuevamente el archivo y extraer la información
                 $datos = $routes = $visitas = [];
                 foreach ($camiones as $camion => $c)
                 {
@@ -123,8 +124,8 @@ class CreateRouteCommand extends ContainerAwareCommand
                     fclose($file);
                 }
 
-        //dump($routes);
-/* ***************************************************************************************** */
+
+                // Identificar fechas de dias habiles donde se cargará la información
                 $hoy = date('Y-m-d');
                 $prox20dias =date('Y-m-d', strtotime('+30 day'));
                 $inicio = strtotime($hoy); 
@@ -134,51 +135,64 @@ class CreateRouteCommand extends ContainerAwareCommand
                 $i=1;
                 for($inicio;$inicio<=$fin;$inicio=strtotime('+1 day ' . date('Y-m-d',$inicio)))
                 {
-                    if(date('D',$inicio) != 'Sun' && date('D',$inicio)!='Sat'){
+                    if(date('D',$inicio) != 'Sun' && date('D',$inicio)!='Sat'):
                         $fechas[$i] = $inicio;
                         $i++;
-                    }
-                    if($i>20)
+                    endif;
+
+                    if($i>20):
                         break;
+                    endif;
                 }
 
+                // La información extraida del archivo, se registra en la base de datos con las fechas indentificadas
                 foreach($routes as $route => $visitas)
                 {
                     $camion = $manager->getRepository("AppBundle:Camion")->find($route);
-
-                    foreach($visitas as $visita){
+                    foreach($visitas as $visita):
 
                         $idcliente = $visita['Cliente'];
                         $datos = [];
 
-                        for($d=1;$d<=20;$d++)
+                        for($d=1;$d<=20;$d++):
                             $datos[$d] = $visita[$d];
+                        endfor;
     
-                        if(in_array(1, $datos)){
-                            for($d=1;$d<=20;$d++){
-                                if($datos[$d])
-                                {
-                                    $titulo= 'Ruta de trabajo '.date('d/m/Y',$fechas[$d]);
+                        if(in_array(1, $datos)):
 
-                                    $ruta = $manager->getRepository("AppBundle:Ruta")->buscarRutasDelDiaPorCamionYOperador(date('d',$fechas[$d]),date('m',$fechas[$d]),date('Y',$fechas[$d]),$proceso[0]->getEmpresa(),$camion->getId(),$camion->getOperador());
+                            for($d=1;$d<=20;$d++):
+
+                                $ruta = $manager->getRepository("AppBundle:Ruta")->buscarRutasDelDiaPorCamionYOperador(date('Y-m-d',$fechas[$d]),$proceso[0]->getEmpresa(),$camion->getId(),$camion->getOperador());
+                                
+                                if($datos[$d]):
+                                
+                                    $titulo= 'Ruta de trabajo '.date('d/m/Y',$fechas[$d]);
                                     
-                                    if( count($ruta) == 0){
+                                    $cliente = $manager->getRepository("AppBundle:Cliente")->find($idcliente);
+                                    
+                                    if(count($ruta) == 0):
                                         $ruta = new Ruta();
-                                    }else{
+                                    else:
                                         $ruta = $ruta[0];
-                                    }
+                                    endif;
                                    
                                     $ruta->setRtaTitulo($titulo)
-                                    ->setRtaFecha(new \DateTime(date('Y-m-d H:s:i',$fechas[$d])))
-                                    ->setProceso($proceso[0])
-                                    ->setOperador($camion->getOperador())
-                                    ->setCamion($camion);
+                                         ->setRtaFecha(new \DateTime(date('Y-m-d H:s:i',$fechas[$d])))
+                                         ->setProceso($proceso[0])
+                                         ->setOperador($camion->getOperador())
+                                         ->setCamion($camion);
                                     $manager->persist($ruta);
                                     $manager->flush();
 
-                                    $cliente = $manager->getRepository("AppBundle:Cliente")->find($idcliente);
 
-                                    $rutaDetalle = new RutaDetalle();
+                                    $rutaDetalle = $manager->getRepository("AppBundle:RutaDetalle")->findBy( array('ruta'=>$ruta,'cliente'=>$cliente) );
+
+                                    if(count($rutaDetalle) == 0):
+                                        $rutaDetalle = new RutaDetalle();
+                                    else:
+                                        $rutaDetalle = $rutaDetalle[0];
+                                    endif;
+
                                     $rutaDetalle->setRdeLongitud($cliente->getCliLongitud())
                                                 ->setRdeLatitud($cliente->getCliLatitud())
                                                 ->setRdeEstado(0)
@@ -187,10 +201,24 @@ class CreateRouteCommand extends ContainerAwareCommand
                                                 ->setCliente($cliente);
                                     $manager->persist($rutaDetalle);
                                     $manager->flush();
-                                }
-                            }
-                        }
-                    }
+
+                                else:
+
+                                    if(count($ruta) > 0): 
+                                        
+                                        $ruta = $ruta[0];
+                                        $rutaDetalle = $manager->getRepository("AppBundle:RutaDetalle")->findBy( array('ruta'=>$ruta,'cliente'=>$cliente) );
+                                        if(count($rutaDetalle) > 0):
+                                            $rutaDetalle = $rutaDetalle[0];
+                                            $manager->remove($rutaDetalle);
+                                            $manager->flush();
+                                        endif;
+
+                                    endif;
+                                endif;
+                            endfor;
+                        endif;
+                    endforeach;
                 }
 
                 $output->writeln("Carga de datos finalizada, ahora puede ejecutar comando sarc:terminate-process", FILE_APPEND);    

@@ -55,7 +55,7 @@ class RutaRepository extends \Doctrine\ORM\EntityRepository
                 ->getResult();
         }
 
-        public function buscarRutasDelDiaPorCamionYOperador($dia,$mes,$anio,$empresa,$camion,$operador){
+        public function buscarRutasDelDiaPorCamionYOperador($fecha,$empresa,$camion,$operador){
                 
                 return $this->getEntityManager()
                 ->createQuery(' SELECT r
@@ -64,16 +64,12 @@ class RutaRepository extends \Doctrine\ORM\EntityRepository
                                 LEFT JOIN c.operador o
                                 LEFT JOIN o.usuario u
                                 WHERE u.empresa = :idEmpresa
-                                AND SUBSTRING(r.rtaFecha,1,4)= :anio
-                                AND SUBSTRING(r.rtaFecha,6,2)= :mes
-                                AND SUBSTRING(r.rtaFecha,9,2)= :dia
+                                AND SUBSTRING(r.rtaFecha,1,10)= :fecha
                                 AND r.camion= :camion
                                 AND r.operador= :operador
                                 ')
                 ->setParameter('idEmpresa', $empresa)
-                ->setParameter('anio', $anio)
-                ->setParameter('mes', $mes)
-                ->setParameter('dia', $dia)
+                ->setParameter('fecha', $fecha)
                 ->setParameter('camion', $camion)
                 ->setParameter('operador', $operador)
                 ->getResult();
