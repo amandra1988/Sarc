@@ -205,12 +205,19 @@ class CreateRouteCommand extends ContainerAwareCommand
                                 else:
 
                                     if(count($ruta) > 0): 
-                                        
+
                                         $ruta = $ruta[0];
                                         $rutaDetalle = $manager->getRepository("AppBundle:RutaDetalle")->findBy( array('ruta'=>$ruta,'cliente'=>$cliente) );
                                         if(count($rutaDetalle) > 0):
                                             $rutaDetalle = $rutaDetalle[0];
                                             $manager->remove($rutaDetalle);
+                                            $manager->flush();
+                                        endif;
+
+                                        // Si la ruta no tiene visitas asociadas, la borro.
+                                        $rutaDetalle = $manager->getRepository("AppBundle:RutaDetalle")->findBy( array('ruta'=>$ruta) );
+                                        if(count($rutaDetalle) == 0):
+                                            $manager->remove($ruta);
                                             $manager->flush();
                                         endif;
 
