@@ -21,16 +21,16 @@ class ProcesoRepository extends \Doctrine\ORM\EntityRepository
         return $query->getQuery()->getResult();
     }
 
-
     public function agregarActualizarProceso($empresa,$clientes){
         
         $proceso = $this->findBy(array('empresa'=>$empresa,'prcEstado'=>0)); 
         $totalcli = count($clientes);
             
-        if(count($proceso) === 0)
-            $proceso =  new Proceso(); 
-        else
-            $proceso = $proceso[0]; 
+        if(count($proceso) === 0){
+            $proceso = new Proceso(); 
+        }else{
+            $proceso = $proceso[0];
+        }
 
         $proceso->setPrcCantidadClientes($totalcli)
                 ->setPrcFecha(new \DateTime(date('Y-m-d H:s:i')))
@@ -44,5 +44,16 @@ class ProcesoRepository extends \Doctrine\ORM\EntityRepository
         $em->persist($proceso);
         $em->flush();
     }
-
+    
+    public function procesoEnEsperaDeEjecucion($validado,$estado){
+        
+        return $this->getEntityManager()
+                ->createQuery(' SELECT p
+                                FROM AppBundle:Proceso p
+                                WHERE p.prcValidado= :validado
+                                AND p.prcEstado= :estado')
+                ->setParameter('validado', $validado)
+                ->setParameter('estado', $estado)
+                ->getResult();
+    }
 }
