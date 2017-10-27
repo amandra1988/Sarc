@@ -142,6 +142,37 @@ angular.module('superadmin-centro-de-acopio')
     }
     
     $scope.guardar= function(){
+
+        if(!$scope.centro.nombre)
+        {
+            $scope.error = 'Ingrese el nombre del centro de acopio';
+            return;
+        }
+
+        if(!$scope.centro.direccion)
+        {
+            $scope.error = 'Ingrese dirección del centro de acopio';
+            return;
+        }
+
+        if(!$scope.centro.numero)
+        {
+            $scope.error = 'Ingrese número de calle';
+            return;
+        }
+        
+        if(!$scope.centro.comuna)
+        {
+            $scope.error = 'Indique la comuna donde está ubicado el centro de acopio';
+            return;
+        }
+
+        if(!$scope.centro.tetha)
+        {
+            $scope.error = 'Ingrese el ángulo dentro del plano cartesiano (tetha)';
+            return;
+        }
+        
         var c = new CentroFactory();
         c.nombre    = $scope.centro.nombre;
         c.direccion = $scope.centro.direccion;
