@@ -28,7 +28,7 @@ class EmpresasController extends APIBaseController
     * @return Response La respuesta serializada
     */
     public function postEmpresasAction(Request $request){
-        $groups ='';
+        $groups =['empresa_detalle'];
         $centroDeAcopio  = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->find($request->get('centro'));
         $empresa = new Empresa();
         $empresa->setCentroDeAcopio($centroDeAcopio)
@@ -50,7 +50,7 @@ class EmpresasController extends APIBaseController
     * @return Response La respuesta serializada
     */
     public function patchEmpresasAction(Request $request, Empresa $empresa){
-        $groups ='';
+        $groups =['empresa_detalle'];
         if($request->get('centro')){
             $centroDeAcopio  = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->find($request->get('centro')); 
             $empresa->setCentroDeAcopio($centroDeAcopio);  

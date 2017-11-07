@@ -45,7 +45,6 @@ class ClientesController extends APIBaseController
 
             $cliente->setCliNombre($request->get('nombre'))
                     ->setCliDireccion($request->get('direccion'))
-                    ->setCliNumero($request->get('numero'))
                     ->setCliCelular($request->get('celular'))
                     ->setCliCorreo($request->get('correo'))
                     ->setCliTelefono($request->get('telefono'))
@@ -53,6 +52,12 @@ class ClientesController extends APIBaseController
                     ->setCliDemanda($request->get('demanda'))
                     ->setCliTheta($request->get('theta'))
                     ->setComuna($comuna);
+
+            $direccion = $request->get('direccion').', '.$comuna->getComNombre().', Chile';
+            $coordenadas = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion);
+            $cliente->setCliLatitud($coordenadas['latitud'])
+                    ->setCliLongitud($coordenadas['longitud']);
+
         }
 
         $cliente->setCliVisible($request->get('visible'));
@@ -74,7 +79,6 @@ class ClientesController extends APIBaseController
         $cliente = new Cliente();
         $cliente->setCliNombre($request->get('nombre'))
                 ->setCliDireccion($request->get('direccion'))
-                ->setCliNumero($request->get('numero'))
                 ->setCliCelular($request->get('celular'))
                 ->setCliCorreo($request->get('correo'))
                 ->setCliTelefono($request->get('telefono'))
@@ -84,7 +88,7 @@ class ClientesController extends APIBaseController
                 ->setComuna($comuna)
                 ->setCliVisible($request->get('visible'));
     
-        $direccion = $request->get('direccion').' '.$request->get('numero').', '.$comuna->getComNombre().', Chile';
+        $direccion = $request->get('direccion').', '.$comuna->getComNombre().', Chile';
         $coordenadas = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion);
         $cliente->setCliLatitud($coordenadas['latitud'])
                 ->setCliLongitud($coordenadas['longitud']);

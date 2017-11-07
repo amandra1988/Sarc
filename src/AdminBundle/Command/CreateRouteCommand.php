@@ -228,7 +228,19 @@ class CreateRouteCommand extends ContainerAwareCommand
                     endforeach;
                 }
 
-                $output->writeln("Carga de datos finalizada, ahora puede ejecutar comando sarc:terminate-process", FILE_APPEND);    
+                $output->writeln("Carga de datos finalizada, ahora puede ejecutar comando sarc:terminate-process", FILE_APPEND);
+
+
+                $command = $this->getApplication()->find('sarc:terminate-process');
+                $arguments = array(
+                    'command'   => 'sarc:terminate-process'
+                );
+                //obtnemos los parametros del comando
+                $greetInput = new ArrayInput($arguments);
+                //ejecutamos el comando
+                $returnCode = $command->run($greetInput, $output);
+
+
             }else{
                 $output->writeln("No existen proceso en ejecución", FILE_APPEND);
             }

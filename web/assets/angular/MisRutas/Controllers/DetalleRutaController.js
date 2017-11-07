@@ -22,12 +22,19 @@ angular.module('operador-mis-rutas')
 
                     $scope.ruta = retorno;
 
+                    $scope.datacentro = {};
+                    $scope.datacentro ={
+                        id:$scope.ruta.ruta_operador.usuario.empresa.centro_de_acopio.id_centro, 
+                        longitude: $scope.ruta.ruta_operador.usuario.empresa.centro_de_acopio.longitud_centro,
+                        latitude:  $scope.ruta.ruta_operador.usuario.empresa.centro_de_acopio.latitud_centro
+                    };
+
                     $scope.map={
                         center:{
-                            latitude:  $scope.ruta.ruta_operador.usuario.empresa.centro_de_acopio.latitud_centro, 
-                            longitude: $scope.ruta.ruta_operador.usuario.empresa.centro_de_acopio.longitud_centro
+                            latitude:  $scope.datacentro.latitude, 
+                            longitude: $scope.datacentro.longitude
                         }, 
-                        zoom: 15,
+                        zoom: 12,
                         options: {
                             streetViewControl: true,
                             panControl: true,
@@ -37,16 +44,31 @@ angular.module('operador-mis-rutas')
                     };
                 
                     $scope.polylines = [];
-                
+                    $scope.coordenadas = [];
+
+                    //$scope.coordenadas.push($scope.datacentro);
+               
+                    angular.forEach(retorno, function(value,key){
+
+                        if(key == "ruta_detalle")
+                        {
+                            for(var x = 0 ; x < value.length; x++){
+                                $scope.coordenadas.push(value[x]);
+                            }
+                        }
+                    });
+
+                    //$scope.coordenadas.push($scope.datacentro);
+console.log($scope.coordenadas);
                     uiGmapGoogleMapApi.then(function(){
-                        $scope.randomMarkers = $scope.ruta.ruta_detalle;
+                        $scope.randomMarkers = $scope.coordenadas;
                         $scope.polylines = [
                         {
                             editable: false,
                             draggable: false,
                             geodesic: true,
                             visible: true,
-                            path: $scope.ruta.ruta_detalle,
+                            path: $scope.coordenadas,
                             stroke: {
                                 color: '#6060FB',
                                 weight: 2

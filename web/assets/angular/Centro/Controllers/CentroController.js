@@ -64,8 +64,7 @@ angular.module('superadmin-centro-de-acopio')
                 if($scope.centros[i].id_centro === id) {
                     $scope.centro.id = $scope.centros[i].id_centro ;
                     $scope.centro.nombre = $scope.centros[i].nombre_centro ;
-                    $scope.centro.direccion = $scope.centros[i].direccion_centro ;
-                    $scope.centro.numero = $scope.centros[i].numero_centro;
+                    $scope.centro.direccion = $scope.centros[i].direccion_centro ; 
                     $scope.centro.comuna = $scope.centros[i].comuna;
                     $scope.centro.tetha = $scope.centros[i].theta_centro;
                     $scope.centro.latitud = $scope.centros[i].latitud_centro;
@@ -155,12 +154,6 @@ angular.module('superadmin-centro-de-acopio')
             return;
         }
 
-        if(!$scope.centro.numero)
-        {
-            $scope.error = 'Ingrese número de calle';
-            return;
-        }
-        
         if(!$scope.centro.comuna)
         {
             $scope.error = 'Indique la comuna donde está ubicado el centro de acopio';
@@ -176,7 +169,6 @@ angular.module('superadmin-centro-de-acopio')
         var c = new CentroFactory();
         c.nombre    = $scope.centro.nombre;
         c.direccion = $scope.centro.direccion;
-        c.numero    = $scope.centro.numero;
         c.comuna    = $scope.centro.comuna.comuna_id;
         c.tetha     = $scope.centro.tetha;
         c.longitud  = $scope.centro.longitud;

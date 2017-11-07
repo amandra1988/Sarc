@@ -41,17 +41,8 @@ class CentroDeAcopio
      * @JMS\Groups({"centro_lista"})
      */
     private $cenDireccion;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="cen_numero", type="integer")
-     * @JMS\SerializedName("numero_centro")
-     * @JMS\Groups({"centro_lista"})
-     */
-    private $cenNumero;
     
-     /**
+    /**
      * @var boolean
      *
      * @ORM\Column(name="cen_visible", type="boolean")
@@ -155,30 +146,6 @@ class CentroDeAcopio
     public function getCenDireccion()
     {
         return $this->cenDireccion;
-    }
-
-    /**
-     * Set cenNumero
-     *
-     * @param string $cenNumero
-     *
-     * @return CentroDeAcopio
-     */
-    public function setCenNumero($cenNumero)
-    {
-        $this->cenNumero = $cenNumero;
-
-        return $this;
-    }
-
-    /**
-     * Get cenNumero
-     *
-     * @return string
-     */
-    public function getCenNumero()
-    {
-        return $this->cenNumero;
     }
 
     /**

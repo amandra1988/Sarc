@@ -4,6 +4,10 @@ namespace APIBundle\Controller;
 use AppBundle\Entity\Empresa;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+/*
+use AdminBundle\Command\CreateDataFileCommand;
+use Symfony\Component\Console\Application;
+*/
 
 class ProcesosController extends APIBaseController
 {
@@ -22,20 +26,30 @@ class ProcesosController extends APIBaseController
 
     }
 
-    public function patchEmpresasProcesosAction(Request $request,Empresa $empresa){
+    public function patchEmpresasProcesosAction(Request $request,Empresa $empresa)
+    {
         $groups = ['proceso_detalle'];
 
         $proceso = $this->getDoctrine()->getRepository('AppBundle:Proceso')->find($request->get('idproceso'));
 
         $proceso->setPrcValidado($request->get('validar'));
-        if($request->get('validar'))
+        if($request->get('validar')){
             $proceso->setPrcObservacion('Proceso a la espera de ejecución');
-        else
+        }else{
             $proceso->setPrcObservacion('');
-
+        }
+        
         $em = $this->getDoctrine()->getManager();
         $em->persist($proceso);
         $em->flush();
+
+        /*if($request->get('validar')){
+            $command = new CreateDataFileCommand();
+            $application = new Application();
+            $application->add($command);
+            $application->setDefaultCommand($command->getName());
+            $application->run();
+        }*/
         
         return $this->serializedResponse($proceso, $groups);
     }

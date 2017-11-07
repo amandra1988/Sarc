@@ -1,4 +1,40 @@
 angular.module('admin-clientes')
+.directive('numbersOnly', function () {
+return {
+    restrict: 'A',
+    require: 'ngModel',
+    link: function (scope, element, attrs, ctrl) {
+            var validateNumber = function (inputValue) {
+                var maxLength = 9;
+                if (attrs.max) {
+                    maxLength = attrs.max;
+                }
+                if (inputValue === undefined) {
+                    return '';
+                }
+                var transformedInput = inputValue.replace(/[^0-9]/g, '');
+                if (transformedInput !== inputValue) {
+                    ctrl.$setViewValue(transformedInput);
+                    ctrl.$render();
+                }
+                if (transformedInput.length > maxLength) {
+                    transformedInput = transformedInput.substring(0, maxLength);
+                    ctrl.$setViewValue(transformedInput);
+                    ctrl.$render();
+                }
+                var isNotEmpty = (transformedInput.length === 0) ? true : false;
+                ctrl.$setValidity('notEmpty', isNotEmpty);
+                return transformedInput;
+            };
+
+            ctrl.$parsers.unshift(validateNumber);
+            ctrl.$parsers.push(validateNumber);
+            attrs.$observe('notEmpty', function () {
+                validateNumber(ctrl.$viewValue);
+            });
+        }
+    };
+})
 .controller('ClientesController',['$scope','ClienteFactory','$uibModal','urlBasePartials','ComunaFactory','FrecuenciaFactory','idEmpresa',function ($scope,ClienteFactory,$uibModal,urlBasePartials,ComunaFactory,FrecuenciaFactory,idEmpresa) {
     $scope.help =  function(modulo){
         $scope.modulo = modulo;
@@ -73,8 +109,7 @@ angular.module('admin-clientes')
                 if($scope.clientes[i].cliente_id === id) {
                     $scope.cliente.id =$scope.clientes[i].cliente_id ;
                     $scope.cliente.nombre =$scope.clientes[i].cliente_nombre ;
-                    $scope.cliente.direccion =$scope.clientes[i].cliente_direccion ;
-                    $scope.cliente.numero =$scope.clientes[i].cliente_numero ;
+                    $scope.cliente.direccion =$scope.clientes[i].cliente_direccion;
                     $scope.cliente.telefono =$scope.clientes[i].cliente_telefono ;
                     $scope.cliente.celular =$scope.clientes[i].cliente_celular ;
                     $scope.cliente.correo =$scope.clientes[i].cliente_correo ;
@@ -182,11 +217,6 @@ angular.module('admin-clientes')
             return;
         }
 
-        if(!$scope.cli.numero){
-            $scope.error = 'Ingrese número de la dirección del cliente';
-            return;
-        }
-
         if(!$scope.cli.comuna){
             $scope.error = 'Ingrese comuna del cliente';
             return;
@@ -197,13 +227,18 @@ angular.module('admin-clientes')
             return;
         }
 
+        if(!$scope.cli.theta)
+        {
+            $scope.error = 'Ingrese el ángulo dentro del plano cartesiano (theta)';
+            return;
+        }
+
         $scope.error = '';
 
         var c = new ClienteFactory();
         c.nombre=$scope.cli.nombre;
         c.frecuencia=$scope.cli.frecuencia.frecuencia_id;
         c.direccion=$scope.cli.direccion;
-        c.numero= $scope.cli.numero;
         c.comuna= $scope.cli.comuna.comuna_id;
         c.telefono=$scope.cli.telefono;
         c.celular=$scope.cli.celular;

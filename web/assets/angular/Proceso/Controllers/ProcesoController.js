@@ -7,7 +7,14 @@ app.filter('estadoproceso', function() {
 	}
 });
 
-app.controller('ProcesoController',['$scope','ProcesoFactory','$uibModal','urlBasePartials','idEmpresa',function ($scope,ProcesoFactory,$uibModal,urlBasePartials,idEmpresa) {
+app.controller('ProcesoController',['$scope','ProcesoFactory','$uibModal','urlBasePartials','idEmpresa','urlBaseImg',
+function ($scope,ProcesoFactory,$uibModal,urlBasePartials,idEmpresa,urlBaseImg) {
+
+        $scope.valida=[];
+        $scope.valida[0] = urlBaseImg+"validar.png";
+        $scope.valida[1] = urlBaseImg+"invalidar.png";
+
+
         $scope.help =  function(modulo){
             $scope.modulo = modulo;
             var modalInstance= $uibModal.open({

@@ -7,22 +7,20 @@
                     <th width="5%">#</th>
                     <th width="15%">Nombre</th>
                     <th width="15%">Dirección</th>
-                    <th width="5%">Número</th>
                     <th width="10%">Comuna</th>
                     <th width="20%">Región</th>
                     <th width="20%" colspan="2">Coordenadas GPS</th>
-                    <th width="10%">Tetha</th>
+                    <!-- <th width="10%">Tetha</th>-->
                     <th width="10%">Acciones</th>
                 </tr>
                 <tr ng-repeat="x in centros">
                     <td class="data">{{ x.id_centro }}</td> 
                     <td ng-pointer class="data">{{ x.nombre_centro }}</td>
                     <td ng-pointer class="data">{{ x.direccion_centro }}</td>
-                    <td ng-pointer class="data">{{ x.numero_centro }}</td>
                     <td ng-pointer class="data">{{ x.comuna.comuna_nombre }}</td>
                     <td ng-pointer class="data">{{ x.comuna.provincia.region.region_nombre }}</td>
-                    <td ng-pointer class="data" colspan="2">{{ 'Lat:' + x.latitud_centro  + ' Long:'+  x.longitud_centro }}</td>
-                    <td ng-pointer class="data">{{ x.theta_centro }}</td>
+                    <td ng-pointer class="data" colspan="2">{{ 'Lat: ' + x.latitud_centro  + ' Long: '+  x.longitud_centro }}</td>
+                    <!-- <td ng-pointer class="data">{{ x.theta_centro }}</td>-->
                     <td  align='center'>
                         <i class="fa fa-edit fa-2x pointer"  ng-click="editarCentro(x.id_centro)" title="Editar centro de acopio"></i>
                         <i class="fa fa-trash fa-2x pointer" ng-click="eliminarCentro(x.id_centro)" title="Eliminar centro de acopio"></i>
