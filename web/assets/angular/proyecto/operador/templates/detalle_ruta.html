@@ -27,12 +27,12 @@
                 <ui-gmap-markers models="randomMarkers" coords="'self'" icon="'icon'" click="onClick">
                     <ui-gmap-windows show="show">
                         <div ng-non-bindable>
-                     
-                            <b>{{coordenadas.cliente_nombre}}</b>
+                            <b>{{indice}}</b>
+                            <b>{{ruta_cliente.cliente_nombre}}</b>
                             <br>
-                            {{coordenadas.cliente_direccion}}
+                              {{ruta_cliente.cliente_direccion}}
                             <br>
-                            {{coordenadas.comuna.comuna_nombre}}
+                              {{ruta_cliente.comuna.comuna_nombre}}
                         </div>
                     </ui-gmap-windows>
                 </ui-gmap-markers>
