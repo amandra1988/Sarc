@@ -44,15 +44,6 @@ class Cliente
     private $cliDireccion;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="cli_numero", type="string", length=255)
-     * @JMS\SerializedName("cliente_numero")
-     * @JMS\Groups({"cliente_detalle","cliente_lista"})
-     */
-    private $cliNumero;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="cli_telefono", type="integer", length=9, nullable=true)
@@ -212,31 +203,6 @@ class Cliente
     public function getCliDireccion()
     {
         return $this->cliDireccion;
-    }
-
-    /**
-     * Set cliNumero
-     *
-     * @param string $cliNumero
-     *
-     * @return Cliente
-     */
-    public function setCliNumero($cliNumero)
-    {
-        if($cliNumero) {
-            $this->cliNumero = $cliNumero;
-        }
-        return $this;
-    }
-
-    /**
-     * Get cliNumero
-     *
-     * @return string
-     */
-    public function getCliNumero()
-    {
-        return $this->cliNumero;
     }
 
     /**

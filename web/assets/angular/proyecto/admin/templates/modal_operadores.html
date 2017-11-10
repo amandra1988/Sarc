@@ -22,9 +22,9 @@
             </div>
         </div>
         <div class="form-group row">
-          <label class="col-2 col-form-label">(*) RUT</label>
+          <label class="col-2 col-form-label">(*) RUN</label>
           <div class="col-10">
-            <input class="form-control" type="text" ng-model="ope.rut" name="rut" placeholder="00.000.000-0" maxlength="13"  title="Ingrese RUT del operador">
+            <input class="form-control" type="text" ng-model="ope.rut" name="rut" placeholder="Sin puntos ni guión." maxlength="13"  title="Ingrese RUT del operador">
           </div>
         </div>
         <div class="form-group row">
@@ -37,7 +37,7 @@
           <label class="col-2 col-form-label">Celular</label>
            <div class="input-group mb-2 mr-sm-2 mb-sm-0">        
             <div class="input-group-addon">+56</div>
-            <input class="form-control col-2" type="number" ng-model="ope.celular" name="celular" placeholder="999999999"  title="Ingrese correo electrónico" >
+            <input class="form-control col-2" type="text" ng-model="ope.celular" numbers-only max="9" name="celular" placeholder="999999999"  title="Ingrese correo electrónico" >
           </div>
         </div>
         <div class="form-group row">

@@ -68,7 +68,7 @@ class UsuariosController extends APIBaseController
     * @return Response La respuesta serializada
     */
     public function patchUsuariosAction(Request $request, User $usuario){
-        $groups ='';
+        $groups =['usuario_detalle'];
         if($request->get('password')){
             $pass = $this->container->get('security.password_encoder');
             $password = $pass->encodePassword($usuario, $request->get('password'));

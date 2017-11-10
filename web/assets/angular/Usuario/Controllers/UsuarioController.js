@@ -123,7 +123,7 @@ angular.module('superadmin-usuarios')
     }
     
     if($scope.accion === 2){
-        $scope.mensaje ='Cambiar password ';
+        $scope.mensaje ='Cambiar clave de acceso ';
     }
     
     
