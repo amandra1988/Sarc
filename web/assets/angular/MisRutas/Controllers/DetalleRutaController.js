@@ -65,8 +65,7 @@ angular.module('operador-mis-rutas')
                         }
                     });
 
-                    // $scope.coordenadas.push($scope.datacentro);
-                    //console.log($scope.ruta.ruta_operador.usuario.empresa.centro_de_acopio);
+                    $scope.coordenadas.push($scope.datacentro);
                     uiGmapGoogleMapApi.then(function(){
                         $scope.randomMarkers = $scope.coordenadas;
                         $scope.polylines = [
