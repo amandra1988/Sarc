@@ -10,10 +10,9 @@
 {% endblock %}
 
 {% block header %}
-
   <img class="img-responsive" width="15%" style="margin: 7px auto;" src="{{asset('assets/img/sarc.png') }}" alt="">
   <hr>
-  <section style="background:#FFF;">
+  <section style="background:#FFF;" class="row animated fadeInDown">
       <div class="board">
         <ul class="nav nav-tabs" id="myTab">
           <div class="liner"></div>
@@ -25,7 +24,7 @@
             </a>
           </li>
           <li>
-            <a href="centros" title="Centros de acopio">
+            <a href="{{path('centros')}}" title="Centros de acopio">
               <span class="round-tabs two">
                 <img class="img-responsive" width="70%" style="margin: 3px auto;" src="{{asset('assets/img/centro.png') }}" alt="">
               </span> 
@@ -39,7 +38,7 @@
             </a>
           </li>
           <li>
-            <a href="usuarios"  title="Usuarios">
+            <a href="{{path('usuarios')}}"  title="Usuarios">
               <span class="round-tabs four">
                 <img class="img-responsive" width="70%" style="margin: 3px auto;" src="{{asset('assets/img/login.png') }}" alt="">
               </span> 
@@ -48,7 +47,7 @@
           <li>
             <a href="{{path('logout')}}"  title="Salir">
               <span class="round-tabs five">
-                <img class="img-responsive" width="50%" style="margin: 20px auto;" src="{{asset('assets/img/logout.png') }}" alt="">
+                <img class="img-responsive" width="50%" style="margin: 16px auto;" src="{{asset('assets/img/logout.png') }}" alt="">
               </span>
             </a>
           </li>
@@ -58,13 +57,10 @@
 {% endblock %}
 
 {% block body %}
-
-  <div class="contenedor" style="text-align:center">
-      <h3 style="color:#3e5e9a;margin-top: 50px;"> Bienvenido Súper administrador</h3>      
-  </div>
-
+    <div class="contenedor animated fadeInDown" style="text-align:center">
+        <h3 style="color:#3e5e9a;margin-top: 50px;">Bienvenido Súper administrador</h3>      
+    </div>
 {% endblock %}
-
 {% block javascripts %}
     {{ parent() }}
 {% endblock %}

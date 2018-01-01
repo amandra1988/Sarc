@@ -198,8 +198,12 @@ app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','u
         o.visible = true;
         if(accion === 1)
         {
-            o.$save({idEmpresa: idEmpresa}, function(response) {
-               $uibModalInstance.close();
+            o.$save({idEmpresa: idEmpresa}, function(response) {  
+                if(response.error){
+                    $scope.error = response.error;
+                }else{
+                    $uibModalInstance.close();
+                }
             });
         }else{ // Editar
             o.$patch({idEmpresa:idEmpresa, idOperador:$scope.ope.id }, function(response) {

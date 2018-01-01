@@ -2,48 +2,77 @@
 {% block title %}SARC{% endblock %}
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/style_admin.css')}}">
 {% endblock %}
 
 {% block bodystyle%}
-    style="background-image: url({{ asset('assets/img/admin.jpg') }});
-    background-repeat:no-repeat;
-    background-position: center top;
-    background-size: 100% auto;"
+    style="background-color: #FFF;"
 {% endblock %}
 
 {% block header %}
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="{{path('admin-dashboard')}}">Home</a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                  <li><a href="{{path('operadores')}}">Operadores</a></li>
-                  <li><a href="{{path('camiones')}}">Camiones</a></li>
-                  <li><a href="{{path('clientes')}}">Clientes</a></li>
-                  <li><a href="{{path('rutas')}}">Rutas</a></li>
-                  <li><a href="{{path('procesos')}}">Procesos</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{{path('logout')}}">Cerrar sesión</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<img class="img-responsive" width="15%" style="margin: 7px auto;" src="{{asset('assets/img/sarc.png') }}" alt="">
+<hr>
+<section style="background:#FFF;" class="row">
+    <div class="board">
+      <ul class="nav nav-tabs" id="myTab">
+        <div class="liner"></div>
+        <li class="active">
+          <a href="#admin-dashboard" data-toggle="tab" title="Home">
+            <span class="round-tabs one">
+              <img class="img-responsive" width="80%" style="margin: 7px auto;" src="{{asset('assets/img/home.png') }}" alt="">
+            </span> 
+          </a>
+        </li>
+        <li>
+          <a href="{{path('operadores')}}" title="Operadores">
+            <span class="round-tabs two">
+              <img class="img-responsive" width="45%" style="margin: 6px auto;" src="{{asset('assets/img/operador.png') }}" alt="">
+            </span> 
+          </a>
+        </li>
+        <li>
+          <a href="{{path('camiones')}}" title="Camiones">
+            <span class="round-tabs three" >
+              <img class="img-responsive" width="85%" style="margin: 7px auto;" src="{{asset('assets/img/camion.png') }}" alt="">
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="{{path('clientes')}}"  title="Clientes">
+            <span class="round-tabs four">
+              <img class="img-responsive" width="80%" style="margin: 3px auto;" src="{{asset('assets/img/hospital.png') }}" alt="">
+            </span> 
+          </a>
+        </li>
+        <li>
+          <a href="{{path('procesos')}}"  title="Procesos">
+            <span class="round-tabs five">
+              <img class="img-responsive" width="100%" style="margin: 7px auto;" src="{{asset('assets/img/procesos.png') }}" alt="">
+            </span> 
+          </a>
+        </li>
+        <li>
+          <a href="{{path('rutas')}}"  title="Rutas">
+            <span class="round-tabs six">
+              <img class="img-responsive" width="70%" style="margin: 10px auto;" src="{{asset('assets/img/planificacion.png') }}" alt="">
+            </span> 
+          </a>
+        </li>
+        <li>
+          <a href="{{path('logout')}}"  title="Salir">
+            <span class="round-tabs eigth">
+              <img class="img-responsive" width="50%" style="margin: 16px auto;" src="{{asset('assets/img/logout.png') }}" alt="">
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+</section>
 {% endblock %}
 
 {% block body %}
-    <div class="jumbotron">
-        <div class="contenedor">
-        </div>
+    <div class="contenedor animated fadeInDown" style="text-align:center">
+        <h3 style="color:#3e5e9a;margin-top: 50px;"> Bienvenido Administrador</h3>      
     </div>
 {% endblock %}
 

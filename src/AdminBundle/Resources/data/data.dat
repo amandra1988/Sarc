@@ -8,34 +8,35 @@ param e := 20; # varia
 param e2 := 7; # varia
 
 param capacidad:= #capacidad maxima del camion en contenedores
-4 100
-5 50
+1 50
+2 50
+3 50
 ;
 
 set trisemanal;
-set diario := 6;
-set disemanal := 4;
-set semanal := 5;
-set quincenal ;
-set mensual := 7;
+set diario := 1,2;
+set disemanal := 3;
+set semanal ;
+set quincenal := 4;
+set mensual ;
 
 param theta:=
-4   75.369852
-5   78.365236
-6   78.365365
-7   89.369852
+1   78.36652252
+2   78.3652563
+3   78.35266555
+4   76.23561555
 ;
 
 param demanda :=
-4   20
-5   25
-6   10
-7   60
+1   20
+2   50
+3   50
+4   48
 ;
 
 param frecuencia :=
-4   8  
-5   4  
-6   20  
-7   1  
+1   20  
+2   20  
+3   8  
+4   2  
 ;

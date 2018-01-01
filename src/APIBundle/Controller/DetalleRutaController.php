@@ -13,15 +13,11 @@ class DetalleRutaController extends APIBaseController
     * @return Response La respuesta serializada
     */ 
     public function getRutaAction(Request $request,$ruta){
-
         $groups = ['ruta_lista'];
-
         if(is_array($request->get('expand'))){
             $groups = array_merge($groups, $request->get('expand'));
         }
-
         $ruta = $this->getDoctrine()->getRepository('AppBundle:Ruta')->find($ruta);
-        
         return $this->serializedResponse($ruta, $groups);
     }
 

@@ -166,7 +166,7 @@ class CreateRouteCommand extends ContainerAwareCommand
                                 
                                 if($datos[$d]):
                                 
-                                    $titulo= 'Ruta de trabajo '.date('d/m/Y',$fechas[$d]);
+                                    $titulo= 'Ruta de trabajo operador - '.$camion->getOperador()->getId().''/*.date('d/m/Y',$fechas[$d])*/;
                                     
                                     $cliente = $manager->getRepository("AppBundle:Cliente")->find($idcliente);
                                     

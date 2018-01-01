@@ -1,47 +1,56 @@
-<div class="row">  
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
+<style>
+.img-loading{
+    display: block;
+    max-width: 7%;
+    height: auto;
+    display: inline-block;
+    padding: 6px 12px;
+}
+</style>
+
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <button type="submit" class="btn btn-info arriba" ng-click="crearProceso()" >
+            Crear proceso
+        </button>
+        <button type="submit" class="btn btn-warning arriba" ng-click="ejecutarProceso()" >
+            Ejecutar proceso
+        </button>
+        <img  class="img-loading" src="/saarc/web/assets/img/cargando.gif" ng-if="ejecucion !== false ">  
+        <div class="alert alert-success" style="text-align: center;font-weight: bold;" ng-if="mensaje !==''">
+            {{ mensaje }}
+        </div>
+
         <div class="scroll">
-            <table class="table table-striped table-bordered">
+            <table class="table">
                 <tr>
-                    <th width="5%"  style="text-align: center !important;">#</th>
-                    <th width="13%" style="text-align: center !important;">Fecha creación</th>
-                    <th width="13%" style="text-align: center !important;">Fecha de termino</th>
-                    <th width="15%" style="text-align: center !important;">Cant. de clientes</th>
-                    <th width="12%" style="text-align: center !important;">Estado</th>
-                    <th width="12%" style="text-align: center !important;">Validado</th>
-                    <th width="30%" style="text-align: center !important;">Observación</th>
+                    <th width="5%">#</th>
+                    <th width="13%">Fecha creación</th>
+                    <th width="13%">Fecha de termino</th>
+                    <th width="15%">Cant. de clientes</th>
+                    <th width="12%">Estado</th>
+                    <th width="12%">Validado</th>
+                    <th width="30%">Observación</th>
                 </tr>
                 <tr ng-repeat="x in procesos">
-                    <td style="text-align: center !important;">{{ x.id_proceso }}</td>
-                    <td style="text-align: center !important;">{{x.fecha_proceso|date:'dd/MM/yyyy'}}</td>
-                    <td style="text-align: center !important;">{{x.termino_proceso|date:'dd/MM/yyyy  HH:mm:ss'}}</td>
-                    <td style="text-align: center !important;">{{x.cant_clientes_proceso}}</td>
-
-                    <td style="text-align: center !important;">
+                    <td>{{ x.id_proceso }}</td>
+                    <td>{{x.fecha_proceso|date:'dd/MM/yyyy'}}</td>
+                    <td>{{x.termino_proceso|date:'dd/MM/yyyy  HH:mm:ss'}}</td>
+                    <td>{{x.cant_clientes_proceso}}</td>
+                    <td>
                         <div ng-if="x.estado_proceso === 0" style="color:#DBA901"><b>{{x.estado_proceso|estadoproceso}}</b></div>
                         <div ng-if="x.estado_proceso === 1" style="color:blue"><b>{{x.estado_proceso|estadoproceso}}</b></div>
                         <div ng-if="x.estado_proceso === 2" style="color:red"><b>{{x.estado_proceso|estadoproceso}}</b></div>
                         <div ng-if="x.estado_proceso === 3" ><b>{{x.estado_proceso|estadoproceso}}</b></div>
                     </td>
-
-                   
-                    <td style="text-align: center !important;">
+                    <td style="text-align: center !important; cursor:pointer">
                         <div ng-if="x.estado_proceso === 0">
-
-
-                            <span class="btn btn-success"  ng-if="x.validado_proceso === false" >
-                                <img ng-src="{{valida[0]}}" width="25%"ng-click="validacion(x.id_proceso,1)">
-                            </span>
-                            
-                            <span class="btn btn-danger" ng-if="x.validado_proceso === true && x.estado_proceso === 0">
-                                <img ng-src="{{valida[1]}}" width="25%" ng-click="validacion(x.id_proceso,0)">
-                            </span>
+                            <img ng-if="x.validado_proceso === false" ng-src="{{valida[0]}}" width="20%"ng-click="validacion(x.id_proceso,1)" title="Validar proceso">    
+                            <img ng-if="x.validado_proceso === true && x.estado_proceso === 0" ng-src="{{valida[1]}}" width="20%" ng-click="validacion(x.id_proceso,0)"  title="Invalidar proceso">
                         </div>
-
                         <div ng-if="x.estado_proceso > 0">  
                             <i class="fa fa-check-circle-o fa-2x" aria-hidden="true" ></i>
                         </div>
-                        
                     </td>
                     <td>{{x.observacion_proceso}}</td>
                 </tr>

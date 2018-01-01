@@ -1,12 +1,10 @@
 angular.module('admin-rutas')
-
 .filter('estadoVisita', function() {
-	return function(numero) {
-        var estados = [ 'Por realizar','En proceso','Con problemas','Cancelada','Realizada' ]; 
-		return estados[numero];
-	}
+    return function(numero) {
+    var estados = [ 'Por realizar','En proceso','Con problemas','Cancelada','Realizada' ]; 
+            return estados[numero];
+    };
 })
-
 .controller('RutasController',['$scope','$http','uiCalendarConfig','$uibModal','urlBasePartials','RutaFactory','idEmpresa',function ($scope,$http,uiCalendarConfig,$uibModal,urlBasePartials,RutaFactory,idEmpresa) {
     
     $scope.help =  function(modulo){
@@ -32,20 +30,23 @@ angular.module('admin-rutas')
         $scope.help('Rutas');
     });
 
-    
     $scope.eventSources = [];
     $scope.SelectedEvent=null;
-    $scope.mes = 0;
-    $scope.anio= 0;
+    
+    /*var fecha = new Date();
+    $scope.mes = fecha.getMonth();
+    $scope.anio= fecha.getFullYear();*/
 
     $scope.listaDeRutas= function (){
-        RutaFactory.query({idEmpresa:idEmpresa, mes:$scope.mes, anio:$scope.anio ,'expand[]': ['r_ruta_operador','operador_detalle','r_ruta_camion',
+        RutaFactory.query({idEmpresa:idEmpresa/*, mes:$scope.mes, anio:$scope.anio*/ ,'expand[]': 
+                                                   ['r_ruta_operador','operador_detalle','r_ruta_camion',
                                                     'camion_detalle','r_operador_usuario','r_usuario_empresa',
                                                     'r_empresa_centro_acopio','centro_detalle','r_ruta_detalle',
                                                     'rutaDet_detalle','r_ruta_cliente','cliente_detalle'
-                                                   ]}, function(retorno) {
+                                                   ]}, 
+        function(retorno){
             angular.forEach(retorno, function(value,key){
-                $scope.events.push( value );
+                $scope.events.push(value);
             });
         });
     };
@@ -88,7 +89,7 @@ angular.module('admin-rutas')
      };
 
     $scope.uiConfig = {
-         calendar: {
+        calendar: {
              height: 500,
              editable: true,
              displayEventTime:false,
@@ -114,11 +115,9 @@ angular.module('admin-rutas')
              eventClick: function(event){
                 $scope.mostrarEvento(event);
              }
-         }
-     };
-
+        }
+    };
     $scope.eventSources = [$scope.events,$scope.eventsF,$scope.listaDeRutas];
-
     }]
 )
 
@@ -139,7 +138,7 @@ angular.module('admin-rutas')
     uiGmapGoogleMapApi.then(function(){
 
         $scope.randomMarkers = $scope.evento.ruta_detalle;
-        
+        console.log( $scope.randomMarkers);
         $scope.polylines = [
         {
             path: $scope.evento.ruta_detalle,
