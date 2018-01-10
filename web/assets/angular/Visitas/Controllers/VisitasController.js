@@ -93,9 +93,11 @@ angular.module('cliente-visitas')
 	$scope.uiConfig = {
 	     calendar: {
 	         height: 500,
-	         editable: true,
+	         editable: false,
 	         displayEventTime:false,
 	         fixedWeekCount : false,
+	         eventBackgroundColor: '#1F7F16',
+	         eventTextColor:'#FFF',
 	         header: {
 	             left:  'prev,next,today',
 	             center:'title',

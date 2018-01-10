@@ -56,9 +56,11 @@ angular.module('operador-mis-rutas')
     $scope.uiConfig = {
             calendar: {
                     height: 500,
-                    editable: true,
+                    editable: false,
                     displayEventTime:false,
                     fixedWeekCount : false,
+                    eventBackgroundColor: '#0489B1',
+                    eventTextColor:'#FFF',
                     header: {
                     left:  'prev,next,today',
                     center:'title',
