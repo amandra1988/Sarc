@@ -12,7 +12,7 @@
                 <tr ng-repeat="x in ruta.ruta_detalle" class="alert alert-{{x.estado|classestado}}">
                     <td>{{$index + 1}}.- {{x.ruta_cliente.cliente_nombre }}</td> 
                     <td><b>{{x.estado|estadoVisita}}</b></option>
-                    <td title="Agregar comentario">
+                    <td title="Agregar comentario" style="cursor:pointer">
                         <i class="fa fa-comment fa-lg" ng-click="comentario(x)"></i>
                     </td>
                 </tr>

@@ -12,39 +12,66 @@
 {% endblock %}
 
 {% block bodystyle%}
-   style="background-color: black;"
+   style="background-color: #FFF;"
 {% endblock %}
 
 {% block header %}
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">SARC</a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                  <li><a href="{{ path('superadmin-dashboard') }}">Home</a></li>
-                  <li><a href="{{ path('centros') }}">Centros de acopio</a></li>
-                  <li  class="active"><a href="#">Empresas</a></li>
-                  <li><a href="{{ path('usuarios') }}">Usuarios</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="#" title="Ayuda">
-                            <i class="fa fa-question-circle-o fa-lg" aria-hidden="true" id="help"></i>
-                        </a>
-                    </li>
-                    <li><a href="{{path('logout')}}">Cerrar sesión</a></li>
-                </ul>
-            </div>
+    <style>
+        .nav-tabs > li {
+            width: 16%; 
+        }
+    </style>
+    <img class="img-responsive" width="15%" style="margin: 7px auto;" src="{{asset('assets/img/sarc.png') }}" alt="">
+    <hr>
+    <section style="background:#FFF;"  class="row">
+        <div class="board">
+          <ul class="nav nav-tabs" id="myTab">
+            <div class="liner"></div>
+            <li>
+              <a href="{{path('superadmin-dashboard')}}" title="Home">
+                <span class="round-tabs one">
+                  <img class="img-responsive" width="80%" style="margin: 7px auto;" src="{{asset('assets/img/home.png') }}" alt="">
+                </span> 
+              </a>
+            </li>
+            <li>
+              <a href="{{path('centros')}}" title="Centros de acopio">
+                <span class="round-tabs two">
+                  <img class="img-responsive" width="70%" style="margin: 3px auto;" src="{{asset('assets/img/centro.png') }}" alt="">
+                </span> 
+              </a>
+            </li>
+            <li class="active">
+              <a href="#empresas" data-toggle="tab" title="Empresas">
+                <span class="round-tabs three" >
+                  <img class="img-responsive" width="85%" style="margin: 7px auto;" src="{{asset('assets/img/empresas.png') }}" alt="">
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="{{path('usuarios')}}"  title="Usuarios">
+                <span class="round-tabs four">
+                  <img class="img-responsive" width="70%" style="margin: 3px auto;" src="{{asset('assets/img/login.png') }}" alt="">
+                </span> 
+              </a>
+            </li>
+            <li>
+                <a href="#" data-toggle="tab" title="Ayuda" id="help">
+                  <span class="round-tabs six">
+                    <img class="img-responsive" width="46%" style="margin: 18px auto;" src="{{asset('assets/img/help.png') }}" alt="">
+                  </span> 
+                </a>
+            </li>
+            <li>
+              <a href="{{path('logout')}}"  title="Salir">
+                <span class="round-tabs five">
+                  <img class="img-responsive" width="50%" style="margin: 16px auto;" src="{{asset('assets/img/logout.png') }}" alt="">
+                </span>
+              </a>
+            </li>
+          </ul>
         </div>
-    </nav>
+    </section>
 {% endblock %}
 
 
@@ -63,9 +90,7 @@
 {% endblock %}
 
 {% block body %}
-    <div class="jumbotron">
-        <div class="contenedor">
-            {{ parent() }}
-        </div>
+    <div class="contenedor animated fadeInDown">
+        {{ parent() }}
     </div>
 {% endblock %}

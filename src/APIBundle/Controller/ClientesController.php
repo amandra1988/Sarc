@@ -18,31 +18,23 @@ class ClientesController extends APIBaseController
     * @return Response La respuesta serializada
     */ 
     public function getEmpresasClientesAction(Request $request, $idEmpresa){
-        
         $groups = ['cliente_lista','r_cliente_comuna','comuna_detalle','frecuencia_detalle'];
         if(is_array($request->get('expand'))){
             $groups = array_merge($groups, $request->get('expand'));
         }
-
-        $clientes = $this->getDoctrine()->getRepository('AppBundle:Cliente')
-                         ->obtenerClientesDeLaEmpresa($idEmpresa);
-
+        $clientes = $this->getDoctrine()->getRepository('AppBundle:Cliente')->obtenerClientesDeLaEmpresa($idEmpresa);
         return $this->serializedResponse($clientes, $groups); 
     }
-
     /**
     * Editar Cliente
     * @return Response La respuesta serializada
     */
-    public function patchEmpresasClientesAction(Request $request,Empresa $empresa, Cliente $cliente ){
-        
+    public function patchEmpresasClientesAction(Request $request,Empresa $empresa, Cliente $cliente ){   
         $groups =['cliente_detalle'];
         $em = $this->getDoctrine()->getManager();
-
         if($request->get('visible')){
             $frecuencia = $this->getDoctrine()->getRepository('AppBundle:Frecuencia')->find($request->get('frecuencia'));
             $comuna = $this->getDoctrine()->getRepository('AppBundle:Comuna')->find($request->get('comuna'));
-
             $cliente->setCliNombre($request->get('nombre'))
                     ->setCliDireccion($request->get('direccion'))
                     ->setCliCelular($request->get('celular'))
@@ -52,21 +44,16 @@ class ClientesController extends APIBaseController
                     ->setCliDemanda($request->get('demanda'))
                     ->setCliTheta($request->get('theta'))
                     ->setComuna($comuna);
-
             $direccion = $request->get('direccion').', '.$comuna->getComNombre().', Chile';
             $coordenadas = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion);
             $cliente->setCliLatitud($coordenadas['latitud'])
                     ->setCliLongitud($coordenadas['longitud']);
-
         }
-
         $cliente->setCliVisible($request->get('visible'));
         $em->persist($cliente);
         $em->flush();
-
         $clientes= $this->getDoctrine()->getRepository('AppBundle:Cliente')->obtenerClientesDeLaEmpresa($empresa->getId());
-        $proceso = $this->getDoctrine()->getRepository('AppBundle:Proceso')->agregarActualizarProceso($empresa,$clientes);
-
+        $this->getDoctrine()->getRepository('AppBundle:Proceso')->agregarActualizarProceso($empresa,$clientes);
         return  $this->serializedResponse($cliente, $groups) ; 
     }
 
@@ -75,7 +62,6 @@ class ClientesController extends APIBaseController
         $frecuencia = $this->getDoctrine()->getRepository('AppBundle:Frecuencia')->find($request->get('frecuencia')); 
         $comuna = $this->getDoctrine()->getRepository('AppBundle:Comuna')->find($request->get('comuna'));
         $em = $this->getDoctrine()->getManager();
-
         $cliente = new Cliente();
         $cliente->setCliNombre($request->get('nombre'))
                 ->setCliDireccion($request->get('direccion'))
@@ -112,8 +98,8 @@ class ClientesController extends APIBaseController
         $em->flush();
 
         $clientes= $this->getDoctrine()->getRepository('AppBundle:Cliente')->obtenerClientesDeLaEmpresa($empresa->getId());
-        $proceso = $this->getDoctrine()->getRepository('AppBundle:Proceso')->agregarActualizarProceso($empresa,$clientes);
-
+        $this->getDoctrine()->getRepository('AppBundle:Proceso')->agregarActualizarProceso($empresa,$clientes);
+        
         return $this->serializedResponse($cliente, $groups);
     }
 }

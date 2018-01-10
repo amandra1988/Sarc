@@ -2,13 +2,13 @@
 
 namespace APIBundle\Controller;
 use AppBundle\Entity\Empresa;
+use AppBundle\Entity\Cliente;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 /*
 use AdminBundle\Command\CreateDataFileCommand;
 use Symfony\Component\Console\Application;
 */
-
 class ProcesosController extends APIBaseController
 {
     /**
@@ -23,20 +23,37 @@ class ProcesosController extends APIBaseController
         }
         $procesos = $this->getDoctrine()->getRepository('AppBundle:Proceso')->obtenerProcesosDeLaEmpresa($empresa->getId());
         return $this->serializedResponse($procesos, $groups);
-
     }
 
-    public function patchEmpresasProcesosAction(Request $request,Empresa $empresa)
-    {
+    public function postEmpresasProcesosAction(Request $request,Empresa $empresa){
+        $groups = '';
+        $respuesta=[];
+       
+        if($request->get('accion')=== 1){
+            $clientes= $this->getDoctrine()->getRepository('AppBundle:Cliente')->obtenerClientesDeLaEmpresa($empresa->getId());
+            $respuesta['mensaje'] = $this->getDoctrine()->getRepository('AppBundle:Proceso')->agregarActualizarProceso($empresa,$clientes);
+        }else{
+            $respuesta['mensaje'] ="Ejecutar proceso";
+
+           /* $command = new CreateDataFileCommand();
+            $application = new Application();
+            $application->add($command);
+            $application->setDefaultCommand($command->getName());
+            $application->run();*/
+        }
+        
+        return $this->serializedResponse($respuesta, $groups);
+        
+    }
+
+    public function patchEmpresasProcesosAction(Request $request,Empresa $empresa){
         $groups = ['proceso_detalle'];
-
         $proceso = $this->getDoctrine()->getRepository('AppBundle:Proceso')->find($request->get('idproceso'));
-
         $proceso->setPrcValidado($request->get('validar'));
         if($request->get('validar')){
-            $proceso->setPrcObservacion('Proceso a la espera de ejecución');
+            $proceso->setPrcObservacion('Proceso validado y a la espera de ejecución');
         }else{
-            $proceso->setPrcObservacion('');
+            $proceso->setPrcObservacion('Debe validar este proceso para que pueda ser ejecutado.');
         }
         
         $em = $this->getDoctrine()->getManager();
@@ -53,4 +70,7 @@ class ProcesosController extends APIBaseController
         
         return $this->serializedResponse($proceso, $groups);
     }
+    
+    
+    
 }

@@ -25,24 +25,27 @@ class ProcesoRepository extends \Doctrine\ORM\EntityRepository
         
         $proceso = $this->findBy(array('empresa'=>$empresa,'prcEstado'=>0)); 
         $totalcli = count($clientes);
-            
+        $mensaje ='';
+        $observacion='Debe validar este proceso para que pueda ser ejecutado.';
         if(count($proceso) === 0){
-            $proceso = new Proceso(); 
+            $proceso = new Proceso();
+            $mensaje ='Nuevo proceso creado correctamente.';
         }else{
             $proceso = $proceso[0];
+            $mensaje ='Proceso actualizado.';
         }
-
         $proceso->setPrcCantidadClientes($totalcli)
                 ->setPrcFecha(new \DateTime(date('Y-m-d H:s:i')))
                 ->setPrcEstado(0)
                 ->setPrcValidado(false)
                 ->setEmpresa($empresa)
-                ->setPrcObservacion('')
+                ->setPrcObservacion($observacion)
                 ->setPrcTermino(new \DateTime(date('Y-m-d H:s:i')));  
 
         $em = $this->getEntityManager();
         $em->persist($proceso);
         $em->flush();
+        return $mensaje;
     }
     
     public function procesoEnEsperaDeEjecucion($validado,$estado){

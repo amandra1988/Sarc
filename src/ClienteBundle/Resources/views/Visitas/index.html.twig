@@ -13,38 +13,70 @@
 {% endblock %}
 
 {% block bodystyle%}
-    style="background-color: black;"
+    style="background-color: #FFF;"
 {% endblock %}
 
 {% block header %}
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="{{path('cliente-dashboard')}}">Home</a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                  <li class="active"><a href="{{path('visitas')}}">Visitas</a></li>
-                  <!-- <li><a href="">Cambiar mi clave</a></li>-->
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="#" title="Ayuda">
-                            <i class="fa fa-question-circle-o fa-lg" aria-hidden="true" id="help"></i>
-                        </a>
-                    </li>
-                    <li><a href="{{path('logout')}}">Cerrar sesión</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <style>
+    .angular-google-map-container {
+        width: 100%;
+        height: 500px;
+    }
+    .nav-tabs > li {
+        width: 25%; 
+    }
+    .liner{
+        height: 2px;
+        background: #ddd;
+        position: absolute;
+        width: 75%;
+        margin: 0 auto;
+        left: 0;
+        right: 0;
+        top: 50%;
+        z-index: 1;
+    }
+    </style>
+
+    <img class="img-responsive" width="15%" style="margin: 7px auto;" src="{{asset('assets/img/sarc.png') }}" alt="">
+    <hr>
+      <section style="background:#FFF;" class="row animated fadeInDown">
+          <div class="board">
+            <ul class="nav nav-tabs" id="myTab">
+              <div class="liner"></div>
+              <li>
+                <a  href="{{path('cliente-dashboard')}}" title="Home">
+                  <span class="round-tabs one">
+                    <img class="img-responsive" width="80%" style="margin: 7px auto;" src="{{asset('assets/img/home.png') }}" alt="">
+                  </span> 
+                </a>
+              </li>
+              <li class="active">
+                <a href="#home" data-toggle="tab" title="Mis rutas">
+                  <span class="round-tabs two">
+                    <img class="img-responsive" width="90%" style="margin: 3px auto;" src="{{asset('assets/img/planificacion.png') }}" alt="">
+                  </span> 
+                </a>
+              </li>
+              <li>
+                <a href="#" data-toggle="tab" title="Ayuda" id="help">
+                  <span class="round-tabs seven">
+                    <img class="img-responsive" width="46%" style="margin: 18px auto;" src="{{asset('assets/img/help.png') }}" alt="">
+                  </span> 
+                </a>
+              </li>
+              <li>
+                <a href="{{path('logout')}}"  title="Salir">
+                  <span class="round-tabs five">
+                    <img class="img-responsive" width="50%" style="margin: 16px auto;" src="{{asset('assets/img/logout.png') }}" alt="">
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </div>
+  </section>
 {% endblock %}
+
 
 {% block javascripts %}
     <script type="text/javascript">
@@ -63,9 +95,9 @@
 {% endblock %}
 
 {% block body %}
-    <div class="jumbotron">
-        <div class="contenedor">
-            {{ parent() }}
-        </div>    
+    <div class="contenedor">
+        {{ parent() }}
     </div>
 {% endblock %}
+
+

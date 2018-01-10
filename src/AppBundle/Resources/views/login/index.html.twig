@@ -1,19 +1,25 @@
-{% extends 'base.html.twig' %}
-{% block title %}Proyecto{% endblock %}
+{% extends 'base.index.html.twig' %}
+{% block title %}Sarc{% endblock %}
 {% block stylesheets %}{{ parent() }}{% endblock %}
 {% block bodystyle%}
-    style="background-image: url({{ asset('assets/img/login.jpg') }});background-repeat:no-repeat;background-position: center top;
-    background-size: 100% auto;"
+    style="background-image: url({{ asset('assets/img/login.jpg') }});no-repeat center;-webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;
+    background-position: center top;
+    background-size: 100% auto;
+    margin-top: 40px;"
 {% endblock %}
+
+
 {% block body %}
     <div class="row animated fadeInDown"><br>
-        <div class="panel panel-default col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12 col-xs-12" style="background: rgba(0, 0, 0, 0.5);color: #fff">
-            <div class="panel-body">
+        <div class="panel panel-default col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1" 
+        style="color: #286090;margin-top: 10px; margin-bottom: 50px;">
+
+            <img class="img-responsive" width="40%" style="margin: 0 auto;" src="{{asset('assets/img/sarc.png') }}" alt="">
+
+            <div class="panel-body" style="margin-top: 40px;margin-bottom: 40px;">
                 <form action="{{ path('login_check') }}"  method="post">
-                    <center>
-                        <img class="img-responsive" width="15%" src="{{asset('assets/img/logo.png') }}"
-                             alt="">
-                    </center>
+                    <img class="img-responsive" style="margin: 0 auto;" width="15%" src="{{asset('assets/img/login.png') }}" width="40%">
+                    <br>
                     <div class="form-group">
                         <label for="username"><i class="fa fa-user"></i> Usuario</label>
                         <input id="username" name="_username" type="text" class="form-control" placeholder="Ingrese su nombre de usuario">
@@ -39,6 +45,8 @@
         </div>
     </div>
 {% endblock %}
+
+
 {% block javascripts %}
     {{ parent() }}
 {% endblock %}

@@ -12,6 +12,11 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Logger\ConsoleLogger;
 
+/*
+1) bin/console sarc:switch-process IN_CREATE .dat     -- Crear el archvio .dat a partir de un proceso validado y con estado 0
+2) bin/console sarc:switch-process IN_CREATE .PID     -- Crear el archvio .PID actualiza el estado del proceso a 1 "En proceso"
+3) bin/console sarc:switch-process IN_CREATE .sol     -- Crear el archvio .PID carga las rutas de trabajo del archivo devuelto por ampl
+*/
 class SwitchProcessCommand extends ContainerAwareCommand
 {
     protected function configure()
