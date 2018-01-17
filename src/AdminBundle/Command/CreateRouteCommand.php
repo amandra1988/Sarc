@@ -17,6 +17,13 @@ use Symfony\Component\Console\Logger\ConsoleLogger;
 
 class CreateRouteCommand extends ContainerAwareCommand
 {
+    protected static $defaultName = 'sarc:create-route';
+    public function __construct()
+    {
+    
+        // you *must* call the parent constructor
+        parent::__construct();
+    }
     protected function configure()
     {
         $this

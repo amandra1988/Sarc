@@ -12,6 +12,13 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class UpdateInfoProcessCommand extends ContainerAwareCommand
 {
+    protected static $defaultName = 'sarc:update-info-process';
+    public function __construct()
+    {
+    
+        // you *must* call the parent constructor
+        parent::__construct();
+    }
     protected function configure()
     {
         $this->setName('sarc:update-info-process')

@@ -11,3 +11,15 @@ services:
             class:  AppBundle\Security\ApiKeyAuthenticator
             public: false
             arguments: ["@doctrine.orm.entity_manager"]
+
+    switch.command:
+            class:  AdminBundle\Command\SwitchProcessCommand
+            tags: [{ name: console.command }] # This makes it a command
+            calls:
+                - [setContainer, ['@service_container']]
+    create.command:
+            class:  AdminBundle\Command\CreateDataFileCommand
+            tags: [{ name: console.command }] # This makes it a command
+            calls:
+                - [setContainer, ['@service_container']]
+

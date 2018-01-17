@@ -9,8 +9,15 @@ use Symfony\Component\HttpFoundation\Response;
 use AdminBundle\Command\CreateDataFileCommand;
 use Symfony\Component\Console\Application;
 */
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
+
+use Symfony\Component\HttpKernel\KernelInterface;
+
 class ProcesosController extends APIBaseController
 {
+    
     /**
     * Lista de procesos
     * @param Request $request La petición
@@ -28,18 +35,29 @@ class ProcesosController extends APIBaseController
     public function postEmpresasProcesosAction(Request $request,Empresa $empresa){
         $groups = '';
         $respuesta=[];
-       
+
+        $logger = $this->container->get('logger');
         if($request->get('accion')=== 1){
             $clientes= $this->getDoctrine()->getRepository('AppBundle:Cliente')->obtenerClientesDeLaEmpresa($empresa->getId());
             $respuesta['mensaje'] = $this->getDoctrine()->getRepository('AppBundle:Proceso')->agregarActualizarProceso($empresa,$clientes);
         }else{
+           
             $respuesta['mensaje'] ="Ejecutar proceso";
 
-           /* $command = new CreateDataFileCommand();
-            $application = new Application();
-            $application->add($command);
-            $application->setDefaultCommand($command->getName());
-            $application->run();*/
+
+            $command = $this->get('switch.command');
+
+            $input = new ArrayInput(array(
+                //'command' => 'sarc:switch-process',
+                // (optional) define the value of command arguments
+                'event' => 'IN_CREATE',
+                'file_name' => "hola.dat"
+             ));
+            $output = new BufferedOutput();
+            $command->run($input,$output);
+            echo "gggggggg"; 
+            $content = $output->fetch();
+           // $logger->info('SARC: creado'); 
         }
         
         return $this->serializedResponse($respuesta, $groups);
@@ -55,7 +73,7 @@ class ProcesosController extends APIBaseController
         }else{
             $proceso->setPrcObservacion('Debe validar este proceso para que pueda ser ejecutado.');
         }
-        
+    
         $em = $this->getDoctrine()->getManager();
         $em->persist($proceso);
         $em->flush();

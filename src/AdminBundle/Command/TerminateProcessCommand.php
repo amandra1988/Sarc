@@ -12,6 +12,13 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class TerminateProcessCommand extends ContainerAwareCommand
 {
+    protected static $defaultName = 'sarc:terminate-process';
+    public function __construct()
+    {
+    
+        // you *must* call the parent constructor
+        parent::__construct();
+    }
     protected function configure()
     {
         $this->setName('sarc:terminate-process')
