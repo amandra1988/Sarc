@@ -1,9 +1,9 @@
 <?php
 
 namespace AdminBundle\Command;
-
+use Symfony\Component\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Command\Command;
+//use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -11,7 +11,7 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Logger\ConsoleLogger;
-
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 /*
 1) bin/console sarc:switch-process IN_CREATE .dat     -- Crear el archvio .dat a partir de un proceso validado y con estado 0
 2) bin/console sarc:switch-process IN_CREATE .PID     -- Crear el archvio .PID actualiza el estado del proceso a 1 "En proceso"
@@ -19,6 +19,15 @@ use Symfony\Component\Console\Logger\ConsoleLogger;
 */
 class SwitchProcessCommand extends ContainerAwareCommand
 {
+    protected static $defaultName = 'sarc:switch-process';
+    protected $_execute;
+    protected $_arguments;
+    public function __construct()
+    {
+    
+        // you *must* call the parent constructor
+        parent::__construct();
+    }
     protected function configure()
     {
         $this
@@ -30,7 +39,9 @@ class SwitchProcessCommand extends ContainerAwareCommand
     }
   
     protected function execute(InputInterface $input, OutputInterface $output)
-    {
+    {   
+
+        $this->command = $this->getContainer();
         //argregamos al log todos los parametros
         $logger = $this->getContainer()->get('logger');
         $nameEvent = $input->getArgument('event');
@@ -44,7 +55,7 @@ class SwitchProcessCommand extends ContainerAwareCommand
         }
 
         $typeExtension= array(
-            '.dat'=>"sarc:create-data-file", //solo debe ser a traves de cron
+            '.dat'=>"createdatafile.command", //solo debe ser a traves de cron
             '.sol'=>"sarc:create-route",
             '.PID'=>"sarc:update-info-process"
         );
@@ -66,35 +77,32 @@ class SwitchProcessCommand extends ContainerAwareCommand
         }
 
        if ($nameEvent == "IN_CREATE"){
-            $command = $this->getApplication()->find($typeExtension[$fileExtension]);
-            $arguments = array(
-                'command'   => $typeExtension[$fileExtension],
+            $this->_execute = $this->getContainer()->get('create.command');
+            $this->_arguments = array(
                 'file_name' => $fileExtension
             );
             $logger->info('SARC: '. $nameEvent . " " . $fileName);
        }
 
        if ($nameEvent == "IN_MODIFY"){
-            $command = $this->getApplication()->find('sarc:update-info-process');
-            $arguments = array(
-                'command'   => 'sarc-update-info-process',
+            $this->_execute = $this->getContainer()->get('sarc:update-info-process');
+            $this->_arguments = array(
                 'file_name' => $fileExtension
             );
             $logger->info('SARC: '. $nameEvent . " " . $fileName);
        }
 
        if ($nameEvent == "IN_DELETE"){
-            $command = $this->getApplication()->find('sarc:terminate-process');
-            $arguments = array(
-                'command'   => 'sarc:terminate-process',
+            $this->_execute = $this->getContainer()->get('sarc:terminate-process');
+            $this->_arguments = array(
                 'file_name' => $fileExtension
             );
             $logger->info('SARC: '. $nameEvent . " " . $fileName);
         }
 
         //obtnemos los parametros del comando
-        $greetInput = new ArrayInput($arguments);
+        $greetInput = new ArrayInput($this->_arguments);
         //ejecutamos el comando
-        $returnCode = $command->run($greetInput, $output);
+        $this->_execute->run($greetInput , $output);
     }
 }

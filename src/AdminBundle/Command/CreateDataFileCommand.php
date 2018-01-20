@@ -12,6 +12,13 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class CreateDataFileCommand extends ContainerAwareCommand
 {
+    protected static $defaultName = 'sarc:create-data-file';
+    public function __construct()
+    {
+    
+        // you *must* call the parent constructor
+        parent::__construct();
+    }
     protected function configure()
     {
         $this
