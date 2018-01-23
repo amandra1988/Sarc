@@ -45,7 +45,7 @@ class ProcesosController extends APIBaseController
             $respuesta['mensaje'] ="Ejecutar proceso";
 
 
-            $command = $this->get('switch.command');
+            /*$command = $this->get('switch.command');
 
             $input = new ArrayInput(array(
                 //'command' => 'sarc:switch-process',
@@ -57,7 +57,7 @@ class ProcesosController extends APIBaseController
             $command->run($input,$output);
             echo "gggggggg"; 
             $content = $output->fetch();
-           // $logger->info('SARC: creado'); 
+           // $logger->info('SARC: creado'); */
         }
         
         return $this->serializedResponse($respuesta, $groups);

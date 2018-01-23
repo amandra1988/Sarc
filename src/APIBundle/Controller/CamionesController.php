@@ -48,7 +48,7 @@ class CamionesController extends APIBaseController
     }
     
     public function patchEmpresasCamionesAction(Request $request,$idEmpresa, Camion $camion){
-        $groups ='';
+        $groups =['camion_detalle'];
 
         $camion->setCamPatente($request->get('patente'))
                ->setCamCapacidad($request->get('capacidad'))
