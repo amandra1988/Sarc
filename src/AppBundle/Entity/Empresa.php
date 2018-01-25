@@ -81,6 +81,13 @@ class Empresa
      */
     protected  $usuarios;
 
+
+    /**
+     * @ORM\OneToOne(targetEntity="ConfiguracionAmpl", mappedBy="empresa", cascade={"persist", "remove"} )
+     */
+    protected  $configuracionAmpl;
+
+
     /**
      * @ORM\OneToMany(targetEntity="Proceso", mappedBy="empresa", cascade={"persist", "remove"} )
      */
@@ -387,5 +394,29 @@ class Empresa
     public function getProcesos()
     {
         return $this->procesos;
+    }
+
+    /**
+     * Set configuracionAmpl
+     *
+     * @param \AppBundle\Entity\ConfiguracionAmpl $configuracionAmpl
+     *
+     * @return Empresa
+     */
+    public function setConfiguracionAmpl(\AppBundle\Entity\ConfiguracionAmpl $configuracionAmpl = null)
+    {
+        $this->configuracionAmpl = $configuracionAmpl;
+
+        return $this;
+    }
+
+    /**
+     * Get configuracionAmpl
+     *
+     * @return \AppBundle\Entity\ConfiguracionAmpl
+     */
+    public function getConfiguracionAmpl()
+    {
+        return $this->configuracionAmpl;
     }
 }

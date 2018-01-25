@@ -26,30 +26,25 @@
                 <tr>
                     <th width="5%">#</th>
                     <th width="13%">Fecha creación</th>
-                    <th width="13%">Fecha de termino</th>
-                    <th width="15%">Cant. de clientes</th>
-                    <th width="12%">Estado</th>
-                    <th width="12%">Validado</th>
-                    <th width="30%">Observación</th>
+                    <th width="13%">Fecha de ejecución</th>
+                    <th width="15%">Total de clientes</th>
+                    <th width="12%">Estado del proceso</th>
+                    <th width="12%" style="text-align: center">Validado</th>
+                    <th width="30%">Observación del proceso</th>
                 </tr>
                 <tr ng-repeat="x in procesos">
                     <td>{{ x.id_proceso }}</td>
-                    <td>{{x.fecha_proceso|date:'dd/MM/yyyy'}}</td>
-                    <td>{{x.termino_proceso|date:'dd/MM/yyyy  HH:mm:ss'}}</td>
-                    <td>{{x.cant_clientes_proceso}}</td>
-                    <td>
-                        <div ng-if="x.estado_proceso === 0" style="color:#DBA901"><b>{{x.estado_proceso|estadoproceso}}</b></div>
-                        <div ng-if="x.estado_proceso === 1" style="color:blue"><b>{{x.estado_proceso|estadoproceso}}</b></div>
-                        <div ng-if="x.estado_proceso === 2" style="color:red"><b>{{x.estado_proceso|estadoproceso}}</b></div>
-                        <div ng-if="x.estado_proceso === 3" ><b>{{x.estado_proceso|estadoproceso}}</b></div>
-                    </td>
+                    <td>{{ x.fecha_proceso | date:'dd/MM/yyyy  HH:mm:ss' }}</td>
+                    <td>{{ x.termino_proceso | date:'dd/MM/yyyy  HH:mm:ss' }}</td>
+                    <td>{{ x.cant_clientes_proceso}}</td>
+                    <td>{{x.estado_proceso | estadoproceso}}</td>
                     <td style="text-align: center !important; cursor:pointer">
                         <div ng-if="x.estado_proceso === 0">
-                            <img ng-if="x.validado_proceso === false" ng-src="{{valida[0]}}" width="20%"ng-click="validacion(x.id_proceso,1)" title="Validar proceso">    
-                            <img ng-if="x.validado_proceso === true && x.estado_proceso === 0" ng-src="{{valida[1]}}" width="20%" ng-click="validacion(x.id_proceso,0)"  title="Invalidar proceso">
+                            <img ng-if="x.validado_proceso === false" ng-src="{{valida[0]}}" style="height: 35px;"  ng-click="validacion(x.id_proceso,1)" title="Validar proceso">    
+                            <img ng-if="x.validado_proceso === true && x.estado_proceso === 0" ng-src="{{valida[1]}}" style="height: 35px;" ng-click="validacion(x.id_proceso,0)"  title="Invalidar proceso">
                         </div>
                         <div ng-if="x.estado_proceso > 0">  
-                            <i class="fa fa-check-circle-o fa-2x" aria-hidden="true" ></i>
+                            <img ng-src="{{valida[2]}}" style="height: 35px;">
                         </div>
                     </td>
                     <td>{{x.observacion_proceso}}</td>
@@ -57,4 +52,4 @@
             </table>
         </div>
     </div>
-</div>
+</div>      

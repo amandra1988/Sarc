@@ -3,23 +3,29 @@
         <button type="submit" class="btn btn-success arriba" ng-click="nuevoCliente()" >
             <span class="glyphicon glyphicon-plus"></span> Agregar cliente
         </button>
+        <br>
+    
+        <div class="filtros col-lg-4">
+            <input type="text" ng-model="busqueda" class="form-control" placeholder="Búsqueda: Ingrese lo que desea buscar">
+        </div>
+
         <div class="scroll">
             <table class="table">
                 <tr>
-                    <th width="5%">#</th>
-                    <th width="16%">Nombre</th>
-                    <th width="15%">Dirección</th>
-                    <th width="10%">Comuna</th>
-                    <th width="7%">Celular</th>
-                    <th width="7%">Teléfono</th>
-                    <th width="10%">Correo</th>
-                    <th width="10%">Demanda</th>
-                    <th width="10%">Frecuencia</th>   
-                    <th width="10%">Theta</th>   
+                    <th width="5%"  class="pointer"><a ng-click="columna='codigo'; reverse = !reverse;">#</a></th>
+                    <th width="16%" class="pointer"><a ng-click="columna='codigo'; reverse = !reverse;">Nombre</a></th>
+                    <th width="15%" class="pointer"><a ng-click="columna='codigo'; reverse = !reverse;">Dirección</a></th>
+                    <th width="10%" class="pointer"><a ng-click="columna='codigo'; reverse = !reverse;">Comuna</a></th>
+                    <th width="7%"  class="pointer"><a ng-click="columna='codigo'; reverse = !reverse;">Celular</a></th>
+                    <th width="7%"  class="pointer"><a ng-click="columna='codigo'; reverse = !reverse;">Teléfono</a></th>
+                    <th width="10%" class="pointer"><a ng-click="columna='codigo'; reverse = !reverse;">Correo</a></th>
+                    <th width="10%" class="pointer"><a ng-click="columna='codigo'; reverse = !reverse;">Demanda</a></th>
+                    <th width="10%" class="pointer"><a ng-click="columna='codigo'; reverse = !reverse;">Frecuencia</a></th>   
+                    <th width="10%" class="pointer"><a ng-click="columna='codigo'; reverse = !reverse;">Theta</a></th>   
                     <th width="10%">Acciones</th>
                 </tr>
 
-                <tr ng-repeat="x in clientes">
+                <tr ng-repeat="x in clientes | filter:busqueda | orderBy:columna:reverse">
                     <td class="data">{{ x.cliente_id }}</td> 
                     <td ng-pointer class="data">{{ x.cliente_nombre}}</td>
                     <td ng-pointer class="data">{{ x.cliente_direccion }}</td>

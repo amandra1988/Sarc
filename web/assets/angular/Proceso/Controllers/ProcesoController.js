@@ -13,6 +13,7 @@ function ($timeout,$scope,ProcesoFactory,$uibModal,urlBasePartials,idEmpresa,url
         $scope.valida=[];
         $scope.valida[0] = urlBaseImg+"validar.png";
         $scope.valida[1] = urlBaseImg+"invalidar.png";
+        $scope.valida[2] = urlBaseImg+"check.png";
         $scope.mensaje ='';
         $scope.ejecucion = false;
         

@@ -230,3 +230,11 @@ padding-top: 50px;
     float: left;
     margin-bottom: -9px;
 }
+
+
+.filtros{
+    font-weight: bold;
+    margin-top: -33px;
+    margin-left: 170px;
+    float: initial;
+}
