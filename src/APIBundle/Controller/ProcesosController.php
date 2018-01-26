@@ -35,32 +35,36 @@ class ProcesosController extends APIBaseController
     public function postEmpresasProcesosAction(Request $request,Empresa $empresa){
         $groups = '';
         $respuesta=[];
-
         $logger = $this->container->get('logger');
-        if($request->get('accion')=== 1){
-            $clientes= $this->getDoctrine()->getRepository('AppBundle:Cliente')->obtenerClientesDeLaEmpresa($empresa->getId());
-            $respuesta['mensaje'] = $this->getDoctrine()->getRepository('AppBundle:Proceso')->agregarActualizarProceso($empresa,$clientes);
-        }else{
-           
-            $respuesta['mensaje'] ="Ejecutar proceso";
 
+        try {
 
-            $command = $this->get('switch.command');
+            if($request->get('accion')=== 1){
+                $clientes= $this->getDoctrine()->getRepository('AppBundle:Cliente')->obtenerClientesDeLaEmpresa($empresa->getId());
+                $respuesta['mensaje'] = $this->getDoctrine()->getRepository('AppBundle:Proceso')->agregarActualizarProceso($empresa,$clientes);
+            }else{
+               
+                
+    
+                $command = $this->get('create.command'); 
+                $input = new ArrayInput(array(
+                    'file_name' => "3122012018.dat" //debria ser dinamico.Ejemplo la fecha + id proceso
+                 ));
+                $output = new BufferedOutput();
+                $command->run($input,$output);
+                $content = $output->fetch(); //podemos devolver algun mensaje del proceso
+                                            // desde la consola
+                $respuesta['mensaje'] =$content;
+            }
+            
 
-            $input = new ArrayInput(array(
-                //'command' => 'sarc:switch-process',
-                // (optional) define the value of command arguments
-                'event' => 'IN_CREATE',
-                'file_name' => "hola.dat"
-             ));
-            $output = new BufferedOutput();
-            $command->run($input,$output);
-            echo "gggggggg"; 
-            $content = $output->fetch();
-           // $logger->info('SARC: creado'); 
         }
-        
+        catch(Exception $e) {
+            $respuesta['mensaje'] = $e->getMessage();
+        }
+
         return $this->serializedResponse($respuesta, $groups);
+        
         
     }
 
