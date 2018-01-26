@@ -10,6 +10,9 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+
 class CreateDataFileCommand extends ContainerAwareCommand
 {
     protected static $defaultName = 'sarc:create-data-file';
@@ -32,6 +35,8 @@ class CreateDataFileCommand extends ContainerAwareCommand
     {
         $fs = new Filesystem();
 
+        $fileName = $input->getArgument('file_name');
+
         //obtenemos la ruta del modulo AdminBundle
         $absolutePath =$this->getContainer()->get('kernel')->locateResource('@AdminBundle/Resources/');
         //validamos que exista la carpeta data
@@ -48,11 +53,22 @@ class CreateDataFileCommand extends ContainerAwareCommand
         if($fs->exists($absolutePath."data/data.dat")){
             unlink($absolutePath."data/data.dat");
         }
+        if($fs->exists($absolutePath."data/execute.run")){
+            unlink($absolutePath."data/execute.run");
+        }
+        if($fs->exists($absolutePath."data/model.mod")){
+            unlink($absolutePath."data/model.mod");
+        }
+
+
 
         //procedemos a crear el archivo de datos, si no existe
         if(!$fs->exists($absolutePath."data/data.dat")){
             try {
+                $fs->touch($absolutePath."data/data.PID");
                 $fs->touch($absolutePath."data/data.dat");
+                $fs->touch($absolutePath."data/execute.run");
+                $fs->touch($absolutePath."data/model.mod");
             } catch (IOExceptionInterface $e) {
                 echo "An error occurred while creating data file ".$e->getPath();
             }
@@ -102,7 +118,7 @@ class CreateDataFileCommand extends ContainerAwareCommand
             $mensuales   = ($mensuales   == ":= ")?"":trim($mensuales,',');
 
             $text = $this->getContainer()->get('twig')->render('AdminBundle:Data:data.html.twig', [
-                        "dias"=>21,
+                        "dias"=>20,
                         "vehiculos" =>2,
                         "infinito"=>360,
                         "epsilon"=>20,
@@ -116,9 +132,34 @@ class CreateDataFileCommand extends ContainerAwareCommand
                         "clientes"=>$clientes,
                         "frecuencias"=>$frecuencia
                     ]);
- 
+
             //abrimos el archivo para agregar los contenidos
             file_put_contents($absolutePath."data/data.dat", $text);
+
+            $text_file_data = $this->getContainer()->get('twig')->render('AdminBundle:Data:execute.html.twig', [
+                "file_data"=>$absolutePath."data/data.dat",
+                "file_mod"=>$absolutePath."data/model.mod",
+            ]);
+
+            //abrimos el archivo para agregar los contenidos
+            file_put_contents($absolutePath."data/execute.run", $text_file_data);
+            
+            $text_file_mod = $this->getContainer()->get('twig')->render('AdminBundle:Data:model.html.twig', [
+                "file_data"=>"data.dat",
+            ]);
+
+            //abrimos el archivo para agregar los contenidos
+            file_put_contents($absolutePath."data/model.mod", $text_file_mod);
+
+            //llamar a ampl
+            $process = new Process('ampl '.$absolutePath."data/execute.run > ".$absolutePath."data/solution.sol");
+            $process->run();
+            
+            // executes after the command finishes
+            if (!$process->isSuccessful()) {
+               throw new ProcessFailedException($process);
+            }
+
             $output->writeln("Archivo creado correctamente", FILE_APPEND); 
         }else{
             $output->writeln("No existen procesos en espera.", FILE_APPEND);             

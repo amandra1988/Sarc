@@ -50,6 +50,12 @@ class TerminateProcessCommand extends ContainerAwareCommand
             $manager->flush();
             $output->writeln("Proceso finalizado", FILE_APPEND);
 
+            //creamos un archivo que valida que el proceso a terminado
+            $fs = new Filesystem();
+            //obtenemos la ruta del modulo AdminBundle
+            $absolutePath =$this->getContainer()->get('kernel')->locateResource('@AdminBundle/Resources/');
+            $fs->touch($absolutePath."data/process.end");
+
         }else{
             $output->writeln("Nada que finalizar", FILE_APPEND);
         }

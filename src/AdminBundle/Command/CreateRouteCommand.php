@@ -37,14 +37,21 @@ class CreateRouteCommand extends ContainerAwareCommand
     {
         $fs = new Filesystem();
         $absolutePath =$this->getContainer()->get('kernel')->locateResource('@AdminBundle/Resources/');
+        
+        $fileName = $input->getArgument('file_name');
+        $logger = $this->getContainer()->get('logger');
+        $logger->info('SARC: Crear ruta'.$fileName);
 
-        if($fs->exists($absolutePath."data/out.txt"))
+        if($fs->exists($absolutePath."data/solution.sol"))
         {
             $manager = $this->getContainer()->get('doctrine.orm.default_entity_manager');
-
+          
+            //obtener el número del proceso desde el nombre del archivo
+            //8-2-12122018-solution.sol
             //Buscar proceso en espera de ejecucion.
             $proceso = $manager->getRepository("AppBundle:Proceso")->procesoEnEsperaDeEjecucion(1,1);
-            if( count($proceso) > 0)
+
+            if( !count($proceso) )
             {
                 $cantClientes = $proceso[0]->getPrcCantidadClientes();
         
@@ -54,28 +61,68 @@ class CreateRouteCommand extends ContainerAwareCommand
                 $replace  = ['','','','',''];
 
                 // Leer una vez el archivo para obtener posicion de los datos que necesitamos
-                $file = fopen($absolutePath."data/out.txt",'r');
+                $file = fopen($absolutePath."data/solution.sol",'r');
+
+                
+                $m= array();
+                $i= 1;
+                $file = new \SplFileObject($absolutePath."data/solution.sol");
+                foreach ($file as $lineNumber => $content) {
+                    
+                    if($v = strpos($content, '[*,*,')){
+                        $m[$i] = $lineNumber;
+                        $i++;
+                    }
+
+                }
+                $fileIterator = new \LimitIterator($file, $m[1], $m[2]);
+                foreach($fileIterator as $line) {
+                    //echo str_replace(' ', ';', $line);
+                    //echo preg_replace('/\s+/', '|', $line) . "\r\n";
+                    $arr = explode('|' , preg_replace('/\s+/', '|', $line));
+print_r($arr);
+                   /* 
+                    foreach($arr as $index => $value){
+                        //guardar en la tabla
+                        //echo $index ."--". $value. "\r\n";
+
+                    }
+*/
+                    //no necesarias necessarias estas lineas
+                    $string = implode('|',array_slice($arr, 1, 4));
+                    if(!strpos($string, '[*,*,')){
+                        echo $string. "\r\n";;
+                    }
+                    
+                    
+                }
+                exit;
+                
+
                 while(!feof($file)){
                     $l++;
                     $linea = fgets($file);
+                   // print_r($linea);
                     $viene = strpos($linea, '[*,*,');
                     if($viene !== false)
                     { 
+                        
                        $camion= (int)str_replace($caracter, $replace, $linea);
                        $desde = ($l+1);
                        $hasta = ($desde+($cantClientes*2)+2);
                        $datos = ["Camion"=>$camion, "Desde"=>$desde,"Hasta"=>$hasta];
                        array_push($camiones,$datos);
                     }
+
                 }
                 fclose($file);
-
+                print_r($camiones); exit;
 
                 // Con los datos identificados anteriormente, abrir nuevamente el archivo y extraer la información
                 $datos = $routes = $visitas = [];
                 foreach ($camiones as $camion => $c)
                 {
-                    $file = fopen($absolutePath."data/out.txt",'r');
+                    $file = fopen($absolutePath."data/solution.sol",'r');
                     $l=0;
                     $visitas = [];
                     $routes[$c['Camion']] = []; 
