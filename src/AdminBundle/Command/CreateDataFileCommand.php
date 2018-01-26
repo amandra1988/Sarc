@@ -39,6 +39,9 @@ class CreateDataFileCommand extends ContainerAwareCommand
         $fs = new Filesystem();
 
         $fileName = $input->getArgument('file_name');
+        $parte = explode("_",$fileName);
+
+        $idproceso = $parte[0];
 
         //obtenemos la ruta del modulo AdminBundle
         $absolutePath =$this->getContainer()->get('kernel')->locateResource('@AdminBundle/Resources/');
@@ -75,17 +78,15 @@ class CreateDataFileCommand extends ContainerAwareCommand
             }
         }
 
-             
         $manager = $this->getContainer()->get('doctrine.orm.default_entity_manager');
        
         //Buscar todos los procesos validados y esta en espera.
-        $proceso = $manager->getRepository("AppBundle:Proceso")->procesoEnEsperaDeEjecucion(1,0);
-
+        $proceso = $manager->getRepository("AppBundle:Proceso")->find($idproceso);
 
         //En este punto es donde me doy cuenta que la generación de rutas es solo para una empresa
-        if(count($proceso)>0)
+        if($proceso->getPrcEstado() == 0 && $proceso->getPrcValidado())
         {
-            $empresa  = $proceso[0]->getEmpresa();
+            $empresa  = $proceso->getEmpresa();
             $camiones = $manager->getRepository("AppBundle:Camion")->buscarCamionesDeLaEmpresa($empresa);
             $clientes = $manager->getRepository("AppBundle:Cliente")->obtenerClientesDeLaEmpresa($empresa);
 
@@ -98,10 +99,11 @@ class CreateDataFileCommand extends ContainerAwareCommand
             $frecuencia = array(1=>20, 2=>4 , 3=>8 , 4=>2 , 5=>1);
             $orden = 0;
 
-            foreach($clientes  as $cliente){
+            foreach($clientes  as $cliente)
+            {
                 $orden++;
                 $procesoCliente = new ProcesoClientes();
-                $procesoCliente->setCliente($cliente)->setProceso($proceso[0])->setPclOrden($orden);
+                $procesoCliente->setCliente($cliente)->setProceso($proceso)->setPclOrden($orden);
                 $manager->persist($procesoCliente);
                 $manager->flush();
 
@@ -125,7 +127,7 @@ class CreateDataFileCommand extends ContainerAwareCommand
             foreach($camiones as $camion){
                 $orden++;
                 $procesoCamiones = new ProcesoCamiones();
-                $procesoCamiones->setCamion($camion)->setProceso($proceso[0])->setPcmOrden($orden);
+                $procesoCamiones->setCamion($camion)->setProceso($proceso)->setPcmOrden($orden);
                 $manager->persist($procesoCamiones);
                 $manager->flush();
             }
@@ -137,15 +139,12 @@ class CreateDataFileCommand extends ContainerAwareCommand
             $mensuales   = ($mensuales   == ":= ")?"":trim($mensuales,',');
 
 
-
             $configAmpl = $manager
                           ->getRepository("AppBundle:ConfiguracionAmpl")
                           ->findBy(
                             [
-                                'empresa'=>$proceso[0]->getEmpresa()->getId()
+                                'empresa'=>$proceso->getEmpresa()->getId()
                             ]);
-
-
 
             $data =  $this->getContainer()->get('twig')
                      ->render('AdminBundle:Data:data.html.twig',
@@ -193,8 +192,8 @@ class CreateDataFileCommand extends ContainerAwareCommand
                throw new ProcessFailedException($process);
             }
 
-            $proceso[0]->setPrcEstado(1)->setPrcObservacion("Generando rutas de trabajo...");
-            $manager->persist($proceso[0]);
+            $proceso->setPrcEstado(1)->setPrcObservacion("Generando rutas de trabajo...");
+            $manager->persist($proceso);
             $manager->flush();
 
             $output->writeln("La carga de rutas de trabajo ha comenzado. Este proceso puede tardar.", FILE_APPEND);
