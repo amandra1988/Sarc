@@ -94,7 +94,7 @@ return {
             var modalInstance = $scope.modal();
             modalInstance.result.then(function()
             {
-               $scope.listaDeClientes();
+               $scope.listaDeClientes();s
             }, function () {
             });
         };
@@ -181,9 +181,12 @@ return {
     $scope.error='';
     $scope.confirm='';
     $scope.mensaje='';
+    $scope.display = '';
     
     if($scope.accion === 1){
         $scope.mensaje = 'Nuevo' ;
+        $scope.cli.theta ='11.11111111';
+        $scope.display = 'none';
     }
     
     if($scope.accion === 2){
@@ -194,7 +197,6 @@ return {
         $scope.mensaje ='Eliminar';
     }
 
-    
     $scope.guardar= function(){
 
         if(!$scope.cli.nombre){
