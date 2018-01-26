@@ -2,6 +2,9 @@
 
 namespace AdminBundle\Command;
 
+use AppBundle\Entity\ProcesoClientes;
+use AppBundle\Entity\ProcesoCamiones;
+
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -39,9 +42,9 @@ class CreateDataFileCommand extends ContainerAwareCommand
 
         //obtenemos la ruta del modulo AdminBundle
         $absolutePath =$this->getContainer()->get('kernel')->locateResource('@AdminBundle/Resources/');
+
         //validamos que exista la carpeta data
         if(!$fs->exists($absolutePath."data")){
-            // si no exite la procedemos a crear
             try {
                 $fs->mkdir($this->getContainer()->get('kernel')->locateResource('@AdminBundle/Resources/')."data");
             } catch (IOExceptionInterface $e) {
@@ -50,35 +53,35 @@ class CreateDataFileCommand extends ContainerAwareCommand
         }
 
         //siempre borramos el archivo, temas cache
-        if($fs->exists($absolutePath."data/data.dat")){
-            unlink($absolutePath."data/data.dat");
+        if($fs->exists($absolutePath."data/".$fileName.".dat")){
+            unlink($absolutePath."data/".$fileName.".dat");
         }
-        if($fs->exists($absolutePath."data/execute.run")){
-            unlink($absolutePath."data/execute.run");
+        if($fs->exists($absolutePath."data/".$fileName.".run")){
+            unlink($absolutePath."data/".$fileName.".run");
         }
-        if($fs->exists($absolutePath."data/model.mod")){
-            unlink($absolutePath."data/model.mod");
+        if($fs->exists($absolutePath."data/".$fileName.".mod")){
+            unlink($absolutePath."data/".$fileName.".mod");
         }
-
-
 
         //procedemos a crear el archivo de datos, si no existe
-        if(!$fs->exists($absolutePath."data/data.dat")){
+        if(!$fs->exists($absolutePath."data/".$fileName.".dat")){
             try {
-                $fs->touch($absolutePath."data/data.PID");
-                $fs->touch($absolutePath."data/data.dat");
-                $fs->touch($absolutePath."data/execute.run");
-                $fs->touch($absolutePath."data/model.mod");
+                $fs->touch($absolutePath."data/".$fileName.".PID");
+                $fs->touch($absolutePath."data/".$fileName.".dat");
+                $fs->touch($absolutePath."data/".$fileName.".run");
+                $fs->touch($absolutePath."data/".$fileName.".mod");
             } catch (IOExceptionInterface $e) {
                 echo "An error occurred while creating data file ".$e->getPath();
             }
         }
+
              
         $manager = $this->getContainer()->get('doctrine.orm.default_entity_manager');
        
         //Buscar todos los procesos validados y esta en espera.
         $proceso = $manager->getRepository("AppBundle:Proceso")->procesoEnEsperaDeEjecucion(1,0);
-  
+
+
         //En este punto es donde me doy cuenta que la generación de rutas es solo para una empresa
         if(count($proceso)>0)
         {
@@ -93,8 +96,15 @@ class CreateDataFileCommand extends ContainerAwareCommand
             $mensuales   =":= ";
 
             $frecuencia = array(1=>20, 2=>4 , 3=>8 , 4=>2 , 5=>1);
+            $orden = 0;
 
             foreach($clientes  as $cliente){
+                $orden++;
+                $procesoCliente = new ProcesoClientes();
+                $procesoCliente->setCliente($cliente)->setProceso($proceso[0])->setPclOrden($orden);
+                $manager->persist($procesoCliente);
+                $manager->flush();
+
                 if($cliente->getFrecuencia()->getId() == 1)
                     $diarios.= $cliente->getId().',';
 
@@ -110,6 +120,15 @@ class CreateDataFileCommand extends ContainerAwareCommand
                 if($cliente->getFrecuencia()->getId() == 5)
                     $mensuales.= $cliente->getId().',';
             }
+
+            $orden = 0;
+            foreach($camiones as $camion){
+                $orden++;
+                $procesoCamiones = new ProcesoCamiones();
+                $procesoCamiones->setCamion($camion)->setProceso($proceso[0])->setPcmOrden($orden);
+                $manager->persist($procesoCamiones);
+                $manager->flush();
+            }
             
             $diarios     = ($diarios     == ":= ")?"":trim($diarios,',');
             $semanales   = ($semanales   == ":= ")?"":trim($semanales,',');
@@ -117,52 +136,70 @@ class CreateDataFileCommand extends ContainerAwareCommand
             $quincenales = ($quincenales == ":= ")?"":trim($quincenales,',');
             $mensuales   = ($mensuales   == ":= ")?"":trim($mensuales,',');
 
-            $text = $this->getContainer()->get('twig')->render('AdminBundle:Data:data.html.twig', [
-                        "dias"=>20,
-                        "vehiculos" =>2,
-                        "infinito"=>360,
-                        "epsilon"=>20,
-                        "epsilonDos"=>7,
-                        "clieDiarios"=>$diarios,
-                        "clieSemanales"=>$semanales,
-                        "clieBisemanales"=>$bisemanales,
-                        "clieQuincenales"=>$quincenales,
-                        "clieMensuales"=>$mensuales,
-                        "capacidad"=>$camiones,
-                        "clientes"=>$clientes,
-                        "frecuencias"=>$frecuencia
-                    ]);
+
+
+            $configAmpl = $manager
+                          ->getRepository("AppBundle:ConfiguracionAmpl")
+                          ->findBy(
+                            [
+                                'empresa'=>$proceso[0]->getEmpresa()->getId()
+                            ]);
+
+
+
+            $data =  $this->getContainer()->get('twig')
+                     ->render('AdminBundle:Data:data.html.twig',
+                         [
+                            "dias"=> $configAmpl[0]->getDias(),
+                            "vehiculos" =>count($camiones),
+                            "infinito"=>$configAmpl[0]->getInfinito(),
+                            "epsilon"=>$configAmpl[0]->getEpsilon(),
+                            "epsilonDos"=>$configAmpl[0]->getEpsilonDos(),
+                            "clieDiarios"=>$diarios,
+                            "clieSemanales"=>$semanales,
+                            "clieBisemanales"=>$bisemanales,
+                            "clieQuincenales"=>$quincenales,
+                            "clieMensuales"=>$mensuales,
+                            "capacidad"=>$camiones,
+                            "clientes"=>$clientes,
+                            "frecuencias"=>$frecuencia
+                         ]
+                     );
 
             //abrimos el archivo para agregar los contenidos
-            file_put_contents($absolutePath."data/data.dat", $text);
+            file_put_contents($absolutePath."data/".$fileName.".dat", $data);
 
             $text_file_data = $this->getContainer()->get('twig')->render('AdminBundle:Data:execute.html.twig', [
-                "file_data"=>$absolutePath."data/data.dat",
-                "file_mod"=>$absolutePath."data/model.mod",
+                "file_data"=>$absolutePath."data/".$fileName.".dat",
+                "file_mod"=>$absolutePath."data/".$fileName.".mod",
             ]);
 
             //abrimos el archivo para agregar los contenidos
-            file_put_contents($absolutePath."data/execute.run", $text_file_data);
+            file_put_contents($absolutePath."data/".$fileName.".run", $text_file_data);
             
             $text_file_mod = $this->getContainer()->get('twig')->render('AdminBundle:Data:model.html.twig', [
-                "file_data"=>"data.dat",
+                "file_data"=>$fileName.".dat",
             ]);
 
             //abrimos el archivo para agregar los contenidos
-            file_put_contents($absolutePath."data/model.mod", $text_file_mod);
+            file_put_contents($absolutePath."data/".$fileName.".mod", $text_file_mod);
 
             //llamar a ampl
-            $process = new Process('ampl '.$absolutePath."data/execute.run > ".$absolutePath."data/solution.sol");
+            $process = new Process('ampl '.$absolutePath."data/".$fileName.".run > ".$absolutePath."data/".$fileName.".sol");
             $process->run();
-            
+
             // executes after the command finishes
             if (!$process->isSuccessful()) {
                throw new ProcessFailedException($process);
             }
 
-            $output->writeln("Archivo creado correctamente", FILE_APPEND); 
+            $proceso[0]->setPrcEstado(1)->setPrcObservacion("Generando rutas de trabajo...");
+            $manager->persist($proceso[0]);
+            $manager->flush();
+
+            $output->writeln("La carga de rutas de trabajo ha comenzado. Este proceso puede tardar.", FILE_APPEND);
         }else{
-            $output->writeln("No existen procesos en espera.", FILE_APPEND);             
+            $output->writeln("No existe proceso con estado \"En espera\" y validado.", FILE_APPEND);
         }
     }
 }

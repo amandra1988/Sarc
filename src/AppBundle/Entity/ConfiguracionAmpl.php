@@ -45,9 +45,9 @@ class ConfiguracionAmpl
     /**
      * @var int
      *
-     * @ORM\Column(name="cnf_epcilo_dos", type="integer")
+     * @ORM\Column(name="cnf_epsilon_dos", type="integer")
      */
-    private $epciloDos;
+    private $epsilonDos;
 
 
     /**
@@ -141,29 +141,6 @@ class ConfiguracionAmpl
         return $this->epsilon;
     }
 
-    /**
-     * Set epciloDos
-     *
-     * @param integer $epciloDos
-     *
-     * @return ConfiguracionAmpl
-     */
-    public function setEpciloDos($epciloDos)
-    {
-        $this->epciloDos = $epciloDos;
-
-        return $this;
-    }
-
-    /**
-     * Get epciloDos
-     *
-     * @return int
-     */
-    public function getEpciloDos()
-    {
-        return $this->epciloDos;
-    }
 
     /**
      * Set empresa
@@ -187,5 +164,29 @@ class ConfiguracionAmpl
     public function getEmpresa()
     {
         return $this->empresa;
+    }
+
+    /**
+     * Set epsilonDos
+     *
+     * @param integer $epsilonDos
+     *
+     * @return ConfiguracionAmpl
+     */
+    public function setEpsilonDos($epsilonDos)
+    {
+        $this->epsilonDos = $epsilonDos;
+
+        return $this;
+    }
+
+    /**
+     * Get epsilonDos
+     *
+     * @return integer
+     */
+    public function getEpsilonDos()
+    {
+        return $this->epsilonDos;
     }
 }

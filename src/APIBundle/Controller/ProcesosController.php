@@ -43,21 +43,26 @@ class ProcesosController extends APIBaseController
                 $clientes= $this->getDoctrine()->getRepository('AppBundle:Cliente')->obtenerClientesDeLaEmpresa($empresa->getId());
                 $respuesta['mensaje'] = $this->getDoctrine()->getRepository('AppBundle:Proceso')->agregarActualizarProceso($empresa,$clientes);
             }else{
-               
-                
-    
-                $command = $this->get('create.command'); 
-                $input = new ArrayInput(array(
-                    'file_name' => "3122012018.dat" //debria ser dinamico.Ejemplo la fecha + id proceso
-                 ));
-                $output = new BufferedOutput();
-                $command->run($input,$output);
-                $content = $output->fetch(); //podemos devolver algun mensaje del proceso
-                                            // desde la consola
-                $respuesta['mensaje'] =$content;
-            }
-            
+                $error ='';
+                $proceso = $this->getDoctrine()->getRepository("AppBundle:Proceso")->procesoEnEsperaDeEjecucion(1,0);
 
+                if(count($proceso)){
+                    $fecha = time();
+                    $fileName = $proceso[0]->getId().'_'.$fecha;
+                    $command = $this->get('create.command');
+                    $input = new ArrayInput(array(
+                        'file_name' =>  $fileName
+                    ));
+                    $output = new BufferedOutput();
+                    $command->run($input,$output);
+                    $content = $output->fetch();
+
+                }else{
+                    $content = 'No existe proceso con estado "En espera" y validado.';
+                }
+
+                $respuesta['mensaje'] = $content;
+            }
         }
         catch(Exception $e) {
             $respuesta['mensaje'] = $e->getMessage();

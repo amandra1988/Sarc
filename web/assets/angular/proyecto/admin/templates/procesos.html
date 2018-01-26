@@ -16,8 +16,8 @@
         <button type="submit" class="btn btn-warning arriba" ng-click="ejecutarProceso()" >
             Ejecutar proceso
         </button>
-        <img  class="img-loading" src="/saarc/web/assets/img/cargando.gif" ng-if="ejecucion !== false ">  
-        <div class="alert alert-success" style="text-align: center;font-weight: bold;" ng-if="mensaje !==''">
+
+        <div class="alert alert-{{ class }}" style="text-align: center;font-weight: bold; margin-top:10px" ng-if="mensaje !==''">
             {{ mensaje }}
         </div>
 
@@ -26,7 +26,7 @@
                 <tr>
                     <th width="5%">#</th>
                     <th width="13%">Fecha creación</th>
-                    <th width="13%">Fecha de ejecución</th>
+                    <th width="13%">Fecha de termino</th>
                     <th width="15%">Total de clientes</th>
                     <th width="12%">Estado del proceso</th>
                     <th width="12%" style="text-align: center">Validado</th>
@@ -43,8 +43,12 @@
                             <img ng-if="x.validado_proceso === false" ng-src="{{valida[0]}}" style="height: 35px;"  ng-click="validacion(x.id_proceso,1)" title="Validar proceso">    
                             <img ng-if="x.validado_proceso === true && x.estado_proceso === 0" ng-src="{{valida[1]}}" style="height: 35px;" ng-click="validacion(x.id_proceso,0)"  title="Invalidar proceso">
                         </div>
-                        <div ng-if="x.estado_proceso > 0">  
+                        <div ng-if="x.estado_proceso === 1">
                             <img ng-src="{{valida[2]}}" style="height: 35px;">
+                        </div>
+
+                        <div ng-if="x.estado_proceso > 1">
+                            <img ng-src="{{valida[3]}}" style="height: 35px;">
                         </div>
                     </td>
                     <td>{{x.observacion_proceso}}</td>
