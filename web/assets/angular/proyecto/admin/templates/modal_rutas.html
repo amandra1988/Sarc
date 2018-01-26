@@ -50,14 +50,7 @@
             </tr>
         </table>
 
-        <ui-gmap-google-map class="col-12"
-        center="map.center"
-        zoom="map.zoom"
-        options="map.options"
-        dragging="map.dragging"
-        control="map.control"
-        ng-cloak
-        >
+        <ui-gmap-google-map class="col-12" ng-if="map.center" center="map.center" zoom="map.zoom" options="map.options" dragging="map.dragging" control="map.control" ng-cloak >
            
         <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
             geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" icons='p.icons'>

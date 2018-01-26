@@ -27,6 +27,7 @@ class ProcesoRepository extends \Doctrine\ORM\EntityRepository
         $totalcli = count($clientes);
         $mensaje ='';
         $observacion='Debe validar este proceso para que pueda ser ejecutado.';
+        
         if(count($proceso) === 0){
             $proceso = new Proceso();
             $mensaje ='Nuevo proceso creado correctamente.';
@@ -34,17 +35,18 @@ class ProcesoRepository extends \Doctrine\ORM\EntityRepository
             $proceso = $proceso[0];
             $mensaje ='Proceso actualizado.';
         }
+
         $proceso->setPrcCantidadClientes($totalcli)
                 ->setPrcFecha(new \DateTime(date('Y-m-d H:s:i')))
                 ->setPrcEstado(0)
                 ->setPrcValidado(false)
                 ->setEmpresa($empresa)
                 ->setPrcObservacion($observacion)
-                ->setPrcTermino(new \DateTime(date('Y-m-d H:s:i')));  
-
+                /*->setPrcTermino(new \DateTime(date('Y-m-d H:s:i')))*/;  
         $em = $this->getEntityManager();
         $em->persist($proceso);
         $em->flush();
+        
         return $mensaje;
     }
     

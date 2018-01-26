@@ -81,6 +81,11 @@ class Camion
     protected $rutas;
 
     /**
+     * @ORM\OneToMany(targetEntity="ProcesoCamiones", mappedBy="camion")
+     */
+    protected $procesoCamiones;
+
+    /**
      * Get id
      *
      * @return int
@@ -277,5 +282,39 @@ class Camion
     public function getOperador()
     {
         return $this->operador;
+    }
+
+    /**
+     * Add procesoCamione
+     *
+     * @param \AppBundle\Entity\ProcesoCamiones $procesoCamione
+     *
+     * @return Camion
+     */
+    public function addProcesoCamione(\AppBundle\Entity\ProcesoCamiones $procesoCamione)
+    {
+        $this->procesoCamiones[] = $procesoCamione;
+
+        return $this;
+    }
+
+    /**
+     * Remove procesoCamione
+     *
+     * @param \AppBundle\Entity\ProcesoCamiones $procesoCamione
+     */
+    public function removeProcesoCamione(\AppBundle\Entity\ProcesoCamiones $procesoCamione)
+    {
+        $this->procesoCamiones->removeElement($procesoCamione);
+    }
+
+    /**
+     * Get procesoCamiones
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProcesoCamiones()
+    {
+        return $this->procesoCamiones;
     }
 }

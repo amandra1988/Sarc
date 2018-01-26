@@ -144,6 +144,12 @@ class Cliente
      * @ORM\OneToMany(targetEntity="RutaDetalle", mappedBy="cliente", cascade={"persist", "remove"} )
      */
     protected  $rutas;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="ProcesoClientes", mappedBy="cliente")
+     */
+    protected $procesoClientes;
     
     /**
      * Get id
@@ -540,5 +546,39 @@ class Cliente
     public function getCliTheta()
     {
         return $this->cliTheta;
+    }
+
+    /**
+     * Add procesoCliente
+     *
+     * @param \AppBundle\Entity\ProcesoClientes $procesoCliente
+     *
+     * @return Cliente
+     */
+    public function addProcesoCliente(\AppBundle\Entity\ProcesoClientes $procesoCliente)
+    {
+        $this->procesoClientes[] = $procesoCliente;
+
+        return $this;
+    }
+
+    /**
+     * Remove procesoCliente
+     *
+     * @param \AppBundle\Entity\ProcesoClientes $procesoCliente
+     */
+    public function removeProcesoCliente(\AppBundle\Entity\ProcesoClientes $procesoCliente)
+    {
+        $this->procesoClientes->removeElement($procesoCliente);
+    }
+
+    /**
+     * Get procesoClientes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProcesoClientes()
+    {
+        return $this->procesoClientes;
     }
 }
