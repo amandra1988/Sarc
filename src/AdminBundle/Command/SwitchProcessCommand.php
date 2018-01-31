@@ -26,7 +26,6 @@ class SwitchProcessCommand extends ContainerAwareCommand
     protected $_arguments;
     public function __construct()
     {
-    
         // you *must* call the parent constructor
         parent::__construct();
     }
@@ -44,29 +43,34 @@ class SwitchProcessCommand extends ContainerAwareCommand
     {   
         //validadamos que no se ha realizado el proceso.
         $fs = new Filesystem();
+
+        $this->_execute = $this->getContainer();
+        
+        //argregamos al log todos los parametros
+        $logger = $this->getContainer()->get('logger');
+        $nameEvent = ltrim($input->getArgument('event'), '"');
+        
+        $fileName = str_replace('"','',$input->getArgument('file_name'));
+        $archivo = explode(".", $fileName);
+        $file = $archivo[0];
+           
         //obtenemos la ruta del modulo AdminBundle
         $absolutePath =$this->getContainer()->get('kernel')->locateResource('@AdminBundle/Resources/');
         //siempre borramos el archivo, temas cache
-        if($fs->exists($absolutePath."data/process.end")){
+        if($fs->exists($absolutePath."data/".$file.".end")){
             $logger->info('SARC: ERROR proceso ya realizado');
             throw new \RuntimeException("Proceso ya realizado");
         }
-
-        $this->_execute = $this->getContainer();
-        //argregamos al log todos los parametros
-        $logger = $this->getContainer()->get('logger');
-        $nameEvent = ltrim($input->getArgument('event'), '"');;
-        $fileName = str_replace('"','',$input->getArgument('file_name'));
-
+  
         $a = substr($fileName,strrpos($fileName,'.',-1),strlen($fileName));
-
         $fileExtension = str_replace('"','',$a);
-        //$logger->info('SARC switch: '. $nameEvent . " " . $fileName);
         
-        if($fs->exists($absolutePath."data/data.PID")){
-            $logger->info($nameEvent .$fileName. $fileExtension);// . " " . $fileName. " " .$fileExtension);
+        if($fs->exists($absolutePath."data/".$file.".PID")){
+            
+            $logger->info($nameEvent .$fileName. $fileExtension);
 
             if($fileExtension == ".sol"  && $nameEvent == "IN_CREATE"){
+                
                 $logger->info('SARC sol');
                 $this->_execute = $this->getContainer()->get("createroute.command");
 
@@ -81,12 +85,11 @@ class SwitchProcessCommand extends ContainerAwareCommand
                 $this->_execute ->run($greetInput , $output);
                 $content = $output->fetch();
                 $logger->info('SARC eee' .$content);
-
             }
 
             if ($fileExtension == ".PID" && $nameEvent == "IN_MODIFY"){
                 $this->_execute = $this->getContainer()->get("updateinfoprocess.command");
-                $logger->info('SARCvvv IN_MODIFY: '. $nameEvent . " " . $fileName);
+                $logger->info('SARC IN_MODIFY: '. $nameEvent . " " . $fileName);
 
                 $this->_arguments = array(
                     'file_name' => $fileName
@@ -94,10 +97,8 @@ class SwitchProcessCommand extends ContainerAwareCommand
                 //obtnemos los parametros del comando
                 $greetInput = new ArrayInput($this->_arguments);
                 //ejecutamos el comando
-        
                 $this->_execute->run($greetInput , $output);
             }
-
         }
     }
 }

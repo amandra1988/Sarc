@@ -45,9 +45,8 @@ class ProcesosController extends APIBaseController
             }else{
                 $error ='';
                 $proceso = $this->getDoctrine()->getRepository("AppBundle:Proceso")->procesoEnEsperaDeEjecucion(1,0);
-
                 if(count($proceso)){
-                    $fecha = time();
+                    $fecha = date('dmY') ;
                     $fileName = $proceso[0]->getId().'_'.$fecha;
                     $command = $this->get('create.command');
                     $input = new ArrayInput(array(
@@ -56,21 +55,16 @@ class ProcesosController extends APIBaseController
                     $output = new BufferedOutput();
                     $command->run($input,$output);
                     $content = $output->fetch();
-
                 }else{
                     $content = 'No existe proceso con estado "En espera" y validado.';
                 }
-
                 $respuesta['mensaje'] = $content;
             }
         }
         catch(Exception $e) {
             $respuesta['mensaje'] = $e->getMessage();
         }
-
         return $this->serializedResponse($respuesta, $groups);
-        
-        
     }
 
     public function patchEmpresasProcesosAction(Request $request,Empresa $empresa){
