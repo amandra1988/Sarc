@@ -31,33 +31,33 @@ class TerminateProcessCommand extends ContainerAwareCommand
     {
         $fs = new Filesystem();
         $absolutePath =$this->getContainer()->get('kernel')->locateResource('@AdminBundle/Resources/');
-
+        
+        $fileName = $input->getArgument('file_name');
+        $archivo = explode(".", $fileName);
+        $nfile = $archivo[0];
+        
+        $proceso = explode("_",$nfile);
+        $idProceso = $proceso[0];
 
         //Eliminar archivo .PID
-        if($fs->exists($absolutePath."data/data.PID")){
-            unlink($absolutePath."data/data.PID");
+        if($fs->exists($absolutePath."data/".$nfile.".PID")){
+            unlink($absolutePath."data/".$nfile.".PID");
         }
 
         $manager = $this->getContainer()->get('doctrine.orm.default_entity_manager');
 
-        //Buscar todos los procesos validados y en proceso 
-        $proceso = $manager->getRepository("AppBundle:Proceso")->procesoEnEsperaDeEjecucion(1,1);
+        $proceso = $manager->getRepository("AppBundle:Proceso")->find($idProceso);
 
-        if(count($proceso)>0){
+        $proceso->setPrcEstado(3)
+                ->setPrcTermino(new \DateTime(date('Y-m-d H:s:i')))
+                ->setPrcObservacion('Proceso finalizado correctamente.');
+            
+        $manager->persist($proceso);
+        $manager->flush();
+        
+        $output->writeln("Proceso finalizado", FILE_APPEND);
 
-            $proceso[0]->setPrcEstado(3)->setPrcTermino(new \DateTime(date('Y-m-d H:s:i')))->setPrcObservacion('Proceso finalizado correctamente.');  
-            $manager->persist($proceso[0]);
-            $manager->flush();
-            $output->writeln("Proceso finalizado", FILE_APPEND);
+        $fs->touch($absolutePath."data/".$nfile.".end");
 
-            //creamos un archivo que valida que el proceso a terminado
-            $fs = new Filesystem();
-            //obtenemos la ruta del modulo AdminBundle
-            $absolutePath =$this->getContainer()->get('kernel')->locateResource('@AdminBundle/Resources/');
-            $fs->touch($absolutePath."data/process.end");
-
-        }else{
-            $output->writeln("Nada que finalizar", FILE_APPEND);
-        }
     }
 }

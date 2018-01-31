@@ -66,8 +66,6 @@ angular.module('admin-rutas')
                 value.textColor= 'black';
                 $scope.events.push(value);
             });
-
-            console.log($scope.operadores);
         });
     };
 
