@@ -16,7 +16,10 @@
     "tests"
   ],
   "dependencies": {
-    "jQuery":"2.X",
-    "angular-google-maps":"2.4.x"
+    "jQuery": "2.X",
+    "angular-google-maps": "2.4.x"
+  },
+  "resolutions": {
+    "angular": ">=1.6.0"
   }
 }

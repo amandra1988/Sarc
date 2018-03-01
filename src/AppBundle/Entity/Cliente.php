@@ -125,7 +125,7 @@ class Cliente
      /**
      * @var int
      *
-     * @ORM\Column(name="cli_demanda", type="string", length=5 )
+     * @ORM\Column(name="cli_demanda", type="string", length=10 )
      * @JMS\SerializedName("cliente_demanda")
      * @JMS\Groups({"cliente_lista"})
      */

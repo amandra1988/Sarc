@@ -93,6 +93,7 @@ class CreateDataFileCommand extends ContainerAwareCommand
             $diarios     =":= ";
             $semanales   =":= ";
             $bisemanales =":= ";
+            $trisemanales =":= ";
             $quincenales =":= ";
             $mensuales   =":= ";
 
@@ -115,11 +116,14 @@ class CreateDataFileCommand extends ContainerAwareCommand
                 
                 if($cliente->getFrecuencia()->getId() == 3)
                     $bisemanales.= $cliente->getId().',';
-                
+
                 if($cliente->getFrecuencia()->getId() == 4)
-                    $quincenales.= $cliente->getId().',';
+                    $trisemanales.= $cliente->getId().',';
                 
                 if($cliente->getFrecuencia()->getId() == 5)
+                    $quincenales.= $cliente->getId().',';
+                
+                if($cliente->getFrecuencia()->getId() == 6)
                     $mensuales.= $cliente->getId().',';
             }
 
@@ -135,6 +139,7 @@ class CreateDataFileCommand extends ContainerAwareCommand
             $diarios     = ($diarios     == ":= ")?"":trim($diarios,',');
             $semanales   = ($semanales   == ":= ")?"":trim($semanales,',');
             $bisemanales = ($bisemanales == ":= ")?"":trim($bisemanales,',');
+            $trisemanales= ($trisemanales== ":= ")?"":trim($trisemanales,',');
             $quincenales = ($quincenales == ":= ")?"":trim($quincenales,',');
             $mensuales   = ($mensuales   == ":= ")?"":trim($mensuales,',');
 
@@ -157,6 +162,7 @@ class CreateDataFileCommand extends ContainerAwareCommand
                             "clieDiarios"=>$diarios,
                             "clieSemanales"=>$semanales,
                             "clieBisemanales"=>$bisemanales,
+                            "clieTrisemanales"=>$trisemanales,
                             "clieQuincenales"=>$quincenales,
                             "clieMensuales"=>$mensuales,
                             "capacidad"=>$camiones,

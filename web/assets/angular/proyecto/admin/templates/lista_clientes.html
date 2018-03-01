@@ -25,7 +25,7 @@
                     <th width="10%">Acciones</th>
                 </tr>
 
-                <tr ng-repeat="x in clientes | filter:busqueda | orderBy:columna:reverse">
+                <tr ng-repeat="x in clientes | filter:busqueda | orderBy:columna:reverse | limitTo:posicion | limitTo:-10">
                     <td class="data">{{ x.cliente_id }}</td> 
                     <td ng-pointer class="data">{{ x.cliente_nombre}}</td>
                     <td ng-pointer class="data">{{ x.cliente_direccion }}</td>
@@ -43,6 +43,9 @@
                     </td>
                 </tr>
             </table>
+
+            <button class="btn btn-primary" ng-click="anteriores()"><i class="fa fa-chevron-left"></i> Anterior</button>
+            <button class="btn btn-primary" ng-click="siguientes()">Siguiente <i class="fa fa-chevron-right"></i></button>
         </div>
     </div>
 </div>

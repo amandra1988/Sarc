@@ -39,13 +39,14 @@ angular.module('admin-rutas')
     };
 
 
-    /*var fecha = new Date();
+    var fecha = new Date();
     $scope.mes = fecha.getMonth();
-    $scope.anio= fecha.getFullYear();*/
+    $scope.anio= fecha.getFullYear();
+
     $scope.colores =['#F2F51F','#70F51F','#F5AA1F','#1FEBF5','#1FC1F5','#F371EF','#829BF2','#ABEBC6'];
     $scope.operadores =[];
     $scope.listaDeRutas= function (){
-        RutaFactory.query({idEmpresa:idEmpresa/*, mes:$scope.mes, anio:$scope.anio*/ ,'expand[]': 
+        RutaFactory.query({idEmpresa:idEmpresa, mes:$scope.mes, anio:$scope.anio ,'expand[]':
                                                    ['r_ruta_operador','operador_detalle','r_ruta_camion',
                                                     'camion_detalle','r_operador_usuario','r_usuario_empresa',
                                                     'r_empresa_centro_acopio','centro_detalle','r_ruta_detalle',

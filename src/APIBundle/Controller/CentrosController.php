@@ -60,11 +60,12 @@ class CentrosController extends APIBaseController
         
         $deposito  = $geotools->convert($cooDeposito);
         $cDeposito = explode(" ",$deposito->toUTM());
-        
+
+        $xcen = $cDeposito[1] / -9.99;
         $centro->setCenLatitud($latitud);
         $centro->setCenLongitud($longitud);
         $centro->setCenY($cDeposito[2]);
-        $centro->setCenX($cDeposito[1]);
+        $centro->setCenX($xcen);
         
         $em = $this->getDoctrine()->getManager();
         $em->persist($centro);
@@ -105,11 +106,11 @@ class CentrosController extends APIBaseController
            
             $deposito  = $geotools->convert($cooDeposito);
             $cDeposito = explode(" ",$deposito->toUTM());
-            
+            $xcen = $cDeposito[1] / -9.99;
             $centro->setCenLatitud($latitud)
                     ->setCenLongitud($longitud)
                     ->setCenY($cDeposito[2])
-                    ->setCenX($cDeposito[1]);
+                    ->setCenX($xcen);
         }
         
         $centro->setCenVisible($request->get('visible'));

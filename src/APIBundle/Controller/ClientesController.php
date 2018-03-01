@@ -31,50 +31,10 @@ class ClientesController extends APIBaseController
     */
     public function patchEmpresasClientesAction(Request $request,Empresa $empresa, Cliente $cliente ){  
         
-       
-        $geotools   = new \League\Geotools\Geotools();
-        $coordenadaCliente = new \League\Geotools\Coordinate\Coordinate([-35.4275756,-71.6493885]); //Coodenadas cliente
-        $coordenadaDeposito = new \League\Geotools\Coordinate\Coordinate([-35.4490374, -71.6844736]); //coordenadas deposito   
-        
-        $cCliente  = $geotools->convert($coordenadaCliente);
-        
-        $cDeposito = $geotools->convert($coordenadaDeposito);
-        
-        $sCliente = $cCliente->toUTM();
-        
-        $sDeposito= $cDeposito->toUTM();
-        
-        printf("Cliente  %s\n", $cCliente->toUTM()); // 19H 259474 6076312 (alias)
-        printf("Deposito  %s\n", $cDeposito->toUTM()); // 19H 259474 6076312 (alias)
-        
-        $aCliente = explode(" ",$sCliente);
-        $aDeposito = explode(" ",$sDeposito);
-        
-        
-        $xcl = $aCliente[1]/ -9.99;
-        $ycl = $aCliente[2];
-
-        $atan2 =  atan2( ($ycl - $aDeposito[2]), (($xcl * -1) - ($aDeposito[1] * -1)));
-        //$atan2 =  atan2( (6076313.915 - 5929656.33), ((number_format($aCliente[1],2, '.', '') * -1) - (67104.6619 * -1)));
-        //echo "<br> Atan2((", $aCliente[2] ,"-", $aDeposito[2], ")", ",", "(", $aCliente[1] / -9.99, "-", $aDeposito[1], ") ) = ",$atan2;
-        $rad2deg = rad2deg($atan2);
-        echo "<br> Angulo ",$rad2deg;
-        
-        
-        /*
-        echo "<br>--------------Calculos Marion---------------";
-        echo "<br> Atan2((-25974,397 - -67104,6619) ,(6076313,915 - 5929656,33)) ";
-        $atam2Marion = atan2((6076313.915 - 5929656.33), (-25974.397 - -67104.6619)); //en php atan2 es primero y, despues x
-        echo "<br> Marion atan2 1,297369476 -->", $atam2Marion;
-        $gradosMarion = rad2deg($atam2Marion);
-        echo "<br> Grados /angulo Marion 74.3337954453 -->", $gradosMarion;*/
-
-die;
-        
         $groups =['cliente_detalle'];
 
         $em = $this->getDoctrine()->getManager();
-     
+
         if($request->get('visible')){
             
             $theta = 0;
@@ -103,12 +63,19 @@ die;
             $cClie = $geotools->convert($cooCliente);
             $cCliente = explode(" ",$cClie->toUTM());
 
-            $x = ($cCliente[1] / -9.99);
+            $xclie = ($cCliente[1] / -9.99);
+            $yclie = $cCliente[2];
+
+            $xdep = $empresa->getCentroDeAcopio()->getCenX();
+            $ydep = $empresa->getCentroDeAcopio()->getCenY();
+
+            $atan2 = atan2( ($yclie - $ydep), ($xclie - $xdep));
+            $theta = rad2deg($atan2);
 
             $cliente->setCliLatitud($latitud)
                     ->setCliLongitud($longitud)
-                    ->setCliY($cCliente[2])
-                    ->setCliX($x)
+                    ->setCliY($yclie)
+                    ->setCliX($xclie)
                     ->setCliTheta($theta);
    
         }
@@ -165,10 +132,19 @@ die;
         $cClie = $geotools->convert($cooCliente);
         $cCliente = explode(" ",$cClie->toUTM());
 
+        $xclie = ($cCliente[1] / -9.99);
+        $yclie = $cCliente[2];
+
+        $xdep = $empresa->getCentroDeAcopio()->getCenX();
+        $ydep = $empresa->getCentroDeAcopio()->getCenY();
+
+        $atan2 = atan2( ($yclie - $ydep), ($xclie - $xdep));
+        $theta = rad2deg($atan2);
+
         $cliente->setCliLatitud($latitud)
                 ->setCliLongitud($longitud)
-                ->setCliY($cCliente[2])
-                ->setCliX($cCliente[1])
+                ->setCliY($yclie)
+                ->setCliX($xclie)
                 ->setCliTheta($theta);
 
         $em->persist($cliente);

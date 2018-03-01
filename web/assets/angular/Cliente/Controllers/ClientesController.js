@@ -86,6 +86,21 @@ return {
         $scope.listaDeFrecuencias();
         $scope.listaDeComunas();
 
+        $scope.posicion = 10;
+
+        $scope.siguientes = function(){
+            if($scope.clientes.length > $scope.posicion){
+                $scope.posicion += 10;
+            };
+        }
+
+        $scope.anteriores = function(){
+            if($scope.posicion > 10){
+                $scope.posicion -= 10;
+            };
+        }
+
+
         $scope.accion = 1;
        
         $scope.nuevoCliente = function() {
@@ -234,6 +249,8 @@ return {
         c.frecuencia=$scope.cli.frecuencia.frecuencia_id;
         c.direccion=$scope.cli.direccion;
         c.comuna= $scope.cli.comuna.comuna_id;
+
+        console.log(c.comuna);
         c.telefono=$scope.cli.telefono;
         c.celular=$scope.cli.celular;
         c.correo=$scope.cli.correo;
