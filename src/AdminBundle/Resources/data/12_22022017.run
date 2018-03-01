@@ -1,0 +1,6 @@
+reset;
+model /media/sf_saarc/src/AdminBundle/Resources/data/12_22022017.mod;
+data /media/sf_saarc/src/AdminBundle/Resources/data/12_22022017.dat;
+option solver scipampl; 
+solve;
+display y;

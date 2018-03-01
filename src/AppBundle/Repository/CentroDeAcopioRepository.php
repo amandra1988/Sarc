@@ -30,4 +30,5 @@ class CentroDeAcopioRepository extends \Doctrine\ORM\EntityRepository
         }
         return $data;
     }
+            
 }

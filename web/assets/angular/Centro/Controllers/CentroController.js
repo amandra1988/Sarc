@@ -1,35 +1,12 @@
 angular.module('superadmin-centro-de-acopio')
 .controller('CentroController',['$scope','CentroFactory','$uibModal','urlBasePartials','ComunaFactory',function ($scope,CentroFactory, $uibModal,urlBasePartials,ComunaFactory) {
-        
-    $scope.help =  function(modulo){
-        $scope.modulo = modulo;
-        var modalInstance= $uibModal.open({
-                templateUrl: urlBasePartials+'../../help.html',
-                backdrop: 'static',
-                size: 'lg',
-                animation: true,
-                ariaLabelledBy: 'modal-title',
-                ariaDescribedBy: 'modal-body',
-                controller: 'Help',
-                resolve: {
-                    modulo: function() {
-                        return $scope.modulo;
-                    }
-                }
-            });
-            return modalInstance;
-        };
-    
-        $("#help").click( function(){
-            $scope.help('Centros de acopio');
-        });
-    
 
+        console.log('Hola Romina');
         $scope.centros =[];
 
         $scope.listaDeCentros= function (){
             CentroFactory.query({'expand[]': ['comuna_detalle','r_comuna_provincia','provincia_detalle','r_provincia_region','region_detalle']}, function(retorno) {
-                $scope.centros = retorno;
+                $scope.centros = retorno;   
             });   
         };
         
@@ -44,7 +21,7 @@ angular.module('superadmin-centro-de-acopio')
         };
             
         $scope.listaDeComunas();
-		$scope.centro = [];
+	$scope.centro = [];
 		
         $scope.nuevoCentro = function() {
             $scope.accion = 1;
@@ -53,7 +30,6 @@ angular.module('superadmin-centro-de-acopio')
             modalInstance.result.then(function()
             {
                $scope.listaDeCentros();
-            }, function () {
             });
         };
        
@@ -64,9 +40,9 @@ angular.module('superadmin-centro-de-acopio')
                 if($scope.centros[i].id_centro === id) {
                     $scope.centro.id = $scope.centros[i].id_centro ;
                     $scope.centro.nombre = $scope.centros[i].nombre_centro ;
-                    $scope.centro.direccion = $scope.centros[i].direccion_centro ; 
+                    $scope.centro.direccion = $scope.centros[i].direccion_centro ;
+                    $scope.centro.numero = $scope.centros[i].numero_centro;
                     $scope.centro.comuna = $scope.centros[i].comuna;
-                    $scope.centro.tetha = $scope.centros[i].theta_centro;
                     $scope.centro.latitud = $scope.centros[i].latitud_centro;
                     $scope.centro.longitud = $scope.centros[i].longitud_centro;
                     break;
@@ -76,7 +52,6 @@ angular.module('superadmin-centro-de-acopio')
             modalInstance.result.then(function()
             {
                $scope.listaDeCentros();
-            }, function () {
             });
         };
         
@@ -90,8 +65,7 @@ angular.module('superadmin-centro-de-acopio')
                 c.$patch({idCentro:id}, function(response) {
                     $scope.listaDeCentros();
                 });
-            }, function () {
-            });
+            }); 
         };
         
         $scope.modal =  function(){
@@ -129,11 +103,11 @@ angular.module('superadmin-centro-de-acopio')
     $scope.centro  = centro;
 
     if($scope.accion === 1){
-        $scope.mensaje = 'Nuevo';
+        $scope.mensaje = 'Nuevo' ;
     }
   
     if($scope.accion === 2){
-        $scope.mensaje = 'Editar';
+        $scope.mensaje = 'Editar' ;
     }
   
     if($scope.accion === 0){
@@ -141,36 +115,11 @@ angular.module('superadmin-centro-de-acopio')
     }
     
     $scope.guardar= function(){
-
-        if(!$scope.centro.nombre)
-        {
-            $scope.error = 'Ingrese el nombre del centro de acopio';
-            return;
-        }
-
-        if(!$scope.centro.direccion)
-        {
-            $scope.error = 'Ingrese dirección del centro de acopio';
-            return;
-        }
-
-        if(!$scope.centro.comuna)
-        {
-            $scope.error = 'Indique la comuna donde está ubicado el centro de acopio';
-            return;
-        }
-
-        if(!$scope.centro.tetha)
-        {
-            $scope.error = 'Ingrese el ángulo dentro del plano cartesiano (tetha)';
-            return;
-        }
-        
         var c = new CentroFactory();
         c.nombre    = $scope.centro.nombre;
         c.direccion = $scope.centro.direccion;
+        c.numero    = $scope.centro.numero;
         c.comuna    = $scope.centro.comuna.comuna_id;
-        c.tetha     = $scope.centro.tetha;
         c.longitud  = $scope.centro.longitud;
         c.latitud   = $scope.centro.latitud;
         c.visible = 1;

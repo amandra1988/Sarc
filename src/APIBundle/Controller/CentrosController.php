@@ -28,14 +28,19 @@ class CentrosController extends APIBaseController
     * @return Response La respuesta serializada
     */
     public function postCentrosAction(Request $request){
+        
         $groups =['centro_detalle'];
-        $latitud = 0;
-        $longitud= 0;
+        
+        $latitud  = 0;
+        $longitud = 0;
+        $cDeposito= [];
+        
         $comuna  = $this->getDoctrine()->getRepository('AppBundle:Comuna')->find($request->get('comuna')); 
+        
         $centro = new CentroDeAcopio();
+        
         $centro->setCenNombre($request->get('nombre'));
         $centro->setCenDireccion($request->get('direccion'));
-        $centro->setCenTheta($request->get('tetha'));
         $centro->setComuna($comuna);
         $centro->setCenVisible(true);
         
@@ -46,10 +51,21 @@ class CentrosController extends APIBaseController
             $direccion = $request->get('direccion').' '.$request->get('numero').', '.$comuna->getComNombre().', Chile';
             $coordenadas = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion);        
             $latitud = $coordenadas['latitud'];
-            $longitud= $coordenadas['longitud'];
+            $longitud= $coordenadas['longitud']; 
         }
+        
+        //Obtener X e Y
+        $geotools    = new \League\Geotools\Geotools();
+        $cooDeposito = new \League\Geotools\Coordinate\Coordinate([$latitud, $longitud]);
+        
+        $deposito  = $geotools->convert($cooDeposito);
+        $cDeposito = explode(" ",$deposito->toUTM());
+        
         $centro->setCenLatitud($latitud);
         $centro->setCenLongitud($longitud);
+        $centro->setCenY($cDeposito[2]);
+        $centro->setCenX($cDeposito[1]);
+        
         $em = $this->getDoctrine()->getManager();
         $em->persist($centro);
         $em->flush();
@@ -65,12 +81,11 @@ class CentrosController extends APIBaseController
         $groups =['centro_detalle'];
         $latitud = 0;
         $longitud= 0;
-        
+
         if($request->get('comuna')){
             $comuna  = $this->getDoctrine()->getRepository('AppBundle:Comuna')->find($request->get('comuna')); 
             $centro->setCenNombre($request->get('nombre'));
             $centro->setCenDireccion($request->get('direccion'));
-            $centro->setCenTheta($request->get('tetha'));
             $centro->setComuna($comuna);
             
             if( null !== $request->get('latitud') && $request->get('latitud') !='' && $request->get('latitud') !=0 ){
@@ -83,8 +98,18 @@ class CentrosController extends APIBaseController
                 $latitud = $coordenadas['latitud'];
                 $longitud= $coordenadas['longitud'];
             }
-            $centro->setCenLatitud($latitud);
-            $centro->setCenLongitud($longitud);
+
+            //Obtener X e Y
+            $geotools    = new \League\Geotools\Geotools();
+            $cooDeposito = new \League\Geotools\Coordinate\Coordinate([$latitud, $longitud]);
+           
+            $deposito  = $geotools->convert($cooDeposito);
+            $cDeposito = explode(" ",$deposito->toUTM());
+            
+            $centro->setCenLatitud($latitud)
+                    ->setCenLongitud($longitud)
+                    ->setCenY($cDeposito[2])
+                    ->setCenX($cDeposito[1]);
         }
         
         $centro->setCenVisible($request->get('visible'));

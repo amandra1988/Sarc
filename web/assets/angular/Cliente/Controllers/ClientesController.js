@@ -107,16 +107,15 @@ return {
             for(var i=0,len=$scope.clientes.length; i<len;i++)
             {
                 if($scope.clientes[i].cliente_id === id) {
-                    $scope.cliente.id =$scope.clientes[i].cliente_id ;
-                    $scope.cliente.nombre =$scope.clientes[i].cliente_nombre ;
+                    $scope.cliente.id =$scope.clientes[i].cliente_id;
+                    $scope.cliente.nombre =$scope.clientes[i].cliente_nombre;
                     $scope.cliente.direccion =$scope.clientes[i].cliente_direccion;
-                    $scope.cliente.telefono =$scope.clientes[i].cliente_telefono ;
-                    $scope.cliente.celular =$scope.clientes[i].cliente_celular ;
-                    $scope.cliente.correo =$scope.clientes[i].cliente_correo ;
-                    $scope.cliente.demanda =$scope.clientes[i].cliente_demanda ;
-                    $scope.cliente.frecuencia =$scope.clientes[i].cliente_frecuencia ;
-                    $scope.cliente.theta =$scope.clientes[i].cliente_theta ;
-                    $scope.cliente.comuna =$scope.clientes[i].comuna ;
+                    $scope.cliente.telefono =$scope.clientes[i].cliente_telefono;
+                    $scope.cliente.celular =$scope.clientes[i].cliente_celular;
+                    $scope.cliente.correo =$scope.clientes[i].cliente_correo;
+                    $scope.cliente.demanda =$scope.clientes[i].cliente_demanda;
+                    $scope.cliente.frecuencia =$scope.clientes[i].cliente_frecuencia;
+                    $scope.cliente.comuna =$scope.clientes[i].comuna;
                     break;
                 }
             }
@@ -184,8 +183,7 @@ return {
     $scope.display = '';
     
     if($scope.accion === 1){
-        $scope.mensaje = 'Nuevo' ;
-        $scope.cli.theta ='11.11111111';
+        $scope.mensaje = 'Nuevo';
         $scope.display = 'none';
     }
     
@@ -229,12 +227,6 @@ return {
             return;
         }
 
-        if(!$scope.cli.theta)
-        {
-            $scope.error = 'Ingrese el ángulo dentro del plano cartesiano (theta)';
-            return;
-        }
-
         $scope.error = '';
 
         var c = new ClienteFactory();
@@ -246,7 +238,6 @@ return {
         c.celular=$scope.cli.celular;
         c.correo=$scope.cli.correo;
         c.demanda=$scope.cli.demanda;
-        c.theta=$scope.cli.theta;
         c.visible=true;
         if(accion === 1)
         {

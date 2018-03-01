@@ -98,13 +98,30 @@ class Cliente
     /**
      * @var string
      *
+     * @ORM\Column(name="cli_x", type="string", length=20)
+     * @JMS\SerializedName("cliente_x")
+     * @JMS\Groups({"cliente_lista"})
+     */
+     private $cliX;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="cli_y", type="string", length=20)
+     * @JMS\SerializedName("cliente_y")
+     * @JMS\Groups({"cliente_lista"})
+     */
+     private $cliY;
+
+     /**
+     * @var string
+     *
      * @ORM\Column(name="cli_theta", type="string", length=20)
      * @JMS\SerializedName("cliente_theta")
      * @JMS\Groups({"cliente_lista"})
      */
      private $cliTheta;
-
-    
+     
      /**
      * @var int
      *
@@ -525,30 +542,6 @@ class Cliente
     }
 
     /**
-     * Set cliTheta
-     *
-     * @param string $cliTheta
-     *
-     * @return Cliente
-     */
-    public function setCliTheta($cliTheta)
-    {
-        $this->cliTheta = $cliTheta;
-
-        return $this;
-    }
-
-    /**
-     * Get cliTheta
-     *
-     * @return string
-     */
-    public function getCliTheta()
-    {
-        return $this->cliTheta;
-    }
-
-    /**
      * Add procesoCliente
      *
      * @param \AppBundle\Entity\ProcesoClientes $procesoCliente
@@ -580,5 +573,77 @@ class Cliente
     public function getProcesoClientes()
     {
         return $this->procesoClientes;
+    }
+
+    /**
+     * Set cliX
+     *
+     * @param string $cliX
+     *
+     * @return Cliente
+     */
+    public function setCliX($cliX)
+    {
+        $this->cliX = $cliX;
+
+        return $this;
+    }
+
+    /**
+     * Get cliX
+     *
+     * @return string
+     */
+    public function getCliX()
+    {
+        return $this->cliX;
+    }
+
+    /**
+     * Set cliY
+     *
+     * @param string $cliY
+     *
+     * @return Cliente
+     */
+    public function setCliY($cliY)
+    {
+        $this->cliY = $cliY;
+
+        return $this;
+    }
+
+    /**
+     * Get cliY
+     *
+     * @return string
+     */
+    public function getCliY()
+    {
+        return $this->cliY;
+    }
+
+    /**
+     * Set cliTheta
+     *
+     * @param string $cliTheta
+     *
+     * @return Cliente
+     */
+    public function setCliTheta($cliTheta)
+    {
+        $this->cliTheta = $cliTheta;
+
+        return $this;
+    }
+
+    /**
+     * Get cliTheta
+     *
+     * @return string
+     */
+    public function getCliTheta()
+    {
+        return $this->cliTheta;
     }
 }
