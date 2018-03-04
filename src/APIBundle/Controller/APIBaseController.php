@@ -32,4 +32,21 @@ class APIBaseController extends \AppBundle\Controller\BaseController
         $response->setStatusCode(500);
         return $response;
     }
+    
+    public function obtenerCoordenadasGeograficas( $coordenadasGPS ){
+        
+        $latitud  = $coordenadasGPS['latitud'];
+        $longitud = $coordenadasGPS['longitud'];
+                
+        $geotools    = new \League\Geotools\Geotools();
+        $coordenadas = new \League\Geotools\Coordinate\Coordinate([$latitud, $longitud]);
+
+        $coor = $geotools->convert($coordenadas);
+        $coordenada = explode(" ",$coor->toUTM());
+
+        $x = ($coordenada[1]/-9.99);
+        $y = $coordenada[2];
+        
+        return [ 'x' =>$x, 'y' =>$y ] ;
+    }
 }

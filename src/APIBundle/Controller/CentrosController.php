@@ -49,22 +49,17 @@ class CentrosController extends APIBaseController
             $longitud= $request->get('longitud'); 
         }else{
             $direccion = $request->get('direccion').' '.$request->get('numero').', '.$comuna->getComNombre().', Chile';
-            $coordenadas = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion);        
-            $latitud = $coordenadas['latitud'];
-            $longitud= $coordenadas['longitud']; 
+            $coordenadasGPS = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion);        
+            $latitud = $coordenadasGPS['latitud'];
+            $longitud= $coordenadasGPS['longitud']; 
         }
         
-        //Obtener X e Y
-        $geotools    = new \League\Geotools\Geotools();
-        $cooDeposito = new \League\Geotools\Coordinate\Coordinate([$latitud, $longitud]);
+        $coordenadas = $this->obtenerCoordenadasGeograficas($coordenadasGPS);
         
-        $deposito  = $geotools->convert($cooDeposito);
-        $cDeposito = explode(" ",$deposito->toUTM());
-
-        $xcen = $cDeposito[1] / -9.99;
+        $xcen = $coordenadas['x'];
         $centro->setCenLatitud($latitud);
         $centro->setCenLongitud($longitud);
-        $centro->setCenY($cDeposito[2]);
+        $centro->setCenY($coordenadas['y']);
         $centro->setCenX($xcen);
         
         $em = $this->getDoctrine()->getManager();
@@ -94,22 +89,17 @@ class CentrosController extends APIBaseController
                 $longitud= $request->get('longitud'); 
             }else{
                 $direccion = $request->get('direccion').', '.$comuna->getComNombre().', Chile';
-
-                $coordenadas = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion);        
-                $latitud = $coordenadas['latitud'];
-                $longitud= $coordenadas['longitud'];
+                $coordenadasGPS = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion);        
+                $latitud = $coordenadasGPS['latitud'];
+                $longitud= $coordenadasGPS['longitud'];
             }
-
-            //Obtener X e Y
-            $geotools    = new \League\Geotools\Geotools();
-            $cooDeposito = new \League\Geotools\Coordinate\Coordinate([$latitud, $longitud]);
-           
-            $deposito  = $geotools->convert($cooDeposito);
-            $cDeposito = explode(" ",$deposito->toUTM());
-            $xcen = $cDeposito[1] / -9.99;
+            
+            $coordenadas = $this->obtenerCoordenadasGeograficas($coordenadasGPS);
+            $xcen = $coordenadas['X'];
+        
             $centro->setCenLatitud($latitud)
                     ->setCenLongitud($longitud)
-                    ->setCenY($cDeposito[2])
+                    ->setCenY($coordenadas['y'])
                     ->setCenX($xcen);
         }
         

@@ -36,11 +36,12 @@ class ClientesController extends APIBaseController
         $em = $this->getDoctrine()->getManager();
 
         if($request->get('visible')){
-            
-            $theta = 0;
-            
+
             $frecuencia = $this->getDoctrine()->getRepository('AppBundle:Frecuencia')->find($request->get('frecuencia'));
             $comuna = $this->getDoctrine()->getRepository('AppBundle:Comuna')->find($request->get('comuna'));
+
+            $direccion   = $request->get('direccion').', '.$comuna->getComNombre().', Chile';
+            $coordenadasGPS = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion);
 
             $cliente->setCliNombre($request->get('nombre'))
                     ->setCliDireccion($request->get('direccion'))
@@ -51,33 +52,26 @@ class ClientesController extends APIBaseController
                     ->setCliDemanda($request->get('demanda'))
                     ->setComuna($comuna);
 
-            $direccion   = $request->get('direccion').', '.$comuna->getComNombre().', Chile';
-            $coordenadas = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion);
+      
+            if($coordenadasGPS['latitud'] && $coordenadasGPS['longitud']){
+                
+                $coordenadas = $this->obtenerCoordenadasGeograficas($coordenadasGPS);
 
-            $latitud = $coordenadas['latitud'];
-            $longitud= $coordenadas['longitud'];
+                $xclie = ($coordenadas['x'] / -9.99);
+                $yclie = $coordenadas['y'];
 
-            $geotools   = new \League\Geotools\Geotools();
-            $cooCliente = new \League\Geotools\Coordinate\Coordinate([$latitud, $longitud]);
+                $xdep = $empresa->getCentroDeAcopio()->getCenX();
+                $ydep = $empresa->getCentroDeAcopio()->getCenY();
 
-            $cClie = $geotools->convert($cooCliente);
-            $cCliente = explode(" ",$cClie->toUTM());
+                $atan2 = atan2( ($yclie - $ydep), ($xclie - $xdep));
+                $theta = rad2deg($atan2);
 
-            $xclie = ($cCliente[1] / -9.99);
-            $yclie = $cCliente[2];
-
-            $xdep = $empresa->getCentroDeAcopio()->getCenX();
-            $ydep = $empresa->getCentroDeAcopio()->getCenY();
-
-            $atan2 = atan2( ($yclie - $ydep), ($xclie - $xdep));
-            $theta = rad2deg($atan2);
-
-            $cliente->setCliLatitud($latitud)
-                    ->setCliLongitud($longitud)
-                    ->setCliY($yclie)
-                    ->setCliX($xclie)
-                    ->setCliTheta($theta);
-   
+                $cliente->setCliLatitud($coordenadasGPS['latitud'])
+                        ->setCliLongitud($coordenadasGPS['longitud'])
+                        ->setCliY($yclie)
+                        ->setCliX($xclie)
+                        ->setCliTheta($theta);
+            }
         }
 
         $cliente->setCliVisible($request->get('visible'));
@@ -102,16 +96,14 @@ class ClientesController extends APIBaseController
 
         $frecuencia = $this->getDoctrine()->getRepository('AppBundle:Frecuencia')->find($request->get('frecuencia')); 
         $comuna     = $this->getDoctrine()->getRepository('AppBundle:Comuna')->find($request->get('comuna'));
-
-        $direccion   = $request->get('direccion').', '.$comuna->getComNombre().', Chile';
         
-        $coordenadas = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion);
-               
-        $theta = 0;
-
         $em = $this->getDoctrine()->getManager();
 
         $cliente = new Cliente();
+   
+        $direccion   = $request->get('direccion').', '.$comuna->getComNombre().', Chile';
+
+        $coordenadasGPS = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion);
 
         $cliente->setCliNombre($request->get('nombre'))
                 ->setCliDireccion($request->get('direccion'))
@@ -123,29 +115,25 @@ class ClientesController extends APIBaseController
                 ->setComuna($comuna)
                 ->setCliVisible($request->get('visible'));
 
-        $latitud = $coordenadas['latitud'];
-        $longitud= $coordenadas['longitud'];
+        if($coordenadasGPS['latitud'] && $coordenadasGPS['longitud']){
+                
+                $coordenadas = $this->obtenerCoordenadasGeograficas($coordenadasGPS);
 
-        $geotools   = new \League\Geotools\Geotools();
-        $cooCliente = new \League\Geotools\Coordinate\Coordinate([$latitud, $longitud]);
+                $xclie = ($coordenadas['x'] / -9.99);
+                $yclie = $coordenadas['y'];
 
-        $cClie = $geotools->convert($cooCliente);
-        $cCliente = explode(" ",$cClie->toUTM());
+                $xdep = $empresa->getCentroDeAcopio()->getCenX();
+                $ydep = $empresa->getCentroDeAcopio()->getCenY();
 
-        $xclie = ($cCliente[1] / -9.99);
-        $yclie = $cCliente[2];
+                $atan2 = atan2( ($yclie - $ydep), ($xclie - $xdep));
+                $theta = rad2deg($atan2);
 
-        $xdep = $empresa->getCentroDeAcopio()->getCenX();
-        $ydep = $empresa->getCentroDeAcopio()->getCenY();
-
-        $atan2 = atan2( ($yclie - $ydep), ($xclie - $xdep));
-        $theta = rad2deg($atan2);
-
-        $cliente->setCliLatitud($latitud)
-                ->setCliLongitud($longitud)
-                ->setCliY($yclie)
-                ->setCliX($xclie)
-                ->setCliTheta($theta);
+                $cliente->setCliLatitud($coordenadasGPS['latitud'])
+                        ->setCliLongitud($coordenadasGPS['longitud'])
+                        ->setCliY($yclie)
+                        ->setCliX($xclie)
+                        ->setCliTheta($theta);
+        }
 
         $em->persist($cliente);
         $em->flush();
