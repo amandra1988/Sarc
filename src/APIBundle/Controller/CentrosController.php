@@ -48,8 +48,12 @@ class CentrosController extends APIBaseController
             $latitud = $request->get('latitud');
             $longitud= $request->get('longitud'); 
         }else{
-            $direccion = $request->get('direccion').' '.$request->get('numero').', '.$comuna->getComNombre().', Chile';
-            $coordenadasGPS = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion);        
+            $region = $comuna->getProvincia()->getRegion()->getRegNombre();
+
+            $direccion = ucwords(mb_strtolower($request->get('direccion').', '.$comuna->getComNombre().', '.$region.',  Chile','UTF-8'));
+
+            $coordenadasGPS = $this->obtenerLatitudYLongitud($direccion);
+
             $latitud = $coordenadasGPS['latitud'];
             $longitud= $coordenadasGPS['longitud']; 
         }
@@ -88,8 +92,13 @@ class CentrosController extends APIBaseController
                 $latitud = $request->get('latitud');
                 $longitud= $request->get('longitud'); 
             }else{
-                $direccion = $request->get('direccion').', '.$comuna->getComNombre().', Chile';
-                $coordenadasGPS = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion);        
+
+                $region = $comuna->getProvincia()->getRegion()->getRegNombre();
+
+                $direccion = ucwords(mb_strtolower($request->get('direccion').', '.$comuna->getComNombre().', '.$region.',  Chile','UTF-8'));
+
+                $coordenadasGPS = $this->obtenerLatitudYLongitud($direccion);
+
                 $latitud = $coordenadasGPS['latitud'];
                 $longitud= $coordenadasGPS['longitud'];
             }

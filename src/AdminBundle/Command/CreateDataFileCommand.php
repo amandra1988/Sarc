@@ -97,7 +97,8 @@ class CreateDataFileCommand extends ContainerAwareCommand
             $quincenales =":= ";
             $mensuales   =":= ";
 
-            $frecuencia = array(1=>20, 2=>4 , 3=>8 , 4=>2 , 5=>1);
+            $frecuencia = array(1=>20, 2=>4 , 3=>8 , 4=>12 , 5=>2 , 6=>1);
+
             $orden = 0;
 
             foreach($clientes  as $cliente)
@@ -135,7 +136,8 @@ class CreateDataFileCommand extends ContainerAwareCommand
                 $manager->persist($procesoCamiones);
                 $manager->flush();
             }
-            
+
+
             $diarios     = ($diarios     == ":= ")?"":trim($diarios,',');
             $semanales   = ($semanales   == ":= ")?"":trim($semanales,',');
             $bisemanales = ($bisemanales == ":= ")?"":trim($bisemanales,',');
@@ -170,6 +172,7 @@ class CreateDataFileCommand extends ContainerAwareCommand
                             "frecuencias"=>$frecuencia
                          ]
                      );
+
 
             //abrimos el archivo para agregar los contenidos
             file_put_contents($absolutePath."data/".$fileName.".dat", $data);

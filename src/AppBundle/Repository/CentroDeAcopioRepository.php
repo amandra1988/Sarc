@@ -17,18 +17,4 @@ class CentroDeAcopioRepository extends \Doctrine\ORM\EntityRepository
                  ->setParameter('visible',1);
         return $qb->getQuery()->getResult();
     }
-    
-    public function obtenerLatitudYLongitud($direccion){        
-        
-        $data = array('status'=>'Error', 'latitud'=>0, 'longitud'=>0 );
-        $geo = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($direccion).'&sensor=false');
-        $respuesta = json_decode($geo, true);
-        if ($respuesta['status'] == 'OK') {
-            $data['status']  = 'OK';
-            $data['latitud']  = $respuesta['results'][0]['geometry']['location']['lat'];
-            $data['longitud'] = $respuesta['results'][0]['geometry']['location']['lng'];
-        }
-        return $data;
-    }
-            
 }
