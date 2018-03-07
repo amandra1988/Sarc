@@ -193,13 +193,13 @@ class CreateDataFileCommand extends ContainerAwareCommand
             file_put_contents($absolutePath."data/".$fileName.".mod", $text_file_mod);
 
             //llamar a ampl
-            $process = new Process('ampl '.$absolutePath."data/".$fileName.".run > ".$absolutePath."data/".$fileName.".sol");
+            /*$process = new Process('ampl '.$absolutePath."data/".$fileName.".run > ".$absolutePath."data/".$fileName.".sol");
             $process->run();
 
             // executes after the command finishes
             if (!$process->isSuccessful()) {
                throw new ProcessFailedException($process);
-            }
+            }*/
 
             $proceso->setPrcEstado(1)->setPrcObservacion("Generando rutas de trabajo...");
             $manager->persist($proceso);

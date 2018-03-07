@@ -41,9 +41,9 @@ class ClientesController extends APIBaseController
 
             $comuna = $this->getDoctrine()->getRepository('AppBundle:Comuna')->find($request->get('comuna'));
 
-            $region = $comuna->getProvincia()->getRegion()->getRegNombre();
+            $region = $comuna->getProvincia()->getRegion()->getRegOrdinal();
 
-            $direccion = ucwords(mb_strtolower($request->get('direccion').', '.$comuna->getComNombre().', '.$region.',  Chile','UTF-8'));
+            $direccion = ucwords(mb_strtolower($request->get('direccion'),'UTF-8')).', '.$comuna->getComNombre().', '.$region.' Región, Chile';
 
             $coordenadasGPS = $this->obtenerLatitudYLongitud($direccion);
 

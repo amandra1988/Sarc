@@ -49,11 +49,12 @@ class SwitchProcessCommand extends ContainerAwareCommand
         //argregamos al log todos los parametros
         $logger = $this->getContainer()->get('logger');
         $nameEvent = ltrim($input->getArgument('event'), '"');
-        
+
         $fileName = str_replace('"','',$input->getArgument('file_name'));
         $archivo = explode(".", $fileName);
         $file = $archivo[0];
-           
+
+
         //obtenemos la ruta del modulo AdminBundle
         $absolutePath =$this->getContainer()->get('kernel')->locateResource('@AdminBundle/Resources/');
         //siempre borramos el archivo, temas cache
@@ -70,7 +71,7 @@ class SwitchProcessCommand extends ContainerAwareCommand
             $logger->info($nameEvent .$fileName. $fileExtension);
 
             if($fileExtension == ".sol"  && $nameEvent == "IN_CREATE"){
-                
+
                 $logger->info('SARC sol');
                 $this->_execute = $this->getContainer()->get("createroute.command");
 

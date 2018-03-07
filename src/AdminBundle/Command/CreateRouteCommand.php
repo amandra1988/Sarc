@@ -4,6 +4,8 @@ namespace AdminBundle\Command;
 
 use AppBundle\Entity\Ruta;
 use AppBundle\Entity\RutaDetalle;
+use AppBundle\Entity\Feriados;
+
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,11 +36,12 @@ class CreateRouteCommand extends ContainerAwareCommand
   
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+
         $fs = new Filesystem();
         $absolutePath =$this->getContainer()->get('kernel')->locateResource('@AdminBundle/Resources/');
         
         $fileName = $input->getArgument('file_name');
-        
+
         $archivo = explode(".", $fileName);
         $nfile = $archivo[0];
         
@@ -50,6 +53,7 @@ class CreateRouteCommand extends ContainerAwareCommand
 
         if($fs->exists($absolutePath."data/".$nfile.".sol"))
         {
+
             $manager = $this->getContainer()->get('doctrine.orm.default_entity_manager');
             $proceso = $manager->getRepository("AppBundle:Proceso")->find($idProceso);
             $configAmpl =   $manager
@@ -79,7 +83,8 @@ class CreateRouteCommand extends ContainerAwareCommand
                 }
             }
             fclose($file);
-            
+
+
 // Con los datos identificados anteriormente, abrir nuevamente el archivo y extraer la información
             $datos = $routes = $visitas = [];
             foreach ($camiones as $camion => $c):
@@ -127,6 +132,7 @@ class CreateRouteCommand extends ContainerAwareCommand
 
 
 // Identificar fechas de dias habiles donde se cargará la información
+
             $hoy = date('Y-m-d');
             $prox20dias =date('Y-m-d', strtotime('+30 day'));
             $inicio = strtotime($hoy);                
@@ -134,15 +140,23 @@ class CreateRouteCommand extends ContainerAwareCommand
             $fechas = [];
             $i=1;         
             for($inicio;$inicio<=$fin;$inicio=strtotime('+1 day ' . date('Y-m-d',$inicio))):
-                $esFeriado = false;
+
+                $feriado = $manager
+                    ->getRepository("AppBundle:Feriados")
+                    ->findBy( array("fecha"=>new \DateTime(date('Y-m-d',$inicio)) ));
+
+                $esFeriado = (count($feriado)>0)?true:false;
+
                 if(date('D',$inicio) != 'Sun' && date('D',$inicio)!='Sat' && !$esFeriado):
+
                     $fechas[$i] = $inicio;
                     $i++;
                 endif;
                 if($i>$totalDias) break;
-            endfor;  
-                
-            
+            endfor;
+
+
+
 // La información extraida del archivo, se registra en la base de datos con las fechas indentificadas
                        
             foreach($routes as $key => $visitas):
@@ -170,7 +184,7 @@ class CreateRouteCommand extends ContainerAwareCommand
                         
                         $cliente = $procesoCliente[0]->getCliente();
                         for($dia=1; $dia<=$totalDias; $dia++):
-                            
+
                             $trabajo = $jornadas['dia'][$dia][$correlativoClie];
                         
                             $ruta = $manager
