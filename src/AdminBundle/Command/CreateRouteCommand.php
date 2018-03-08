@@ -51,6 +51,7 @@ class CreateRouteCommand extends ContainerAwareCommand
         $logger = $this->getContainer()->get('logger');
         $logger->info('SARC: Crear ruta '.$fileName);
 
+
         if($fs->exists($absolutePath."data/".$nfile.".sol"))
         {
 
@@ -87,6 +88,7 @@ class CreateRouteCommand extends ContainerAwareCommand
 
 // Con los datos identificados anteriormente, abrir nuevamente el archivo y extraer la información
             $datos = $routes = $visitas = [];
+
             foreach ($camiones as $camion => $c):
             
                 $file = fopen($absolutePath."data/".$nfile.".sol",'r');
@@ -128,7 +130,6 @@ class CreateRouteCommand extends ContainerAwareCommand
                 endwhile;
                 fclose($file);
             endforeach;
-              
 
 
 // Identificar fechas de dias habiles donde se cargará la información
@@ -158,7 +159,15 @@ class CreateRouteCommand extends ContainerAwareCommand
 
 
 // La información extraida del archivo, se registra en la base de datos con las fechas indentificadas
-                       
+
+            $informeTotalClientesProcesados = 0;
+            $informeCamiones = [];
+            $frecuencia = array(1=>20, 2=>4 , 3=>8 , 4=>12 , 5=>2 , 6=>1);
+
+            $criterioDeExito = [1=>1, 2=>10, 4=>5, 8=>3, 12=>2, 20=>1];
+
+            $totalVisitas = [];
+
             foreach($routes as $key => $visitas):
                 
                 $correlativoCam = $key;
@@ -171,18 +180,32 @@ class CreateRouteCommand extends ContainerAwareCommand
                 $camion = $procesoCamion[0]->getCamion();
                 $clientes = $visitas['Clientes'];
                 $jornadas = $visitas['Jornadas'];
-                
-               
+
+                $informeCamionClientes =[];
+                $totalDemanda = 0;
+
+
+
                 foreach($clientes as $clie):
+
+                    $informeTotalCumplidos = 0;
+
+                    $informeTotalClientesProcesados = count($clie);
+
+
                     foreach($clie as $c):
-                    
+
                         $correlativoClie = (int)$c;
+
+
                          //Con el correlativo del cliente y el n° de proceso buscar idCliente
                         $procesoCliente = $manager
                                           ->getRepository("AppBundle:ProcesoClientes")
                                           ->findBy(['pclOrden'=>$correlativoClie, 'proceso'=>$idProceso]);
                         
                         $cliente = $procesoCliente[0]->getCliente();
+
+
                         for($dia=1; $dia<=$totalDias; $dia++):
 
                             $trabajo = $jornadas['dia'][$dia][$correlativoClie];
@@ -195,10 +218,22 @@ class CreateRouteCommand extends ContainerAwareCommand
                                                 $camion->getId(),
                                                 $camion->getOperador()
                                         );
-                            
+
+
                             if($trabajo):
-  
-                                $titulo= 'Ruta de trabajo '.date('d/m/Y',$fechas[$dia]) .' [OP:'.$camion->getOperador()->getId().']';  
+
+                                if( !in_array($cliente->getId(), $informeCamionClientes) ){
+                                    array_push($informeCamionClientes, $cliente->getId());
+                                    $totalDemanda +=  $cliente->getCliDemanda();
+                                }
+
+                                if( !isset($totalVisitas[$cliente->getId()]))
+                                    $totalVisitas[$cliente->getId()] = 1;
+                                else
+                                    $totalVisitas[$cliente->getId()] = (int)$totalVisitas[$cliente->getId()] + 1;
+
+
+                                $titulo= 'Ruta de trabajo '.date('d/m/Y',$fechas[$dia]) .' [OP:'.$camion->getOperador()->getId().']';
                                 $ruta =(count($ruta) == 0)? new Ruta(): $ruta[0] ;
 
                                 $ruta
@@ -227,6 +262,7 @@ class CreateRouteCommand extends ContainerAwareCommand
 
                                 $manager->persist($rutaDetalle);
                                 $manager->flush();
+
                             else:
                                 
                                 if(count($ruta) > 0): 
@@ -249,10 +285,61 @@ class CreateRouteCommand extends ContainerAwareCommand
                                 
                             endif;
                         endfor;
+
+                        if( !isset($informeClientes[$cliente->getId()]))
+                            $informeClientes[$cliente->getId()] = [];
+
+
+                        if(isset($totalVisitas[$cliente->getId()])):
+                            $metrica = (int)round( (20/$totalVisitas[$cliente->getId()]) );
+                            $a = $metrica;
+                            $b = $criterioDeExito[$frecuencia[$cliente->getFrecuencia()->getId()]];
+                            $cumplido = false;
+
+                            if($b == $a):
+                                $cumplido = true;
+                                $informeTotalCumplidos++;
+                            endif;
+                        else:
+                            $cumplido =false;
+                            $metrica = 0;
+                        endif;
+
+
+                        $informeClientes[$cliente->getId()] = [
+                            "Frecuencia"=>$cliente->getFrecuencia()->getNombre(),
+                            "CantVisitasGeneradas"=>(isset($totalVisitas[$cliente->getId()]))?$totalVisitas[$cliente->getId()]:0,
+                            "VisitasEsperadas"=>$frecuencia[$cliente->getFrecuencia()->getId()],
+                            "criterioDeExito"=>$metrica,
+                            "Cumplido"=>$cumplido
+                        ];
+
+
+
                     endforeach;
                 endforeach;
+
+
+                if( !isset($informeCamiones[$camion->getId()]) )
+                    $informeCamiones[$camion->getId()] = [
+                            "clientes"=>$informeCamionClientes,
+                            "TotalDemanda"=>$totalDemanda,
+                            "CapacidadCamion"=>$camion->getCamCapacidad()
+                        ];
+
             endforeach;
-               
+
+
+            $informeResultados = [
+
+                "total_clientes"=> $proceso->getPrcCantidadClientes(),
+                "total_clientes_procesados"=>$informeTotalClientesProcesados,
+                "camiones"=> $informeCamiones,
+                "clientes"=> $informeClientes,
+                "cumplidos"=> $informeTotalCumplidos.'/'.$informeTotalClientesProcesados,
+
+            ];
+
             $output->writeln("Carga de datos finalizada, ahora puede ejecutar comando sarc:terminate-process", FILE_APPEND);
 
             $command = $this->getApplication()->find('sarc:terminate-process');
@@ -264,7 +351,7 @@ class CreateRouteCommand extends ContainerAwareCommand
         
             $greetInput = new ArrayInput($arguments);
                 
-            $command->run($greetInput, $output);   
+            $command->run($greetInput, $output);
         }else{
             $output->writeln("El archivo de salida no existe", FILE_APPEND);
         }
