@@ -20,6 +20,7 @@ use Symfony\Component\Console\Logger\ConsoleLogger;
 class CreateRouteCommand extends ContainerAwareCommand
 {
     protected static $defaultName = 'sarc:create-route';
+
     public function __construct()
     {    
         // you *must* call the parent constructor
@@ -87,6 +88,7 @@ class CreateRouteCommand extends ContainerAwareCommand
 
 
 // Con los datos identificados anteriormente, abrir nuevamente el archivo y extraer la información
+
             $datos = $routes = $visitas = [];
 
             foreach ($camiones as $camion => $c):
@@ -134,6 +136,7 @@ class CreateRouteCommand extends ContainerAwareCommand
 
 // Identificar fechas de dias habiles donde se cargará la información
 
+
             $hoy = date('Y-m-d');
             $prox20dias =date('Y-m-d', strtotime('+30 day'));
             $inicio = strtotime($hoy);                
@@ -157,16 +160,13 @@ class CreateRouteCommand extends ContainerAwareCommand
             endfor;
 
 
-
 // La información extraida del archivo, se registra en la base de datos con las fechas indentificadas
 
             $informeTotalClientesProcesados = 0;
             $informeCamiones = [];
-            $frecuencia = array(1=>20, 2=>4 , 3=>8 , 4=>12 , 5=>2 , 6=>1);
-
-            $criterioDeExito = [1=>1, 2=>10, 4=>5, 8=>3, 12=>2, 20=>1];
-
             $totalVisitas = [];
+            $frecuencia = [1=>20, 2=>4, 3=>8, 4=>12, 5=>2, 6=>1];
+            $criterioDeExito = [1=>1, 2=>10, 4=>5, 8=>3, 12=>2, 20=>1];
 
             foreach($routes as $key => $visitas):
                 
@@ -176,15 +176,13 @@ class CreateRouteCommand extends ContainerAwareCommand
                 $procesoCamion = $manager
                                  ->getRepository("AppBundle:ProcesoCamiones")
                                  ->findBy(['pcmOrden'=>$correlativoCam, 'proceso'=>$idProceso]);
-            
                 $camion = $procesoCamion[0]->getCamion();
+
                 $clientes = $visitas['Clientes'];
                 $jornadas = $visitas['Jornadas'];
 
                 $informeCamionClientes =[];
                 $totalDemanda = 0;
-
-
 
                 foreach($clientes as $clie):
 
@@ -192,11 +190,9 @@ class CreateRouteCommand extends ContainerAwareCommand
 
                     $informeTotalClientesProcesados = count($clie);
 
-
                     foreach($clie as $c):
 
                         $correlativoClie = (int)$c;
-
 
                          //Con el correlativo del cliente y el n° de proceso buscar idCliente
                         $procesoCliente = $manager
@@ -205,73 +201,58 @@ class CreateRouteCommand extends ContainerAwareCommand
                         
                         $cliente = $procesoCliente[0]->getCliente();
 
-
                         for($dia=1; $dia<=$totalDias; $dia++):
 
                             $trabajo = $jornadas['dia'][$dia][$correlativoClie];
                         
-                            $ruta = $manager
-                                        ->getRepository("AppBundle:Ruta")
-                                        ->buscarRutasDelDiaPorCamionYOperador(
-                                                date('Y-m-d',$fechas[$dia]),
-                                                $proceso->getEmpresa(),
-                                                $camion->getId(),
-                                                $camion->getOperador()
-                                        );
-
+                            $ruta = $manager->getRepository("AppBundle:Ruta")
+                                            ->buscarRutasDelDiaPorCamionYOperador(
+                                                    date('Y-m-d',$fechas[$dia]),
+                                                    $proceso->getEmpresa(),
+                                                    $camion->getId(),
+                                                    $camion->getOperador()
+                                            );
 
                             if($trabajo):
 
                                 if( !in_array($cliente->getId(), $informeCamionClientes) ){
                                     array_push($informeCamionClientes, $cliente->getId());
-                                    $totalDemanda +=  $cliente->getCliDemanda();
+                                    $totalDemanda+= $cliente->getCliDemanda();
                                 }
 
-                                if( !isset($totalVisitas[$cliente->getId()]))
+                                if( !isset($totalVisitas[$cliente->getId()])){
                                     $totalVisitas[$cliente->getId()] = 1;
-                                else
-                                    $totalVisitas[$cliente->getId()] = (int)$totalVisitas[$cliente->getId()] + 1;
-
+                                }else{
+                                    $totalVisitas[$cliente->getId()] = (int)$totalVisitas[$cliente->getId()]+1;
+                                }
 
                                 $titulo= 'Ruta de trabajo '.date('d/m/Y',$fechas[$dia]) .' [OP:'.$camion->getOperador()->getId().']';
                                 $ruta =(count($ruta) == 0)? new Ruta(): $ruta[0] ;
 
-                                $ruta
-                                    ->setRtaTitulo($titulo)
-                                    ->setRtaFecha(new \DateTime(date('Y-m-d H:s:i',$fechas[$dia])))
-                                    ->setProceso($proceso)
-                                    ->setOperador($camion->getOperador())
-                                    ->setCamion($camion);
+                                $fecha = new \DateTime(date('Y-m-d H:s:i',$fechas[$dia]));
 
+                                $ruta ->setRtaTitulo($titulo)->setRtaFecha($fecha)->setProceso($proceso)->setOperador($camion->getOperador())->setCamion($camion);
                                 $manager->persist($ruta);
                                 $manager->flush();
 
-                                $rutaDetalle = $manager
-                                               ->getRepository("AppBundle:RutaDetalle")
-                                               ->findBy( array('ruta'=>$ruta,'cliente'=>$cliente) );
+                                $rutaDetalle = $manager->getRepository("AppBundle:RutaDetalle")->findBy( array('ruta'=>$ruta,'cliente'=>$cliente) );
 
                                 $rutaDetalle =(count($rutaDetalle)==0)? new RutaDetalle() : $rutaDetalle[0];
 
-                                $rutaDetalle
-                                        ->setRdeLongitud($cliente->getCliLongitud())
-                                        ->setRdeLatitud($cliente->getCliLatitud())
-                                        ->setRdeEstado(0)
-                                        ->setRdeComentario('')
-                                         ->setRuta($ruta)
-                                         ->setCliente($cliente);
-
+                                $rutaDetalle->setRdeLongitud($cliente->getCliLongitud())->setRdeLatitud($cliente->getCliLatitud())->setRdeEstado(0)->setRdeComentario('')->setRuta($ruta)->setCliente($cliente);
                                 $manager->persist($rutaDetalle);
                                 $manager->flush();
 
                             else:
-                                
-                                if(count($ruta) > 0): 
+
+                                if(count($ruta) > 0):
+
                                     $ruta = $ruta[0];
                                 
                                     $rutaDetalle = $manager->getRepository("AppBundle:RutaDetalle")->findBy( array('ruta'=>$ruta,'cliente'=>$cliente) );
+
                                     if(count($rutaDetalle) > 0):
-                                            $rutaDetalle = $rutaDetalle[0];
-                                            $manager->remove($rutaDetalle);
+                                            $manager->remove($rutaDetalle[0]);
                                             $manager->flush();
                                     endif;
 
@@ -281,9 +262,11 @@ class CreateRouteCommand extends ContainerAwareCommand
                                         $manager->remove($ruta);
                                         $manager->flush();
                                     endif;
+
                                 endif;
                                 
                             endif;
+
                         endfor;
 
                         if( !isset($informeClientes[$cliente->getId()]))
@@ -291,7 +274,8 @@ class CreateRouteCommand extends ContainerAwareCommand
 
 
                         if(isset($totalVisitas[$cliente->getId()])):
-                            $metrica = (int)round( (20/$totalVisitas[$cliente->getId()]) );
+
+                            $metrica = (int)round( ($totalDias/$totalVisitas[$cliente->getId()]) );
                             $a = $metrica;
                             $b = $criterioDeExito[$frecuencia[$cliente->getFrecuencia()->getId()]];
                             $cumplido = false;
@@ -301,56 +285,65 @@ class CreateRouteCommand extends ContainerAwareCommand
                                 $informeTotalCumplidos++;
                             endif;
                         else:
+
                             $cumplido =false;
                             $metrica = 0;
                         endif;
 
-
                         $informeClientes[$cliente->getId()] = [
-                            "Frecuencia"=>$cliente->getFrecuencia()->getNombre(),
-                            "CantVisitasGeneradas"=>(isset($totalVisitas[$cliente->getId()]))?$totalVisitas[$cliente->getId()]:0,
-                            "VisitasEsperadas"=>$frecuencia[$cliente->getFrecuencia()->getId()],
+                            "id"=>$cliente->getId(),
+                            "correlativo"=>$correlativoClie,
+                            "frecuencia"=>$cliente->getFrecuencia()->getNombre(),
+                            "cantVisitasGeneradas"=>(isset($totalVisitas[$cliente->getId()]))?$totalVisitas[$cliente->getId()]:0,
+                            "visitasEsperadas"=>$frecuencia[$cliente->getFrecuencia()->getId()],
                             "criterioDeExito"=>$metrica,
-                            "Cumplido"=>$cumplido
+                            "cumplido"=>$cumplido
                         ];
-
-
 
                     endforeach;
                 endforeach;
 
-
                 if( !isset($informeCamiones[$camion->getId()]) )
                     $informeCamiones[$camion->getId()] = [
+                            "id"=>$camion->getId(),
+                            "correlativo"=>$correlativoCam,
                             "clientes"=>$informeCamionClientes,
-                            "TotalDemanda"=>$totalDemanda,
-                            "CapacidadCamion"=>$camion->getCamCapacidad()
+                            "totalDemanda"=>$totalDemanda,
+                            "capacidadCamion"=>$camion->getCamCapacidad()
                         ];
 
             endforeach;
 
 
             $informeResultados = [
+                        "total_clientes"=> $proceso->getPrcCantidadClientes(),
+                        "total_clientes_procesados"=>$informeTotalClientesProcesados,
+                        "cumplidos"=> $informeTotalCumplidos.'/'.$informeTotalClientesProcesados,
+                        "porcentajeCumplimiento"=>(int)round($informeTotalCumplidos * 100 / $informeTotalClientesProcesados)."%",
+                        "camiones" => $informeCamiones,
+                        "clientes" => $informeClientes
+                    ];
 
-                "total_clientes"=> $proceso->getPrcCantidadClientes(),
-                "total_clientes_procesados"=>$informeTotalClientesProcesados,
-                "camiones"=> $informeCamiones,
-                "clientes"=> $informeClientes,
-                "cumplidos"=> $informeTotalCumplidos.'/'.$informeTotalClientesProcesados,
 
-            ];
+            $informeResultados =  $this->getContainer()->get('twig')
+                ->render('AdminBundle:Data:resultados.html.twig',
+                    $informeResultados
+                );
+
+            //abrimos el archivo para agregar los contenidos
+            file_put_contents($absolutePath."data/".$nfile."_resultados.txt", $informeResultados);
 
             $output->writeln("Carga de datos finalizada, ahora puede ejecutar comando sarc:terminate-process", FILE_APPEND);
 
             $command = $this->getApplication()->find('sarc:terminate-process');
-                
+
             $arguments = array(
                 'command'   => 'sarc:terminate-process',
                 'file_name' => $fileName
             );
-        
+
             $greetInput = new ArrayInput($arguments);
-                
+
             $command->run($greetInput, $output);
         }else{
             $output->writeln("El archivo de salida no existe", FILE_APPEND);
