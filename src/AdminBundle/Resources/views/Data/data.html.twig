@@ -12,7 +12,6 @@ param capacidad:= #capacidad maxima del camion en contenedores
 {{ loop.index }} {{ camion.camCapacidad }}{% if loop.last %};{% endif %}   #id-camion[{{ camion.id }}]
 {% endfor %}
 
-set trisemanal;
 set diario {{ clieDiarios }};
 set disemanal {{ clieBisemanales }};
 set trisemanal {{ clieTrisemanales }};
