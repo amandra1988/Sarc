@@ -22,4 +22,18 @@ services:
             tags: [{ name: console.command }] # This makes it a command
             calls:
                 - [setContainer, ['@service_container']]
-
+    createroute.command:
+            class:  AdminBundle\Command\CreateRouteCommand
+            tags: [{ name: console.command }] # This makes it a command
+            calls:
+                - [setContainer, ['@service_container']]
+    terminateprocess.command:
+            class:  AdminBundle\Command\TerminateProcessCommand
+            tags: [{ name: console.command }] # This makes it a command
+            calls:
+                - [setContainer, ['@service_container']]
+    updateinfoprocess.command:
+            class:  AdminBundle\Command\UpdateInfoProcessCommand
+            tags: [{ name: console.command }] # This makes it a command
+            calls:
+                - [setContainer, ['@service_container']]

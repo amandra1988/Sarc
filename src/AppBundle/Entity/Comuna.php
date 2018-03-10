@@ -37,7 +37,7 @@ class Comuna
     /**
      * @ORM\ManyToOne(targetEntity="Provincia", inversedBy="comunas" )
      * @ORM\JoinColumn(name="prv_id", referencedColumnName="prv_id")
-     * * @JMS\SerializedName("provincia")
+     * @JMS\SerializedName("provincia")
      * @JMS\Groups({"r_comuna_provincia"})
      */
     protected $provincia;

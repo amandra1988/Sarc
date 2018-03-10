@@ -12,6 +12,8 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use Symfony\Component\Console\Output\BufferedOutput;
+
 /*
 1) bin/console sarc:switch-process IN_CREATE .dat     -- Crear el archvio .dat a partir de un proceso validado y con estado 0
 2) bin/console sarc:switch-process IN_CREATE .PID     -- Crear el archvio .PID actualiza el estado del proceso a 1 "En proceso"
@@ -24,7 +26,6 @@ class SwitchProcessCommand extends ContainerAwareCommand
     protected $_arguments;
     public function __construct()
     {
-    
         // you *must* call the parent constructor
         parent::__construct();
     }
@@ -40,69 +41,65 @@ class SwitchProcessCommand extends ContainerAwareCommand
   
     protected function execute(InputInterface $input, OutputInterface $output)
     {   
+        //validadamos que no se ha realizado el proceso.
+        $fs = new Filesystem();
 
-        $this->command = $this->getContainer();
+        $this->_execute = $this->getContainer();
+        
         //argregamos al log todos los parametros
         $logger = $this->getContainer()->get('logger');
-        $nameEvent = $input->getArgument('event');
-        $fileName = $input->getArgument('file_name');
-       
-        $typeEvent = array("IN_CREATE","IN_MODIFY","IN_DELETE");//validamos el primer paramétro
+        $nameEvent = ltrim($input->getArgument('event'), '"');
 
-        if (!in_array($nameEvent, $typeEvent)) {
-            $logger->info('SARC: ERROR No existe el evento indicado'.$nameEvent." ".$fileName);
-            throw new \RuntimeException("No existe el evento indicado ");
+        $fileName = str_replace('"','',$input->getArgument('file_name'));
+        $archivo = explode(".", $fileName);
+        $file = $archivo[0];
+
+
+        //obtenemos la ruta del modulo AdminBundle
+        $absolutePath =$this->getContainer()->get('kernel')->locateResource('@AdminBundle/Resources/');
+        //siempre borramos el archivo, temas cache
+        if($fs->exists($absolutePath."data/".$file.".end")){
+            $logger->info('SARC: ERROR proceso ya realizado');
+            throw new \RuntimeException("Proceso ya realizado");
         }
-
-        $typeExtension= array(
-            '.dat'=>"createdatafile.command", //solo debe ser a traves de cron
-            '.sol'=>"sarc:create-route",
-            '.PID'=>"sarc:update-info-process"
-        );
+  
+        $a = substr($fileName,strrpos($fileName,'.',-1),strlen($fileName));
+        $fileExtension = str_replace('"','',$a);
         
-        //validamos el segundo parámetro
-        $str = strpos($fileName, '.');
-        //obtenemos la extensión del archivo, donde el limite es el punto en el nombre
-        $fileExtension = substr($fileName,strrpos($fileName,'.',-1),strlen($fileName));
+        if($fs->exists($absolutePath."data/".$file.".PID")){
+            
+            $logger->info($nameEvent .$fileName. $fileExtension);
 
-        if ($str === false) {
-            $logger->info('SARC: ERROR El segundo parametro (nombre del archivo), debe tener el separador' . $nameEvent . " " . $fileName);
-            throw new \RuntimeException("El segundo parametro (nombre del archivo), debe tener el separador '.' ");
-        }else{
-            //Debe existir en el array $typeExtension
-            if (!array_key_exists($fileExtension, $typeExtension)) {
-                $logger->info('SARC: ERROR El segundo parametro (nombre del archivo), no tiene una extension conocida ' . $nameEvent . " " . $fileName);
-                throw new \RuntimeException("El segundo parametro (nombre del archivo), no tiene una extension conocida");
+            if($fileExtension == ".sol"  && $nameEvent == "IN_CREATE"){
+
+                $logger->info('SARC sol');
+                $this->_execute = $this->getContainer()->get("createroute.command");
+
+                $this->_arguments = array(
+                    'file_name' => $fileName
+                );
+                //obtnemos los parametros del comando
+                $greetInput = new ArrayInput($this->_arguments);
+                //ejecutamos el comando
+                $output = new BufferedOutput();
+
+                $this->_execute ->run($greetInput , $output);
+                $content = $output->fetch();
+                $logger->info('SARC eee' .$content);
+            }
+
+            if ($fileExtension == ".PID" && $nameEvent == "IN_MODIFY"){
+                $this->_execute = $this->getContainer()->get("updateinfoprocess.command");
+                $logger->info('SARC IN_MODIFY: '. $nameEvent . " " . $fileName);
+
+                $this->_arguments = array(
+                    'file_name' => $fileName
+                );
+                //obtnemos los parametros del comando
+                $greetInput = new ArrayInput($this->_arguments);
+                //ejecutamos el comando
+                $this->_execute->run($greetInput , $output);
             }
         }
-
-       if ($nameEvent == "IN_CREATE"){
-            $this->_execute = $this->getContainer()->get('create.command');
-            $this->_arguments = array(
-                'file_name' => $fileExtension
-            );
-            $logger->info('SARC: '. $nameEvent . " " . $fileName);
-       }
-
-       if ($nameEvent == "IN_MODIFY"){
-            $this->_execute = $this->getContainer()->get('sarc:update-info-process');
-            $this->_arguments = array(
-                'file_name' => $fileExtension
-            );
-            $logger->info('SARC: '. $nameEvent . " " . $fileName);
-       }
-
-       if ($nameEvent == "IN_DELETE"){
-            $this->_execute = $this->getContainer()->get('sarc:terminate-process');
-            $this->_arguments = array(
-                'file_name' => $fileExtension
-            );
-            $logger->info('SARC: '. $nameEvent . " " . $fileName);
-        }
-
-        //obtnemos los parametros del comando
-        $greetInput = new ArrayInput($this->_arguments);
-        //ejecutamos el comando
-        $this->_execute->run($greetInput , $output);
     }
 }

@@ -3,31 +3,34 @@
         <button type="submit" class="btn btn-success arriba" ng-click="nuevoCamion()" >
             <span class="glyphicon glyphicon-plus"></span> Agregar camión
         </button>
+        <br>
+    
+        <div class="filtros col-lg-4">
+            <input type="text" ng-model="busqueda" class="form-control" placeholder="Búsqueda: Ingrese lo que desea buscar">
+        </div>
+
         <div class="scroll">
             <table class="table">
                 <tr>
-                    <th width="5%">#</th>
-                    <th width="20%">Operador</th>
-                    <th width="10%">Patente</th>
-                    <th width="10%">Capacidad</th>
-                    <th width="20%">Tipo de carga</th>
-                    <th width="15%">Estado</th>
-                    <th width="10%">Acciones</th>
+                    <th width="5%"  class="pointer"><a ng-click="columna='codigo'; reverse = !reverse;">#</a></th>
+                    <th width="20%" class="pointer"><a ng-click="columna='operador'; reverse = !reverse;">Operador</a></th>
+                    <th width="10%" class="pointer"><a ng-click="columna='patente'; reverse = !reverse;">Patente</a></th>
+                    <th width="10%" class="pointer"><a ng-click="columna='capacidad'; reverse = !reverse;">Capacidad</a></th>
+                    <th width="20%" class="pointer"><a ng-click="columna='carga'; reverse = !reverse;">Tipo de carga</a></th>
+                    <th width="15%" class="pointer"><a ng-click="columna='estado'; reverse = !reverse;">Estado</a></th>
+                    <th width="10%" >Acciones</th>
                 </tr>
-                <tr ng-repeat="x in camiones">
+                <tr ng-repeat="x in camiones | filter:busqueda | orderBy:columna:reverse">
                     <td class="data">{{ x.id_camion }}</td> 
                     <td class="data">{{ x.camion_operador.nombre_operador +' '+ x.camion_operador.apellido_operador}}</td>
                     <td ng-pointer class="data">{{ x.patente_camion}}</td>
                     <td ng-pointer class="data">{{ x.capacidad_camion }}</td>
-                    
                     <td ng-pointer class="data">{{x.tipo_carga_camion | tipoCarga:'Especial':'Peligrosa'}}</td>
-                    <!-- <td ng-pointer class="data" ng-if="x.tipo_carga_camion === 2">Peligrosa</td>-->
-                    
                     <td ng-pointer class="data" ng-if="x.estado_camion === true">Operativo</td>
                     <td ng-pointer class="data" ng-if="x.estado_camion === false">Fuera de servicio</td>
                     
                     <td align='center'>
-			<!--<i class="fa fa-lock" ng-click="camionOperativo( x.id_camion ,x.estado_camion )"></i>-->
+			            <!--<i class="fa fa-lock" ng-click="camionOperativo( x.id_camion ,x.estado_camion )"></i>-->
                         <i class="fa fa-edit fa-2x" ng-click="editarCamion( x.id_camion )"></i>
                         <i class="fa fa-trash fa-2x" ng-click="eliminarCamion( x.id_camion )"></i>
                     </td>

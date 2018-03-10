@@ -27,7 +27,7 @@ class Proceso
     /**
      * @var datetime
      *
-     * @ORM\Column(name="prc_fecha", type="datetime")
+     * @ORM\Column(name="prc_fecha", type="datetime", nullable=true)
      * @JMS\SerializedName("fecha_proceso")
      * @JMS\Groups({"proceso_detalle","proceso_lista"})
      */
@@ -74,7 +74,7 @@ class Proceso
     /**
      * @var datetime
      *
-     * @ORM\Column(name="prc_termino", type="datetime")
+     * @ORM\Column(name="prc_termino", type="datetime", nullable=true)
      * @JMS\SerializedName("termino_proceso")
      * @JMS\Groups({"proceso_detalle","proceso_lista"})
      */
@@ -93,6 +93,16 @@ class Proceso
      */
     protected $empresa;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="ProcesoClientes", mappedBy="proceso")
+     */
+    protected $procesoClientes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ProcesoCamiones", mappedBy="proceso")
+     */
+    protected $procesoCamiones;
 
     /**
      * Get id
@@ -311,5 +321,73 @@ class Proceso
     public function getEmpresa()
     {
         return $this->empresa;
+    }
+
+    /**
+     * Add procesoCliente
+     *
+     * @param \AppBundle\Entity\ProcesoClientes $procesoCliente
+     *
+     * @return Proceso
+     */
+    public function addProcesoCliente(\AppBundle\Entity\ProcesoClientes $procesoCliente)
+    {
+        $this->procesoClientes[] = $procesoCliente;
+
+        return $this;
+    }
+
+    /**
+     * Remove procesoCliente
+     *
+     * @param \AppBundle\Entity\ProcesoClientes $procesoCliente
+     */
+    public function removeProcesoCliente(\AppBundle\Entity\ProcesoClientes $procesoCliente)
+    {
+        $this->procesoClientes->removeElement($procesoCliente);
+    }
+
+    /**
+     * Get procesoClientes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProcesoClientes()
+    {
+        return $this->procesoClientes;
+    }
+
+    /**
+     * Add procesoCamione
+     *
+     * @param \AppBundle\Entity\ProcesoCamiones $procesoCamione
+     *
+     * @return Proceso
+     */
+    public function addProcesoCamione(\AppBundle\Entity\ProcesoCamiones $procesoCamione)
+    {
+        $this->procesoCamiones[] = $procesoCamione;
+
+        return $this;
+    }
+
+    /**
+     * Remove procesoCamione
+     *
+     * @param \AppBundle\Entity\ProcesoCamiones $procesoCamione
+     */
+    public function removeProcesoCamione(\AppBundle\Entity\ProcesoCamiones $procesoCamione)
+    {
+        $this->procesoCamiones->removeElement($procesoCamione);
+    }
+
+    /**
+     * Get procesoCamiones
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProcesoCamiones()
+    {
+        return $this->procesoCamiones;
     }
 }

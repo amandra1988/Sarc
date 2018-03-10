@@ -110,22 +110,22 @@ span.round-tabs.one{
     color: rgb(34, 194, 34); border: 3px solid #03add9;
 }
 span.round-tabs.two{
-    color: #5eb34d; border: 3px solid #31B404;
+    color: #5eb34d; border: 3px solid #FFFF00;
 }
 span.round-tabs.three{
-    color: #3e5e9a;border: 3px solid #3e5e9a;
+    color: #3e5e9a;border: 3px solid #FFFF00;
 }
 span.round-tabs.four{
     color: #f1685e;border: 3px solid #FFFF00;
 }
 span.round-tabs.five{
-    color: #f1685e;border: 3px solid #FE9A2E;
+    color: #f1685e;border: 3px solid #FFFF00;
 }
 span.round-tabs.six{
-    color: #999;border: 3px solid #01A9DB;
+    color: #999;border: 3px solid #FFFF00;
 }
 span.round-tabs.seven{
-    color: #999;border: 3px solid #000000;
+    color: #999;border: 3px solid #FFFF00;
 }
 span.round-tabs.eigth{
     border: 3px solid red;
@@ -229,4 +229,12 @@ padding-top: 50px;
 .nav-tabs > li {
     float: left;
     margin-bottom: -9px;
+}
+
+
+.filtros{
+    font-weight: bold;
+    margin-top: -33px;
+    margin-left: 170px;
+    float: initial;
 }

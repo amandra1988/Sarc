@@ -13,8 +13,10 @@ function ($timeout,$scope,ProcesoFactory,$uibModal,urlBasePartials,idEmpresa,url
         $scope.valida=[];
         $scope.valida[0] = urlBaseImg+"validar.png";
         $scope.valida[1] = urlBaseImg+"invalidar.png";
+        $scope.valida[2] = urlBaseImg+"espera.png";
+        $scope.valida[3] = urlBaseImg+"finalizar.png";
         $scope.mensaje ='';
-        $scope.ejecucion = false;
+        $scope.class='success';
         
         $scope.help =  function(modulo){
             $scope.modulo = modulo;
@@ -61,6 +63,7 @@ function ($timeout,$scope,ProcesoFactory,$uibModal,urlBasePartials,idEmpresa,url
             v.accion = 1;
             v.$save({idEmpresa:idEmpresa}, function(response) {
                 if(response.mensaje){
+                    $scope.class='success';
                     $scope.mensaje = response.mensaje;
                     $scope.listaDeProcesos();
                     $timeout(function() {
@@ -75,12 +78,12 @@ function ($timeout,$scope,ProcesoFactory,$uibModal,urlBasePartials,idEmpresa,url
            v.accion = 2;
            v.$save({idEmpresa:idEmpresa}, function(response) {
                if(response.mensaje){
-                   $scope.ejecucion = true;
-                   
-                    $timeout(function() {
-                        $scope.ejecucion = false;
-                    },2000);
-                    
+                   $scope.class='info';
+                   $scope.mensaje = response.mensaje;
+                   $timeout(function() {
+                       $scope.listaDeProcesos();
+                       $scope.mensaje="";
+                   },2000);
                }
            });
         };        

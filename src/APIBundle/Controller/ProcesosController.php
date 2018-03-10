@@ -35,38 +35,44 @@ class ProcesosController extends APIBaseController
     public function postEmpresasProcesosAction(Request $request,Empresa $empresa){
         $groups = '';
         $respuesta=[];
-
         $logger = $this->container->get('logger');
-        if($request->get('accion')=== 1){
-            $clientes= $this->getDoctrine()->getRepository('AppBundle:Cliente')->obtenerClientesDeLaEmpresa($empresa->getId());
-            $respuesta['mensaje'] = $this->getDoctrine()->getRepository('AppBundle:Proceso')->agregarActualizarProceso($empresa,$clientes);
-        }else{
-           
-            $respuesta['mensaje'] ="Ejecutar proceso";
 
+        try {
 
-            $command = $this->get('switch.command');
-
-            $input = new ArrayInput(array(
-                //'command' => 'sarc:switch-process',
-                // (optional) define the value of command arguments
-                'event' => 'IN_CREATE',
-                'file_name' => "hola.dat"
-             ));
-            $output = new BufferedOutput();
-            $command->run($input,$output);
-            echo "gggggggg"; 
-            $content = $output->fetch();
-           // $logger->info('SARC: creado'); 
+            if($request->get('accion')=== 1){
+                $clientes= $this->getDoctrine()->getRepository('AppBundle:Cliente')->obtenerClientesDeLaEmpresa($empresa->getId());
+                $respuesta['mensaje'] = $this->getDoctrine()->getRepository('AppBundle:Proceso')->agregarActualizarProceso($empresa,$clientes);
+            }else{
+                $error ='';
+                $proceso = $this->getDoctrine()->getRepository("AppBundle:Proceso")->procesoEnEsperaDeEjecucion(1,0);
+                if(count($proceso)){
+                    $fecha = date('dmY') ;
+                    $fileName = $proceso[0]->getId().'_'.$fecha;
+                    $command = $this->get('create.command');
+                    $input = new ArrayInput(array(
+                        'file_name' =>  $fileName
+                    ));
+                    $output = new BufferedOutput();
+                    $command->run($input,$output);
+                    $content = $output->fetch();
+                }else{
+                    $content = 'No existe proceso con estado "En espera" y validado.';
+                }
+                $respuesta['mensaje'] = $content;
+            }
         }
-        
+        catch(Exception $e) {
+            $respuesta['mensaje'] = $e->getMessage();
+        }
         return $this->serializedResponse($respuesta, $groups);
-        
     }
 
     public function patchEmpresasProcesosAction(Request $request,Empresa $empresa){
+
         $groups = ['proceso_detalle'];
+
         $proceso = $this->getDoctrine()->getRepository('AppBundle:Proceso')->find($request->get('idproceso'));
+
         $proceso->setPrcValidado($request->get('validar'));
         if($request->get('validar')){
             $proceso->setPrcObservacion('Proceso validado y a la espera de ejecución');
@@ -78,14 +84,6 @@ class ProcesosController extends APIBaseController
         $em->persist($proceso);
         $em->flush();
 
-        /*if($request->get('validar')){
-            $command = new CreateDataFileCommand();
-            $application = new Application();
-            $application->add($command);
-            $application->setDefaultCommand($command->getName());
-            $application->run();
-        }*/
-        
         return $this->serializedResponse($proceso, $groups);
     }
     

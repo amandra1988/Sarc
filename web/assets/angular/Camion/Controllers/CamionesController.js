@@ -85,6 +85,16 @@ angular.module('admin-camiones')
             modalInstance.result.then(function()
             {
                 var c = new CamionFactory();
+                for(var i=0,len=$scope.camiones.length; i<len;i++)
+                {
+                    if($scope.camiones[i].id_camion === id) {
+                        c.patente = $scope.camiones[i].patente_camion ;
+                        c.capacidad = $scope.camiones[i].capacidad_camion ;
+                        c.estado = $scope.camiones[i].estado_camion ;
+                        break;
+                    }
+                }
+
                 c.visible = 0;
                 c.$patch({idEmpresa:idEmpresa,idCamion:id}, function(response) {
                     $scope.listaDeCamiones();

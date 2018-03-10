@@ -1,0 +1,49 @@
+** ******************************************************************* **
+** *********************  Resultados generales *********************** **
+** ******************************************************************* **
+
+Total de clientes del procesados       : {{ total_clientes }};
+Total de clientes realmente procesados : {{ total_clientes_procesados }};
+Clientes con visita generada           : {{ cumplidos }};
+Cumplimiento de visitas                : {{ porcentajeCumplimiento }};
+
+** ******************************************************************* **
+** *********************  Resultados por camión ********************** **
+** ******************************************************************* **
+{% for camion in camiones %}
+
+---------------------------------------------
+-- ----------   Camion ID [ {{ camion.id }} ] ---------- --
+---------------------------------------------
+Correlativo      : {{ camion.correlativo }}
+Clientes         :
+{% if camion.clientes|length > 0 %}
+    {% for cliente in  camion.clientes %}
+        Cliente ID => {{ cliente }}
+    {% endfor %}
+{% else %}
+     ** Sin clientes asignados **
+{% endif %}
+
+Total demanda    : {{ camion.totalDemanda }}
+Capacidad camión : {{ camion.capacidadCamion }}
+{% endfor %}
+
+
+
+** ******************************************************************* **
+** ********************  Resultados por cliente ********************** **
+** ******************************************************************* **
+{% for cliente in clientes %}
+
+---------------------------------------------
+-- ----------  cliente ID [ {{ cliente.id }} ] ---------- --
+---------------------------------------------
+Correlativo        : {{ cliente.correlativo }}
+Frecuencia         : {{ cliente.frecuencia }}
+Visitas generadas  : {{ cliente.cantVisitasGeneradas }}
+Visitas esperadas  : {{ cliente.visitasEsperadas }}
+Críterio de éxito  : {{ cliente.criterioDeExito }}
+Objetivo Cumplido  : {% if cliente.cumplido %}Sí!{% else %}No{% endif %}
+{% endfor %}
+

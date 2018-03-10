@@ -1,0 +1,140 @@
+** ******************************************************************* **
+** *********************  Resultados generales *********************** **
+** ******************************************************************* **
+
+Total de clientes del procesados       : 10;
+Total de clientes realmente procesados : 10;
+Clientes con visita generada           : 2/10;
+Cumplimiento de visitas                : 20%;
+
+** ******************************************************************* **
+** *********************  Resultados por camión ********************** **
+** ******************************************************************* **
+
+---------------------------------------------
+-- ----------   Camion ID [ 1 ] ---------- --
+---------------------------------------------
+Correlativo      : 1
+Clientes         :
+     ** Sin clientes asignados **
+
+Total demanda    : 0
+Capacidad camión : 100
+
+---------------------------------------------
+-- ----------   Camion ID [ 2 ] ---------- --
+---------------------------------------------
+Correlativo      : 2
+Clientes         :
+            Cliente ID => 1
+            Cliente ID => 4
+    
+Total demanda    : 4.363125
+Capacidad camión : 50
+
+---------------------------------------------
+-- ----------   Camion ID [ 3 ] ---------- --
+---------------------------------------------
+Correlativo      : 3
+Clientes         :
+     ** Sin clientes asignados **
+
+Total demanda    : 0
+Capacidad camión : 60
+
+
+
+** ******************************************************************* **
+** ********************  Resultados por cliente ********************** **
+** ******************************************************************* **
+
+---------------------------------------------
+-- ----------  cliente ID [ 1 ] ---------- --
+---------------------------------------------
+Correlativo        : 1
+Frecuencia         : Bisemanal
+Visitas generadas  : 8
+Visitas esperadas  : 8
+Críterio de éxito  : 3
+Objetivo Cumplido  : Sí!
+---------------------------------------------
+-- ----------  cliente ID [ 2 ] ---------- --
+---------------------------------------------
+Correlativo        : 2
+Frecuencia         : Bisemanal
+Visitas generadas  : 0
+Visitas esperadas  : 8
+Críterio de éxito  : 0
+Objetivo Cumplido  : No
+---------------------------------------------
+-- ----------  cliente ID [ 3 ] ---------- --
+---------------------------------------------
+Correlativo        : 3
+Frecuencia         : Semanal
+Visitas generadas  : 0
+Visitas esperadas  : 4
+Críterio de éxito  : 0
+Objetivo Cumplido  : No
+---------------------------------------------
+-- ----------  cliente ID [ 4 ] ---------- --
+---------------------------------------------
+Correlativo        : 4
+Frecuencia         : Semanal
+Visitas generadas  : 4
+Visitas esperadas  : 4
+Críterio de éxito  : 5
+Objetivo Cumplido  : Sí!
+---------------------------------------------
+-- ----------  cliente ID [ 5 ] ---------- --
+---------------------------------------------
+Correlativo        : 5
+Frecuencia         : Semanal
+Visitas generadas  : 0
+Visitas esperadas  : 4
+Críterio de éxito  : 0
+Objetivo Cumplido  : No
+---------------------------------------------
+-- ----------  cliente ID [ 6 ] ---------- --
+---------------------------------------------
+Correlativo        : 6
+Frecuencia         : Semanal
+Visitas generadas  : 0
+Visitas esperadas  : 4
+Críterio de éxito  : 0
+Objetivo Cumplido  : No
+---------------------------------------------
+-- ----------  cliente ID [ 7 ] ---------- --
+---------------------------------------------
+Correlativo        : 7
+Frecuencia         : Semanal
+Visitas generadas  : 0
+Visitas esperadas  : 4
+Críterio de éxito  : 0
+Objetivo Cumplido  : No
+---------------------------------------------
+-- ----------  cliente ID [ 8 ] ---------- --
+---------------------------------------------
+Correlativo        : 8
+Frecuencia         : Mensual
+Visitas generadas  : 0
+Visitas esperadas  : 1
+Críterio de éxito  : 0
+Objetivo Cumplido  : No
+---------------------------------------------
+-- ----------  cliente ID [ 9 ] ---------- --
+---------------------------------------------
+Correlativo        : 9
+Frecuencia         : Quincenal
+Visitas generadas  : 0
+Visitas esperadas  : 2
+Críterio de éxito  : 0
+Objetivo Cumplido  : No
+---------------------------------------------
+-- ----------  cliente ID [ 10 ] ---------- --
+---------------------------------------------
+Correlativo        : 10
+Frecuencia         : Semanal
+Visitas generadas  : 0
+Visitas esperadas  : 4
+Críterio de éxito  : 0
+Objetivo Cumplido  : No

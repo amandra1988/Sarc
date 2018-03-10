@@ -83,13 +83,21 @@ class CentroDeAcopio
     /**
      * @var string
      *
-     * @ORM\Column(name="cen_theta", type="string", length=20)
-     * @JMS\SerializedName("theta_centro")
+     * @ORM\Column(name="cen_x", type="string", length=20)
+     * @JMS\SerializedName("centro_x")
      * @JMS\Groups({"centro_detalle","centro_lista"})
      */
-     private $cenTheta;
+     private $cenX;
+     
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cen_y", type="string", length=20)
+     * @JMS\SerializedName("centro_y")
+     * @JMS\Groups({"centro_detalle","centro_lista"})
+     */
+     private $cenY;
 
-    
     /**
      * Get id
      *
@@ -287,26 +295,50 @@ class CentroDeAcopio
     }
 
     /**
-     * Set cenTheta
+     * Set cenX
      *
-     * @param string $cenTheta
+     * @param string $cenX
      *
      * @return CentroDeAcopio
      */
-    public function setCenTheta($cenTheta)
+    public function setCenX($cenX)
     {
-        $this->cenTheta = $cenTheta;
+        $this->cenX = $cenX;
 
         return $this;
     }
 
     /**
-     * Get cenTheta
+     * Get cenX
      *
      * @return string
      */
-    public function getCenTheta()
+    public function getCenX()
     {
-        return $this->cenTheta;
+        return $this->cenX;
+    }
+
+    /**
+     * Set cenY
+     *
+     * @param string $cenY
+     *
+     * @return CentroDeAcopio
+     */
+    public function setCenY($cenY)
+    {
+        $this->cenY = $cenY;
+
+        return $this;
+    }
+
+    /**
+     * Get cenY
+     *
+     * @return string
+     */
+    public function getCenY()
+    {
+        return $this->cenY;
     }
 }
