@@ -62,10 +62,6 @@ function ($timeout,$scope,ProcesoFactory,$uibModal,urlBasePartials,idEmpresa,url
             var v = new ProcesoFactory();
             v.accion = 1;
             v.$save({idEmpresa:idEmpresa}, function(response) {
-                
-                console.log(response.mensaje);
-                
-                
                 if(response.mensaje){
                     $scope.class='success';
                     $scope.mensaje = response.mensaje;
