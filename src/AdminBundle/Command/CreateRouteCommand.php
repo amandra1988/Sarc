@@ -166,7 +166,16 @@ class CreateRouteCommand extends ContainerAwareCommand
             $informeCamiones = [];
             $totalVisitas = [];
             $frecuencia = [1=>20, 2=>4, 3=>8, 4=>12, 5=>2, 6=>1];
-            $criterioDeExito = [1=>1, 2=>10, 4=>5, 8=>3, 12=>2, 20=>1];
+            $criterioDeExito = [1=>1, 2=>5, 3=>3, 4=>2, 5=>10, 6=>20];
+            /*
+                '1'=>'Diaria'     : (20/20) = round(1)
+                '2'=>'Semanal'    : (20/4)  = round(5)
+                '3'=>'Bisemanal'  : (20/8)  = round(2.5)    => 3
+                '4'=>'Trisemanal' : (20/12) = round(1.6667) => 2
+                '5'=>'Quincenal'  : (20/2)  = round(1) =10
+                '6'=>'Mensual'    : (20/1)  = round(1) =20
+            */
+
 
             foreach($routes as $key => $visitas):
                 
