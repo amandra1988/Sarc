@@ -4,7 +4,7 @@ app.filter('estadoproceso', function() {
 	return function(numero) {
         var estados = ['En espera','En proceso','Error','Finalizado']; 
 		return estados[numero];
-	}
+	};
 });
 
 app.controller('ProcesoController',['$timeout','$scope','ProcesoFactory','$uibModal','urlBasePartials','idEmpresa','urlBaseImg',
@@ -74,6 +74,7 @@ function ($timeout,$scope,ProcesoFactory,$uibModal,urlBasePartials,idEmpresa,url
         };
        
         $scope.ejecutarProceso = function(){
+            
            var v = new ProcesoFactory();
            v.accion = 2;
            v.$save({idEmpresa:idEmpresa}, function(response) {

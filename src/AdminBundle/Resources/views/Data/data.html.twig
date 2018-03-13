@@ -21,16 +21,16 @@ set mensual {{ clieMensuales }};
 
 param theta:=
 {% for theta in clientes %}
-{{ theta.id }}   {{ theta.cliTheta}}{% if loop.last %};{% endif %}   
+{{ loop.index }} {{ theta.cliTheta}}{% if loop.last %};{% endif %}   
 {% endfor %}
 
 
 param demanda :=
 {% for demanda in clientes %}
-{{ demanda.id }}   {{ demanda.cliDemanda }}{% if loop.last %};{% endif %}   
+{{ loop.index }} {{ demanda.cliDemanda }}{% if loop.last %};{% endif %}   
 {% endfor %}
 
 param frecuencia :=
 {% for frecuencia in clientes %}
-{{ frecuencia.id }}   {{ frecuencias[frecuencia.frecuencia.id] }}{% if loop.last %};{% endif %}     
+{{ loop.index }} {{ frecuencias[frecuencia.frecuencia.id] }}{% if loop.last %};{% endif %}     
 {% endfor %}

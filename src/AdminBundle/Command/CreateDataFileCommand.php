@@ -110,22 +110,22 @@ class CreateDataFileCommand extends ContainerAwareCommand
                 $manager->flush();
 
                 if($cliente->getFrecuencia()->getId() == 1)
-                    $diarios.= $cliente->getId().',';
+                    $diarios.= $orden.',';
 
                 if($cliente->getFrecuencia()->getId() == 2)
-                    $semanales.= $cliente->getId().',';
+                    $semanales.= $orden.',';
                 
                 if($cliente->getFrecuencia()->getId() == 3)
-                    $bisemanales.= $cliente->getId().',';
+                    $bisemanales.= $orden.',';
 
                 if($cliente->getFrecuencia()->getId() == 4)
-                    $trisemanales.= $cliente->getId().',';
+                    $trisemanales.= $orden.',';
                 
                 if($cliente->getFrecuencia()->getId() == 5)
-                    $quincenales.= $cliente->getId().',';
+                    $quincenales.= $orden.',';
                 
                 if($cliente->getFrecuencia()->getId() == 6)
-                    $mensuales.= $cliente->getId().',';
+                    $mensuales.= $orden.',';
             }
 
             $orden = 0;
@@ -192,20 +192,21 @@ class CreateDataFileCommand extends ContainerAwareCommand
             //abrimos el archivo para agregar los contenidos
             file_put_contents($absolutePath."data/".$fileName.".mod", $text_file_mod);
 
+            $proceso->setPrcEstado(1)->setPrcObservacion("Generando rutas de trabajo...");
+            $manager->persist($proceso);
+            $manager->flush();
+            
+            $output->writeln("La carga de rutas de trabajo ha comenzado. Este proceso puede tardar.", FILE_APPEND);
+            
             //llamar a ampl
             $process = new Process('ampl '.$absolutePath."data/".$fileName.".run > ".$absolutePath."data/".$fileName.".sol");
             $process->run();
 
             // executes after the command finishes
             if (!$process->isSuccessful()) {
-               throw new ProcessFailedException($process);
+                throw new ProcessFailedException($process);
             }
 
-            $proceso->setPrcEstado(1)->setPrcObservacion("Generando rutas de trabajo...");
-            $manager->persist($proceso);
-            $manager->flush();
-
-            $output->writeln("La carga de rutas de trabajo ha comenzado. Este proceso puede tardar.", FILE_APPEND);
         }else{
             $output->writeln("No existe proceso con estado \"En espera\" y validado.", FILE_APPEND);
         }

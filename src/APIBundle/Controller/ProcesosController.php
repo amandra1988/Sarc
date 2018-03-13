@@ -5,10 +5,7 @@ use AppBundle\Entity\Empresa;
 use AppBundle\Entity\Cliente;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-/*
-use AdminBundle\Command\CreateDataFileCommand;
-use Symfony\Component\Console\Application;
-*/
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -36,9 +33,7 @@ class ProcesosController extends APIBaseController
         $groups = '';
         $respuesta=[];
         $logger = $this->container->get('logger');
-
         try {
-
             if($request->get('accion')=== 1){
                 $clientes= $this->getDoctrine()->getRepository('AppBundle:Cliente')->obtenerClientesDeLaEmpresa($empresa->getId());
                 $respuesta['mensaje'] = $this->getDoctrine()->getRepository('AppBundle:Proceso')->agregarActualizarProceso($empresa,$clientes);
@@ -86,7 +81,4 @@ class ProcesosController extends APIBaseController
 
         return $this->serializedResponse($proceso, $groups);
     }
-    
-    
-    
 }

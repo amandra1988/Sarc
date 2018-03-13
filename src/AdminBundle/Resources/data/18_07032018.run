@@ -1,6 +1,0 @@
-reset;
-model /var/www/html/saarc/src/AdminBundle/Resources/data/18_07032018.mod;
-data /var/www/html/saarc/src/AdminBundle/Resources/data/18_07032018.dat;
-option solver scipampl; 
-solve;
-display y;
