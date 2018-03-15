@@ -34,6 +34,7 @@ class CamionesController extends APIBaseController
         $camion->setCamEstado(1);
         $camion->setCamTipoCarga($request->get('tipo_carga'));
         $camion->setCamVisible(true);
+        $camion->setCamEstado(((int)$request->get('estado')> 0)?true:false);
         $camion->setCamCapacidad($request->get('capacidad'));
         $em = $this->getDoctrine()->getManager();
         $em->persist($camion);
@@ -52,7 +53,7 @@ class CamionesController extends APIBaseController
 
         $camion->setCamPatente($request->get('patente'))
                ->setCamCapacidad($request->get('capacidad'))
-               ->setCamEstado($request->get('estado'))
+               ->setCamEstado(((int)$request->get('estado')>0)?true:false)
                ->setCamTipoCarga($request->get('tipo_carga'))
                ->setCamVisible($request->get('visible'));
         

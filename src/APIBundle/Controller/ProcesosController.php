@@ -21,7 +21,9 @@ class ProcesosController extends APIBaseController
     * @return Response La respuesta serializada
     */
     public function getEmpresasProcesosAction(Request $request,Empresa $empresa){
-        $groups = ['proceso_detalle'];
+
+        $groups = ['proceso_detalle','r_procesos_region','region_detalle'];
+
         if(is_array($request->get('expand'))){
             $groups = array_merge($groups, $request->get('expand'));
         }
@@ -30,30 +32,65 @@ class ProcesosController extends APIBaseController
     }
 
     public function postEmpresasProcesosAction(Request $request,Empresa $empresa){
+
         $groups = '';
         $respuesta=[];
         $logger = $this->container->get('logger');
+
+
+
+
         try {
-            if($request->get('accion')=== 1){
-                $clientes= $this->getDoctrine()->getRepository('AppBundle:Cliente')->obtenerClientesDeLaEmpresa($empresa->getId());
-                $respuesta['mensaje'] = $this->getDoctrine()->getRepository('AppBundle:Proceso')->agregarActualizarProceso($empresa,$clientes);
-            }else{
-                $error ='';
-                $proceso = $this->getDoctrine()->getRepository("AppBundle:Proceso")->procesoEnEsperaDeEjecucion(1,0);
-                if(count($proceso)){
-                    $fecha = date('dmY') ;
-                    $fileName = $proceso[0]->getId().'_'.$fecha;
-                    $command = $this->get('create.command');
-                    $input = new ArrayInput(array(
-                        'file_name' =>  $fileName
-                    ));
-                    $output = new BufferedOutput();
-                    $command->run($input,$output);
-                    $content = $output->fetch();
-                }else{
-                    $content = 'No existe proceso con estado "En espera" y validado.';
+
+            if($request->get('accion') == 1){
+
+                $region = NULL;
+
+                if($request->get('region')){
+                    $region = $this->getDoctrine()->getRepository('AppBundle:Region')->find($request->get('region'));
                 }
-                $respuesta['mensaje'] = $content;
+
+                $clientes= $this->getDoctrine()->getRepository('AppBundle:Cliente')->obtenerClientesDeLaEmpresa($empresa,$region);
+
+                if(count($clientes) ==  0){
+                    $respuesta['mensaje'] = "No existen clientes " ;
+
+                    if($region)
+                        $respuesta['mensaje'] .= "en la ". $region->getRegNombre();
+
+                    $respuesta['mensaje'] .= ". No es posible crear el proceso.";
+
+                }else{
+                    $respuesta['mensaje'] = $this->getDoctrine()->getRepository('AppBundle:Proceso')->agregarActualizarProceso($empresa,$clientes,$region);
+                }
+
+            }else{
+
+                $error ='';
+                if( $request->get('proceso') )
+                {
+                    $id = $request->get('proceso');
+                    $proceso = $this->getDoctrine()->getRepository("AppBundle:Proceso")->find($id);
+
+                    if(count($proceso)){
+
+                        $fecha = date('dmY') ;
+                        $fileName = $proceso->getId().'_'.$fecha;
+                        $command = $this->get('create.command');
+                        $input = new ArrayInput(array(
+                            'file_name' =>  $fileName
+                        ));
+                        $output = new BufferedOutput();
+                        $command->run($input,$output);
+                        $content = $output->fetch();
+
+                    }else{
+                        $content = 'No existe proceso con estado "En espera" y validado.';
+                    }
+                    $respuesta['mensaje'] = $content;
+                }else{
+                    $respuesta['mensaje'] = "Falta el código del proceso a ejecutar";
+                }
             }
         }
         catch(Exception $e) {

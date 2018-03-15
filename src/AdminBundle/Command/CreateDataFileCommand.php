@@ -87,13 +87,14 @@ class CreateDataFileCommand extends ContainerAwareCommand
         if($proceso->getPrcEstado() == 0 && $proceso->getPrcValidado())
         {
             $empresa  = $proceso->getEmpresa();
-            $camiones = $manager->getRepository("AppBundle:Camion")->buscarCamionesDeLaEmpresa($empresa);
-            $clientes = $manager->getRepository("AppBundle:Cliente")->obtenerClientesDeLaEmpresa($empresa);
+            $region   = $proceso->getRegion();
+            $clientes = $manager->getRepository("AppBundle:Cliente")->obtenerClientesDeLaEmpresa($empresa,$region);
+            $camiones = $manager->getRepository("AppBundle:Camion")->buscarCamionesDeLaEmpresa($empresa,true);
 
             $diarios     =":= ";
             $semanales   =":= ";
             $bisemanales =":= ";
-            $trisemanales =":= ";
+            $trisemanales=":= ";
             $quincenales =":= ";
             $mensuales   =":= ";
 

@@ -57,3 +57,7 @@ detalleRuta:
 comentariosVisitas:
   type: rest
   resource: APIBundle\Controller\ComentariosVisitasController
+
+regiones:
+  type: rest
+  resource: APIBundle\Controller\RegionesController
