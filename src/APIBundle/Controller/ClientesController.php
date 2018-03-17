@@ -17,12 +17,12 @@ class ClientesController extends APIBaseController
     * Obtener lista de clientes de la empresa
     * @return Response La respuesta serializada
     */ 
-    public function getEmpresasClientesAction(Request $request, $idEmpresa){
+    public function getEmpresasClientesAction(Request $request, Empresa $empresa){
         $groups = ['cliente_lista','r_cliente_comuna','comuna_detalle','frecuencia_detalle'];
         if(is_array($request->get('expand'))){
             $groups = array_merge($groups, $request->get('expand'));
         }
-        $clientes = $this->getDoctrine()->getRepository('AppBundle:Cliente')->obtenerClientesDeLaEmpresa($idEmpresa);
+        $clientes = $this->getDoctrine()->getRepository('AppBundle:Cliente')->obtenerClientesDeLaEmpresa($empresa,null);
         return $this->serializedResponse($clientes, $groups); 
     }
     /**
@@ -77,14 +77,13 @@ class ClientesController extends APIBaseController
         $em->persist($cliente);
         $em->flush();
 
-        $clientes = $this
-                    ->getDoctrine()
-                    ->getRepository('AppBundle:Cliente')
-                    ->obtenerClientesDeLaEmpresa($empresa->getId());
+        $region = $cliente->getComuna()->getProvincia()->getRegion();
+
+        $clientes= $this->getDoctrine()->getRepository('AppBundle:Cliente')->obtenerClientesDeLaEmpresa($empresa,$region);
 
         $this->getDoctrine()
-             ->getRepository('AppBundle:Proceso')
-             ->agregarActualizarProceso($empresa,$clientes);
+            ->getRepository('AppBundle:Proceso')
+            ->agregarActualizarProceso($empresa,$clientes,$region);
 
         return  $this->serializedResponse($cliente, $groups) ;
     }
@@ -148,14 +147,12 @@ class ClientesController extends APIBaseController
         $em->persist($cliente);
         $em->flush();
 
-        $clientes = $this
-                    ->getDoctrine()
-                    ->getRepository('AppBundle:Cliente')
-                    ->obtenerClientesDeLaEmpresa($empresa->getId());
+        $region = $cliente->getComuna()->getProvincia()->getRegion();
+        $clientes= $this->getDoctrine()->getRepository('AppBundle:Cliente')->obtenerClientesDeLaEmpresa($empresa,$region);
 
         $this->getDoctrine()
              ->getRepository('AppBundle:Proceso')
-             ->agregarActualizarProceso($empresa,$clientes);
+             ->agregarActualizarProceso($empresa,$clientes,$region);
         
         return $this->serializedResponse($cliente, $groups);
     }

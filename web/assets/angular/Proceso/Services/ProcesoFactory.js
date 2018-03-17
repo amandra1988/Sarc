@@ -7,4 +7,14 @@ angular.module('admin-procesos')
             {'query': {method: 'GET', isArray:true },'patch': {method:'PATCH'}}
          );
     }
+])
+
+.factory('EmpresaFactory', ['$resource', 'urlBaseApi', function ($resource ,  urlBaseApi ) {
+    return $resource(
+        urlBaseApi + 'regiones',
+        {},
+        {'query': {method: 'GET', isArray:true },'patch': {method:'PATCH'}}
+    );
+}
 ]);
+

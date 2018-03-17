@@ -15,7 +15,14 @@
                 <option value="">--</option>
             </select>
         </div>
-        
+
+        <div class="form-group row">
+            <label>(*) Estado del camión  </label>
+            <input type="radio" ng-model="cam.estado" name="estado" value='1'> Operativo
+            <input type="radio" ng-model="cam.estado" name="estado" value='0'> Fuera de circulación
+
+        </div>
+
         <div class="form-group row">
             <label>(*) Tipo de carga  </label>
             <input type="radio" ng-model="cam.tipo_carga" name="tipo_carga" value='1'> Especial

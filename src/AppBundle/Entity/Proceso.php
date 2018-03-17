@@ -93,6 +93,13 @@ class Proceso
      */
     protected $empresa;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Region", inversedBy="procesos" )
+     * @ORM\JoinColumn(name="reg_id", referencedColumnName="reg_id", nullable=true)
+     * @JMS\SerializedName("region")
+     * @JMS\Groups({"r_procesos_region"})
+     */
+    protected $region;
 
     /**
      * @ORM\OneToMany(targetEntity="ProcesoClientes", mappedBy="proceso")
@@ -389,5 +396,29 @@ class Proceso
     public function getProcesoCamiones()
     {
         return $this->procesoCamiones;
+    }
+
+    /**
+     * Set region
+     *
+     * @param \AppBundle\Entity\Region $region
+     *
+     * @return Proceso
+     */
+    public function setRegion(\AppBundle\Entity\Region $region = null)
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
+    /**
+     * Get region
+     *
+     * @return \AppBundle\Entity\Region
+     */
+    public function getRegion()
+    {
+        return $this->region;
     }
 }

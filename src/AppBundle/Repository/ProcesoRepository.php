@@ -21,10 +21,11 @@ class ProcesoRepository extends \Doctrine\ORM\EntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function agregarActualizarProceso($empresa,$clientes){
-        
-        $proceso = $this->findBy(array('empresa'=>$empresa,'prcEstado'=>0)); 
+    public function agregarActualizarProceso($empresa,$clientes,$region){
+
+        $proceso = $this->findBy(array('empresa'=>$empresa,'prcEstado'=>0,'region'=>$region));
         $totalcli = count($clientes);
+
         $mensaje ='';
         $observacion='Debe validar este proceso para que pueda ser ejecutado.';
         
@@ -41,8 +42,9 @@ class ProcesoRepository extends \Doctrine\ORM\EntityRepository
                 ->setPrcEstado(0)
                 ->setPrcValidado(false)
                 ->setEmpresa($empresa)
-                ->setPrcObservacion($observacion)
-                /*->setPrcTermino(new \DateTime(date('Y-m-d H:s:i')))*/;  
+                ->setRegion($region)
+                ->setPrcObservacion($observacion);
+
         $em = $this->getEntityManager();
         $em->persist($proceso);
         $em->flush();

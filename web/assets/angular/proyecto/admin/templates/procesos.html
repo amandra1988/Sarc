@@ -6,43 +6,62 @@
     display: inline-block;
     padding: 6px 12px;
 }
+.opciones{
+    margin-right: 10px;
+    margin-left: 15px;
+    float: right;
+    padding-top: 6px;
+}
 </style>
 
 <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <button type="submit" class="btn btn-info arriba" ng-click="crearProceso()" >
-            Crear proceso
-        </button>
-        <button type="submit" class="btn btn-warning arriba" ng-click="ejecutarProceso()" >
-            Ejecutar proceso
-        </button>
 
+    <div class="form-inline" style="padding: 6px; background: #03add924;">
+        <div class="form-group row" style="margin-left: 26px;">
+            <label>Seleccione región:</label>
+            <select class="cols-3 form-control" ng-model="region" name="region" ng-options="region as region.region_nombre for region in regiones track by region.region_id">
+            </select>
+        </div>
+        <div class="form-group row opciones">
+            <button type="submit" class="btn btn-info arriba" ng-click="crearProceso()" >
+                Crear proceso
+            </button>
+        </div>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="alert alert-{{ class }}" style="text-align: center;font-weight: bold; margin-top:10px" ng-if="mensaje !==''">
             {{ mensaje }}
         </div>
 
         <div class="scroll">
-            <table class="table">
+            <table class="table table-bordered">
                 <tr>
                     <th width="5%">#</th>
                     <th width="13%">Fecha creación</th>
                     <th width="13%">Fecha de termino</th>
-                    <th width="15%">Total de clientes</th>
-                    <th width="12%">Estado del proceso</th>
-                    <th width="12%" style="text-align: center">Validado</th>
-                    <th width="30%">Observación del proceso</th>
+                    <th width="7%">Total de clientes</th>
+                    <th width="15%" style="text-align: center">Región</th>
+                    <th width="15%">Estado del proceso</th>
+                    <th width="5%" style="text-align: center">Validado</th>
+                    <th width="5%" style="text-align: center">Ejecutar</th>
+
+                    <th width="22%">Observación del proceso</th>
                 </tr>
+
                 <tr ng-repeat="x in procesos">
                     <td>{{ x.id_proceso }}</td>
                     <td>{{ x.fecha_proceso | date:'dd/MM/yyyy  HH:mm:ss' }}</td>
                     <td>{{ x.termino_proceso | date:'dd/MM/yyyy  HH:mm:ss' }}</td>
                     <td>{{ x.cant_clientes_proceso}}</td>
+                    <td>{{x.region.region_nombre}}</td>
                     <td>{{x.estado_proceso | estadoproceso}}</td>
                     <td style="text-align: center !important; cursor:pointer">
                         <div ng-if="x.estado_proceso === 0">
                             <img ng-if="x.validado_proceso === false" ng-src="{{valida[0]}}" style="height: 35px;"  ng-click="validacion(x.id_proceso,1)" title="Validar proceso">    
                             <img ng-if="x.validado_proceso === true && x.estado_proceso === 0" ng-src="{{valida[1]}}" style="height: 35px;" ng-click="validacion(x.id_proceso,0)"  title="Invalidar proceso">
                         </div>
+
                         <div ng-if="x.estado_proceso === 1">
                             <img ng-src="{{valida[2]}}" style="height: 35px;">
                         </div>
@@ -50,6 +69,9 @@
                         <div ng-if="x.estado_proceso > 1">
                             <img ng-src="{{valida[3]}}" style="height: 35px;">
                         </div>
+                    </td>
+                    <td style="text-align: center !important; cursor:pointer">
+                        <img ng-if="x.validado_proceso === true && x.estado_proceso === 0" ng-src="{{valida[4]}}" style="height: 40px;" ng-click="ejecutarProceso(x.id_proceso)"  title="Ejecutar proceso">
                     </td>
                     <td>{{x.observacion_proceso}}</td>
                 </tr>

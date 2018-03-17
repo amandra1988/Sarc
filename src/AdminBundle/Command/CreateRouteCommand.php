@@ -167,7 +167,7 @@ class CreateRouteCommand extends ContainerAwareCommand
             $totalVisitas = [];
 
             $frecuencia = [1=>20, 2=>4, 3=>8, 4=>12, 5=>2, 6=>1];
-            
+
             $criterioDeExito = [1=>1, 2=>10, 4=>5, 8=>3, 12=>2, 20=>1];
 
             foreach($routes as $key => $visitas):

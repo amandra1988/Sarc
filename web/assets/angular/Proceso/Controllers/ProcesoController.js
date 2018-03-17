@@ -7,14 +7,15 @@ app.filter('estadoproceso', function() {
 	};
 });
 
-app.controller('ProcesoController',['$timeout','$scope','ProcesoFactory','$uibModal','urlBasePartials','idEmpresa','urlBaseImg',
-function ($timeout,$scope,ProcesoFactory,$uibModal,urlBasePartials,idEmpresa,urlBaseImg) {
+app.controller('ProcesoController',['$timeout','$scope','EmpresaFactory','ProcesoFactory','$uibModal','urlBasePartials','idEmpresa','urlBaseImg',
+function ($timeout,$scope,EmpresaFactory,ProcesoFactory,$uibModal,urlBasePartials,idEmpresa,urlBaseImg) {
     
         $scope.valida=[];
         $scope.valida[0] = urlBaseImg+"validar.png";
         $scope.valida[1] = urlBaseImg+"invalidar.png";
         $scope.valida[2] = urlBaseImg+"espera.png";
         $scope.valida[3] = urlBaseImg+"finalizar.png";
+        $scope.valida[4] = urlBaseImg+"procesar.png";
         $scope.mensaje ='';
         $scope.class='success';
         
@@ -49,6 +50,15 @@ function ($timeout,$scope,ProcesoFactory,$uibModal,urlBasePartials,idEmpresa,url
         };
         $scope.listaDeProcesos();
 
+        $scope.regiones =[];
+        $scope.region   ={region_id:null, region_nombre:''};
+        $scope.listaDeRegiones= function (){
+            EmpresaFactory.query({}, function(retorno) {
+                $scope.regiones = retorno;
+            });
+        };
+        $scope.listaDeRegiones();
+
         $scope.validacion = function(proceso,valido){
             var v = new ProcesoFactory();
             v.validar = valido;
@@ -61,6 +71,7 @@ function ($timeout,$scope,ProcesoFactory,$uibModal,urlBasePartials,idEmpresa,url
         $scope.crearProceso = function(){
             var v = new ProcesoFactory();
             v.accion = 1;
+            v.region = $scope.region.region_id;
             v.$save({idEmpresa:idEmpresa}, function(response) {
                 if(response.mensaje){
                     $scope.class='success';
@@ -73,10 +84,10 @@ function ($timeout,$scope,ProcesoFactory,$uibModal,urlBasePartials,idEmpresa,url
             });
         };
        
-        $scope.ejecutarProceso = function(){
-            
+        $scope.ejecutarProceso = function(id){
            var v = new ProcesoFactory();
-           v.accion = 2;
+           v.accion  = 2;
+           v.proceso = id;
            v.$save({idEmpresa:idEmpresa}, function(response) {
                if(response.mensaje){
                    $scope.class='info';

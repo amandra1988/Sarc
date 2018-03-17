@@ -40,8 +40,13 @@ class Region
      * @ORM\Column(name="reg_ordinal", type="string", length=5)
      */
     private $regOrdinal;
-    
-    
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Proceso", mappedBy="region", cascade={"persist", "remove"} )
+     */
+    protected  $procesos;
+
         
     /**
      * @ORM\OneToMany(targetEntity="Provincia", mappedBy="region", cascade={"persist", "remove"} )
@@ -146,5 +151,39 @@ class Region
     public function getRegOrdinal()
     {
         return $this->regOrdinal;
+    }
+
+    /**
+     * Add proceso
+     *
+     * @param \AppBundle\Entity\Proceso $proceso
+     *
+     * @return Region
+     */
+    public function addProceso(\AppBundle\Entity\Proceso $proceso)
+    {
+        $this->procesos[] = $proceso;
+
+        return $this;
+    }
+
+    /**
+     * Remove proceso
+     *
+     * @param \AppBundle\Entity\Proceso $proceso
+     */
+    public function removeProceso(\AppBundle\Entity\Proceso $proceso)
+    {
+        $this->procesos->removeElement($proceso);
+    }
+
+    /**
+     * Get procesos
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProcesos()
+    {
+        return $this->procesos;
     }
 }
