@@ -162,7 +162,6 @@ class CreateDataFileCommand extends ContainerAwareCommand
                             "infinito"=>$configAmpl[0]->getInfinito(),
                             "epsilon"=>$configAmpl[0]->getEpsilon(),
                             "epsilonDos"=>$configAmpl[0]->getEpsilonDos(),
-                            "solver"=>$configAmpl[0]->getSolver(),
                             "clieDiarios"=>$diarios,
                             "clieSemanales"=>$semanales,
                             "clieBisemanales"=>$bisemanales,
@@ -182,6 +181,7 @@ class CreateDataFileCommand extends ContainerAwareCommand
             $text_file_data = $this->getContainer()->get('twig')->render('AdminBundle:Data:execute.html.twig', [
                 "file_data"=>$absolutePath."data/".$fileName.".dat",
                 "file_mod"=>$absolutePath."data/".$fileName.".mod",
+                "solver"=>$configAmpl[0]->getSolver()
             ]);
 
             //abrimos el archivo para agregar los contenidos
@@ -199,7 +199,7 @@ class CreateDataFileCommand extends ContainerAwareCommand
             $manager->flush();
             
             $output->writeln("La carga de rutas de trabajo ha comenzado. Este proceso puede tardar.", FILE_APPEND);
-            
+
             //llamar a ampl
             $process = new Process('ampl '.$absolutePath."data/".$fileName.".run > ".$absolutePath."data/".$fileName.".sol");
             $process->run();

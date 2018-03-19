@@ -107,8 +107,8 @@ class CreateRouteCommand extends ContainerAwareCommand
                         
                         if(strpos($linea, ':') !== false):
                             // Son los títulos con los correlativos de los clientes.
-                            $caracter = ['    ','   ',':','='];
-                            $replace  = ['',',','',''];
+                            $caracter = ['    ','   ',':','=','  '];
+                            $replace  = ['',',','','',','];
                             $linea = str_replace($caracter, $replace, $linea);
                             $clientes['Clientes'] = explode(',', $linea);
                         else:     
@@ -128,7 +128,8 @@ class CreateRouteCommand extends ContainerAwareCommand
                         endif;
                         
                     endif;
-                   $routes[$c['Camion']] = ['Clientes'=>$clientes, 'Jornadas'=> $jornadas];
+
+                    $routes[$c['Camion']] = ['Clientes'=>$clientes, 'Jornadas'=> $jornadas];
                 endwhile;
                 fclose($file);
             endforeach;
@@ -159,7 +160,6 @@ class CreateRouteCommand extends ContainerAwareCommand
                 if($i>$totalDias) break;
             endfor;
 
-
 // La información extraida del archivo, se registra en la base de datos con las fechas indentificadas
 
             $informeTotalClientesProcesados = 0;
@@ -169,6 +169,7 @@ class CreateRouteCommand extends ContainerAwareCommand
             $frecuencia = [1=>20, 2=>4, 3=>8, 4=>12, 5=>2, 6=>1];
 
             $criterioDeExito = [1=>1, 2=>10, 4=>5, 8=>3, 12=>2, 20=>1];
+
 
             foreach($routes as $key => $visitas):
                 
@@ -206,7 +207,9 @@ class CreateRouteCommand extends ContainerAwareCommand
                         for($dia=1; $dia<=$totalDias; $dia++):
 
                             $trabajo = $jornadas['dia'][$dia][$correlativoClie];
-                        
+
+
+
                             $ruta = $manager->getRepository("AppBundle:Ruta")
                                             ->buscarRutasDelDiaPorCamionYOperador(
                                                     date('Y-m-d',$fechas[$dia]),
@@ -315,7 +318,6 @@ class CreateRouteCommand extends ContainerAwareCommand
                         ];
 
             endforeach;
-
 
             $informeResultados = [
                         "total_clientes"=> $proceso->getPrcCantidadClientes(),
