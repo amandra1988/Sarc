@@ -49,6 +49,12 @@ class ConfiguracionAmpl
      */
     private $epsilonDos;
 
+    /**
+     * @var int
+     *['scip', 'cplex', 'gorubi']
+     * @ORM\Column(name="cnf_solver", type="string")
+     */
+    private $solver;
 
     /**
      * @var int
@@ -188,5 +194,29 @@ class ConfiguracionAmpl
     public function getEpsilonDos()
     {
         return $this->epsilonDos;
+    }
+
+    /**
+     * Set solver
+     *
+     * @param string $solver
+     *
+     * @return ConfiguracionAmpl
+     */
+    public function setSolver($solver)
+    {
+        $this->solver = $solver;
+
+        return $this;
+    }
+
+    /**
+     * Get solver
+     *
+     * @return string
+     */
+    public function getSolver()
+    {
+        return $this->solver;
     }
 }

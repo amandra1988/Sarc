@@ -58,9 +58,9 @@ angular.module('admin-rutas')
                 if( $scope.operadores[value.ruta_operador.id_operador]){
                     var color = $scope.operadores[value.ruta_operador.id_operador];
                 }else{
-
                     var numero = getRandomSpan();
                     var color  = $scope.colores[numero];
+                    $scope.colores.splice(numero, 1);
                     $scope.operadores[value.ruta_operador.id_operador] = color;
                 }     
                 value.color= color;
