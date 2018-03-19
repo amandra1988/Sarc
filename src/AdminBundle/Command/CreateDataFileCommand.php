@@ -162,6 +162,7 @@ class CreateDataFileCommand extends ContainerAwareCommand
                             "infinito"=>$configAmpl[0]->getInfinito(),
                             "epsilon"=>$configAmpl[0]->getEpsilon(),
                             "epsilonDos"=>$configAmpl[0]->getEpsilonDos(),
+                            "solver"=>$configAmpl[0]->getSolver(),
                             "clieDiarios"=>$diarios,
                             "clieSemanales"=>$semanales,
                             "clieBisemanales"=>$bisemanales,
