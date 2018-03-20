@@ -1,49 +1,128 @@
-** ******************************************************************* **
-** *********************  Resultados generales *********************** **
-** ******************************************************************* **
+<table width="30%">
+    <tr>
+        <td colspan="3">
+            <strong>Resultados generales</strong>
+        </td>
+    </tr>
+    <tr>
+        <td> Total de clientes del procesados </td>
+        <td> :</td>
+        <td> {{ total_clientes }}</td>
+    </tr>
+    <tr>
+        <td> Total de clientes realmente procesado</td>
+        <td> :</td>
+        <td>{{ total_clientes_procesados }} </td>
+    </tr>
+    <tr>
+        <td> Clientes con visita generadas</td>
+        <td> :</td>
+        <td> {{ cumplidos }}</td>
+    </tr>
+    <tr>
+        <td> Cumplimiento de visitas </td>
+        <td> :</td>
+        <td> {{ porcentajeCumplimiento }}</td>
+    </tr>
+</table>
 
-Total de clientes del procesados       : {{ total_clientes }};
-Total de clientes realmente procesados : {{ total_clientes_procesados }};
-Clientes con visita generada           : {{ cumplidos }};
-Cumplimiento de visitas                : {{ porcentajeCumplimiento }};
+<br><br>
 
-** ******************************************************************* **
-** *********************  Resultados por camión ********************** **
-** ******************************************************************* **
-{% for camion in camiones %}
 
----------------------------------------------
--- ----------   Camion ID [ {{ camion.id }} ] ---------- --
----------------------------------------------
-Correlativo      : {{ camion.correlativo }}
-Clientes         :
-{% if camion.clientes|length > 0 %}
-    {% for cliente in  camion.clientes %}
-        Cliente ID => {{ cliente }}
-    {% endfor %}
-{% else %}
-     ** Sin clientes asignados **
-{% endif %}
+<table border="1">
 
-Total demanda    : {{ camion.totalDemanda }}
-Capacidad camión : {{ camion.capacidadCamion }}
+{% set  anterior = '' %}
+{% set break = false %}
+{% for carga in cargaDiaria if not break  %}
+    {% if  anterior == '' %}
+        <tr>
+            <td> {{ carga.resDia }}</td>
+    {% endif %}
+    {% if  anterior != '' and  anterior != carga.resDia %}
+        <td>Total Demanda</td>
+        <td>Total Capacidad</td>
+        </tr>
+        {% set break = true %}
+    {% endif %}
+    {%  if not break %}
+        <td> Camión </td>
+        <td> Clientes </td>
+        <td> Demanda </td>
+        <td> Capacidad </td>
+    {% endif %}
+    {% set  anterior = carga.resDia %}
 {% endfor %}
 
 
+{% set  anterior = '' %}
+{% set  capacidad = 0 %}
+{% set  demanda   = 0 %}
+{% for carga in cargaDiaria %}
+    {% if  anterior == '' %}
+        <tr>
+            <td> {{ carga.resDia }}</td>
+    {% endif %}
+    {% if  anterior != '' and  anterior != carga.resDia %}
+            <td>{{capacidad}}</td>
+            <td>{{demanda}}</td>
+            {% set  capacidad = 0 %}
+            {% set  demanda   = 0 %}
+        </tr>
+        <tr>
+            <td> {{ carga.resDia }}</td>
+    {% endif %}
+    <td> {{ carga.camion.id }} </td>
+    <td> {{ carga.resClientes }} </td>
+    <td> {{ carga.resTotalDemanda }} </td>
+    <td> {{ carga.resTotalCapacidad }} </td>
+    {% set  capacidad = capacidad + carga.resTotalCapacidad  %}
+    {% set  demanda   = demanda + carga.resTotalDemanda %}
+    {% set  anterior = carga.resDia %}
+{% endfor %}
+</table>
 
-** ******************************************************************* **
-** ********************  Resultados por cliente ********************** **
-** ******************************************************************* **
+<br><br>
+
+<table>
+    <tr>
+        <td colspan="3">Resultados por cliente</td>
+    </tr>
+</table>
 {% for cliente in clientes %}
-
----------------------------------------------
--- ----------  cliente ID [ {{ cliente.id }} ] ---------- --
----------------------------------------------
-Correlativo        : {{ cliente.correlativo }}
-Frecuencia         : {{ cliente.frecuencia }}
-Visitas generadas  : {{ cliente.cantVisitasGeneradas }}
-Visitas esperadas  : {{ cliente.visitasEsperadas }}
-Críterio de éxito  : {{ cliente.criterioDeExito }}
-Objetivo Cumplido  : {% if cliente.cumplido %}Sí!{% else %}No{% endif %}
+    <table border="1" width="30%">
+        <tr>
+            <td colspan="3">Cliente ID [ {{ cliente.id }} ] </td>
+        </tr>
+        <tr>
+            <td width="45%">Correlativo</td>
+            <td width="5%">:</td>
+            <td width="45%">{{ cliente.correlativo }}</td>
+        </tr>
+        <tr>
+            <td width="45%">Frecuencia</td>
+            <td width="5%">:</td>
+            <td width="45%">{{ cliente.frecuencia }}</td>
+        </tr>
+        <tr>
+            <td width="45%">Visitas generadas</td>
+            <td width="5%">:</td>
+            <td width="45%">{{ cliente.cantVisitasGeneradas }}</td>
+        </tr>
+       <tr>
+            <td width="45%">Visitas esperadas</td>
+            <td width="5%">:</td>
+            <td width="45%">{{ cliente.visitasEsperadas }}</td>
+        </tr>
+        <tr>
+            <td width="45%">Críterio de éxito</td>
+            <td width="5%">:</td>
+            <td width="45%">{{ cliente.criterioDeExito }}</td>
+        </tr>
+        <tr>
+            <td width="45%">Objetivo Cumplido</td>
+            <td width="5%">:</td>
+            <td width="45%">{% if cliente.cumplido %}<span style="color: green;">Sí!</span>{% else %}<span style="color: red;">No</span>{% endif %}</td>
+        </tr>
+    </table>
+    <br>
 {% endfor %}
-
