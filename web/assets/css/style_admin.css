@@ -107,25 +107,25 @@ span.round-tabs{
 }
 
 span.round-tabs.one{
-    color: rgb(34, 194, 34); border: 3px solid #03add9;
+    color: rgb(34, 194, 34); border: 3px solid #999;
 }
 span.round-tabs.two{
-    color: #5eb34d; border: 3px solid #03add9;
+    color: #5eb34d; border: 3px solid #999;
 }
 span.round-tabs.three{
-    color: #3e5e9a;border: 3px solid #03add9;
+    color: #3e5e9a;border: 3px solid #999;
 }
 span.round-tabs.four{
-    color: #f1685e;border: 3px solid #03add9;
+    color: #f1685e;border: 3px solid #999;
 }
 span.round-tabs.five{
-    color: #f1685e;border: 3px solid #03add9;
+    color: #f1685e;border: 3px solid #999;
 }
 span.round-tabs.six{
-    color: #999;border: 3px solid #03add9;
+    color: #999;border: 3px solid #999;
 }
 span.round-tabs.seven{
-    color: #999;border: 3px solid #03add9;
+    color: #999;border: 3px solid #999;
 }
 span.round-tabs.eigth{
     border: 3px solid red;

@@ -30,7 +30,6 @@
         z-index: 1;
     }
     </style>
-  <img class="img-responsive" width="15%" style="margin: 7px auto;" src="{{asset('assets/img/sarc.png') }}" alt="">
   <hr>
   <section style="background:#FFF;" class="row animated fadeInDown">
       <div class="board">
@@ -63,8 +62,13 @@
 {% endblock %}
 
 {% block body %}
-    <div class="contenedor animated fadeInDown" style="text-align:center">
-        <h3 style="color:#3e5e9a;margin-top: 50px;">Bienvenido</h3>      
+    <div class="contenedor" style="text-align:center">
+        <img class="img-responsive" style="margin: 7px auto;" src="{{asset('assets/img/sarc.png') }}" alt="">
+        <div class="contenedor animated slideInUp" style="text-align:center">
+            <h3 style="color:#3e5e9a;margin-top: 50px;">
+                Bienvenido
+            </h3>
+        </div>
     </div>
 {% endblock %}
 {% block javascripts %}
