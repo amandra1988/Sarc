@@ -30,55 +30,53 @@
 
 
 <table border="1">
+    {% set  anterior = '' %}
+    {% set break = false %}
 
-{% set  anterior = '' %}
-{% set break = false %}
-{% for carga in cargaDiaria if not break  %}
-    {% if  anterior == '' %}
-        <tr>
-            <td> {{ carga.resDia }}</td>
-    {% endif %}
-    {% if  anterior != '' and  anterior != carga.resDia %}
-        <td>Total Demanda</td>
-        <td>Total Capacidad</td>
-        </tr>
-        {% set break = true %}
-    {% endif %}
-    {%  if not break %}
-        <td> Camión </td>
-        <td> Clientes </td>
-        <td> Demanda </td>
-        <td> Capacidad </td>
-    {% endif %}
-    {% set  anterior = carga.resDia %}
-{% endfor %}
+    {% for carga in cargaDiaria if not break  %}
+        {% if  anterior == '' %}
+            <tr>
+                <td> Día</td>
+        {% endif %}
+        {% if  anterior != '' and  anterior != carga.resDia %}
+            <td>Total Capacidad</td>
+            </tr>
+            {% set break = true %}
+        {% endif %}
+        {%  if not break %}
+            <td> Camión </td>
+            <td> Clientes </td>
+        {% endif %}
+        {% set  anterior = carga.resDia %}
+    {% endfor %}
 
 
-{% set  anterior = '' %}
-{% set  capacidad = 0 %}
-{% set  demanda   = 0 %}
-{% for carga in cargaDiaria %}
-    {% if  anterior == '' %}
-        <tr>
-            <td> {{ carga.resDia }}</td>
-    {% endif %}
-    {% if  anterior != '' and  anterior != carga.resDia %}
-            <td>{{capacidad}}</td>
-            <td>{{demanda}}</td>
-            {% set  capacidad = 0 %}
-            {% set  demanda   = 0 %}
-        </tr>
-        <tr>
-            <td> {{ carga.resDia }}</td>
-    {% endif %}
-    <td> {{ carga.camion.id }} </td>
-    <td> {{ carga.resClientes }} </td>
-    <td> {{ carga.resTotalDemanda }} </td>
-    <td> {{ carga.resTotalCapacidad }} </td>
-    {% set  capacidad = capacidad + carga.resTotalCapacidad  %}
-    {% set  demanda   = demanda + carga.resTotalDemanda %}
-    {% set  anterior = carga.resDia %}
-{% endfor %}
+
+    {% set  anterior = '' %}
+    {% set  capacidad = 0 %}
+    {% set  demanda   = 0 %}
+    {% for carga in cargaDiaria %}
+        {% if  anterior == '' %}
+            <tr>
+                <td>{{ carga.resDia }}</td>
+        {% endif %}
+        {% if  anterior != '' and  anterior != carga.resDia %}
+                <td>{{capacidad}}</td>
+                {% set  capacidad = 0 %}
+                {% set  demanda   = 0 %}
+            </tr>
+            <tr>
+                <td> {{ carga.resDia }}</td>
+        {% endif %}
+        <td> {{ carga.camion.id }} </td>
+        <td> {{ carga.resClientes }} </td>
+        {% set  capacidad = capacidad + carga.resTotalCapacidad  %}
+        {% set  demanda   = demanda + carga.resTotalDemanda %}
+        {% set  anterior  = carga.resDia %}
+    {% endfor %}
+
+    <td>{{capacidad}}</td>
+    </tr>
 </table>
 
 <br><br>

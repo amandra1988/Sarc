@@ -41,7 +41,7 @@ class CreateRouteCommand extends ContainerAwareCommand
 
         $fs = new Filesystem();
         $absolutePath =$this->getContainer()->get('kernel')->locateResource('@AdminBundle/Resources/');
-        
+
         $fileName = $input->getArgument('file_name');
 
         $archivo = explode(".", $fileName);
@@ -52,7 +52,6 @@ class CreateRouteCommand extends ContainerAwareCommand
 
         $logger = $this->getContainer()->get('logger');
         $logger->info('SARC: Crear ruta '.$fileName);
-
 
         if($fs->exists($absolutePath."data/".$nfile.".sol"))
         {
@@ -139,10 +138,19 @@ class CreateRouteCommand extends ContainerAwareCommand
 // Identificar fechas de dias habiles donde se cargará la información
 
 
-            $hoy = date('Y-m-d');
-            $prox20dias =date('Y-m-d', strtotime('+30 day'));
+            if(date('Y') == 2018){
+                // Esto es correcto
+                $hoy = date('Y-m-d');
+                $prox20dias = date('Y-m-d', strtotime('+30 day'));
+            }else if(date('Y') < 2018){
+                //Esto es un parche para el cambio de hora de CentOS
+                $hoy = date('2018-m-d');
+                $prox20dias = date('2018-m-d', strtotime('+30 day'));
+            }
+
             $inicio = strtotime($hoy);                
             $fin    = strtotime($prox20dias);
+
             $fechas = [];
             $i=1;         
             for($inicio;$inicio<=$fin;$inicio=strtotime('+1 day ' . date('Y-m-d',$inicio))):
@@ -325,7 +333,7 @@ class CreateRouteCommand extends ContainerAwareCommand
                 endforeach;
             endforeach;
 
-            $resultado = $manager->getRepository("AppBundle:Resultado")->findBy(['proceso'=>$proceso], [ 'resDia'=>'asc', ]);
+            $resultado = $manager->getRepository("AppBundle:Resultado")->findBy(['proceso'=>$proceso], [ 'resDia'=>'asc', 'camion'=>'asc']);
 
             $informeResultados = [
                         "total_clientes"=> $proceso->getPrcCantidadClientes(),

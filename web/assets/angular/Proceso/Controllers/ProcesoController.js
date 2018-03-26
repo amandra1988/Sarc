@@ -69,9 +69,21 @@ function ($timeout,$scope,EmpresaFactory,ProcesoFactory,$uibModal,urlBasePartial
         };
 
         $scope.crearProceso = function(){
+
+
+            if(!$scope.region.region_id){
+                $scope.class='danger';
+                $scope.mensaje = "Debe seleccionar una región para generar proceso";
+                $timeout(function() {
+                    $scope.mensaje="";
+                },2000);
+                return;
+            }
+
             var v = new ProcesoFactory();
             v.accion = 1;
             v.region = $scope.region.region_id;
+
             v.$save({idEmpresa:idEmpresa}, function(response) {
                 if(response.mensaje){
                     $scope.class='success';
