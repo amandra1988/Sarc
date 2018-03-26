@@ -51,31 +51,40 @@
     {% endfor %}
 
 
-
     {% set  anterior = '' %}
-    {% set  capacidad = 0 %}
     {% set  demanda   = 0 %}
+    {% set  clientes  = 0 %}
+    {% set  promedio  = 0 %}
+
+
     {% for carga in cargaDiaria %}
         {% if  anterior == '' %}
             <tr>
                 <td>{{ carga.resDia }}</td>
         {% endif %}
         {% if  anterior != '' and  anterior != carga.resDia %}
-                <td>{{demanda}}</td>
-                {% set  capacidad = 0 %}
+                {% set  promedio  = demanda/clientes %}
+                <td>{{ promedio|round(2, 'floor') }}</td>
+
                 {% set  demanda   = 0 %}
+                {% set  clientes  = 0 %}
             </tr>
             <tr>
                 <td> {{ carga.resDia }}</td>
         {% endif %}
         <td> {{ carga.camion.id }} </td>
         <td> {{ carga.resClientes }} </td>
-        {% set  capacidad = capacidad + carga.resTotalCapacidad  %}
+
         {% set  demanda   = demanda + carga.resTotalDemanda %}
+
+        {% set  clientes  = clientes + carga.resTotalClientes %}
+
         {% set  anterior  = carga.resDia %}
     {% endfor %}
 
-    <td>{{capacidad}}</td>
+    {% set  promedio  = demanda/clientes %}
+
+    <td>{{ promedio|round(2, 'floor') }}</td>
     </tr>
 </table>
 

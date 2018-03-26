@@ -65,7 +65,13 @@ class Resultado
      */
     private $resTotalCapacidad;
 
-
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="res_total_clientes", type="integer")
+     */
+    private $resTotalClientes;
+    
 
     /**
      * Get id
@@ -219,5 +225,29 @@ class Resultado
     public function getCamion()
     {
         return $this->camion;
+    }
+
+    /**
+     * Set resTotalClientes
+     *
+     * @param integer $resTotalClientes
+     *
+     * @return Resultado
+     */
+    public function setResTotalClientes($resTotalClientes)
+    {
+        $this->resTotalClientes = $resTotalClientes;
+
+        return $this;
+    }
+
+    /**
+     * Get resTotalClientes
+     *
+     * @return integer
+     */
+    public function getResTotalClientes()
+    {
+        return $this->resTotalClientes;
     }
 }

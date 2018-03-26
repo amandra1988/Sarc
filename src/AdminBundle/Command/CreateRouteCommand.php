@@ -230,21 +230,24 @@ class CreateRouteCommand extends ContainerAwareCommand
                                     $resultado = $resultado[0];
                                 }
 
-                                $totalDemanda+= $cliente->getCliDemanda();
-
                                 if(strpos($resultado->getResClientes()," ".$correlativoClie.",") === false){
 
                                     $res_clientes = $resultado->getResClientes(). " ".$correlativoClie.",";
+                                    $totalDemanda=$totalDemanda + $cliente->getCliDemanda();
                                 }else{
                                     $res_clientes = $resultado->getResClientes();
+                                    $totalDemanda = $resultado->getResTotalDemanda();
                                 }
+
+                                $totalClientes = count(explode(",",$res_clientes))-1;
 
                                 $resultado->setProceso($proceso)
                                     ->setCamion($camion)
                                     ->setResDia($dia)
                                     ->setResClientes($res_clientes)
                                     ->setResTotalDemanda($totalDemanda)
-                                    ->setResTotalCapacidad($camion->getCamCapacidad());
+                                    ->setResTotalCapacidad($camion->getCamCapacidad())
+                                    ->setResTotalClientes($totalClientes);
                                 $manager->persist($resultado);
                                 $manager->flush();
 // =================================================================================================================== //
@@ -348,7 +351,6 @@ class CreateRouteCommand extends ContainerAwareCommand
                 ->render('AdminBundle:Data:resultados.html.twig',
                     $informeResultados
                 );
-
 
             //abrimos el archivo para agregar los contenidos
             file_put_contents($absolutePath."data/".$nfile."_resultados.html", $informeResultados);
