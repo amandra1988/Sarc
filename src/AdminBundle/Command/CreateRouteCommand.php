@@ -46,7 +46,7 @@ class CreateRouteCommand extends ContainerAwareCommand
 
         $archivo = explode(".", $fileName);
         $nfile = $archivo[0];
-        
+
         $proceso = explode("_",$nfile);
         $idProceso = $proceso[0];
 
@@ -174,7 +174,7 @@ class CreateRouteCommand extends ContainerAwareCommand
 
             $totalVisitas = [];
             $frecuencia      = [ 1 => 20,  2 => 4,  3 => 8, 4 => 12, 5 => 2 , 6  => 1 ];
-            $criterioDeExito = [ 1 => 1,   2 => 10, 4 => 5, 8 => 3 , 12 => 2, 20 => 1 ];
+            $criterioDeExito = [ 1 => 20,   2 => 10, 4 => 5, 8 => 3 , 12 => 2, 20 => 1 ];
 
             foreach($routes as $key => $visitas):
                 
@@ -306,6 +306,8 @@ class CreateRouteCommand extends ContainerAwareCommand
                         if( !isset($informeClientes[$cliente->getId()]))
                             $informeClientes[$cliente->getId()] = [];
 
+
+
                         if(isset($totalVisitas[$cliente->getId()])):
                             $metrica = (int)round( ($totalDias/$totalVisitas[$cliente->getId()]) );
                             $a = $metrica;
@@ -317,9 +319,10 @@ class CreateRouteCommand extends ContainerAwareCommand
                                 $informeTotalCumplidos++;
                             endif;
                         else:
-
                             $cumplido =false;
                             $metrica = 0;
+                            $a = 0 ;
+                            $b = 0;
                         endif;
 
                         $informeClientes[$cliente->getId()] = [
@@ -354,6 +357,8 @@ class CreateRouteCommand extends ContainerAwareCommand
 
             //abrimos el archivo para agregar los contenidos
             file_put_contents($absolutePath."data/".$nfile."_resultados.html", $informeResultados);
+
+            exit();
 
             $output->writeln("Carga de datos finalizada, ahora puede ejecutar comando sarc:terminate-process", FILE_APPEND);
 
