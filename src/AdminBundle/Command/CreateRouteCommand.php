@@ -358,8 +358,6 @@ class CreateRouteCommand extends ContainerAwareCommand
             //abrimos el archivo para agregar los contenidos
             file_put_contents($absolutePath."data/".$nfile."_resultados.html", $informeResultados);
 
-            exit();
-
             $output->writeln("Carga de datos finalizada, ahora puede ejecutar comando sarc:terminate-process", FILE_APPEND);
 
             $command = $this->getApplication()->find('sarc:terminate-process');
