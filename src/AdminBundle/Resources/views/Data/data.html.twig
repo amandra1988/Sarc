@@ -1,0 +1,36 @@
+#Clientes maule modelo final
+data;
+
+param m := {{ dias }};
+param n := {{ vehiculos }};
+param p := {{ infinito }};
+param e := {{ epsilon }}; # varia
+param e2 := {{ epsilonDos }}; # varia
+
+param capacidad:= #capacidad maxima del camion en contenedores
+{% for camion in capacidad %}
+{{ loop.index }} {{ camion.camCapacidad }}{% if loop.last %};{% endif %}   #id-camion[{{ camion.id }}]
+{% endfor %}
+
+set diario {{ clieDiarios }};
+set disemanal {{ clieBisemanales }};
+set trisemanal {{ clieTrisemanales }};
+set semanal {{ clieSemanales }};
+set quincenal {{ clieQuincenales }};
+set mensual {{ clieMensuales }};
+
+param theta:=
+{% for theta in clientes %}
+{{ loop.index }} {{ theta.cliTheta}}{% if loop.last %};{% endif %}   
+{% endfor %}
+
+
+param demanda :=
+{% for demanda in clientes %}
+{{ loop.index }} {{ demanda.cliDemanda }}{% if loop.last %};{% endif %}   
+{% endfor %}
+
+param frecuencia :=
+{% for frecuencia in clientes %}
+{{ loop.index }} {{ frecuencias[frecuencia.frecuencia.id] }}{% if loop.last %};{% endif %}     
+{% endfor %}

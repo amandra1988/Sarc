@@ -27,21 +27,11 @@ class Proceso
     /**
      * @var datetime
      *
-     * @ORM\Column(name="prc_inicio", type="datetime")
-     * @JMS\SerializedName("inicio_proceso")
+     * @ORM\Column(name="prc_fecha", type="datetime", nullable=true)
+     * @JMS\SerializedName("fecha_proceso")
      * @JMS\Groups({"proceso_detalle","proceso_lista"})
      */
-    private $prcFechaInicio;
-
-
-    /**
-     * @var datetime
-     *
-     * @ORM\Column(name="prc_termino", type="datetime")
-     * @JMS\SerializedName("termino_proceso")
-     * @JMS\Groups({"proceso_detalle","proceso_lista"})
-     */
-    private $prcFechaTermino;
+    private $prcFecha;
     
     /**
      * @var int
@@ -54,12 +44,24 @@ class Proceso
     
      /**
      * @var string
-     * @ORM\Column(name="prc_estado", type="string", length=255)
+     * Estados del proceso [0=>'En espera', 1=>'En proceso', 2=>'Error', 3=>'Finalizado']
+     * @ORM\Column(name="prc_estado", type="integer")
      * @JMS\SerializedName("estado_proceso")
      * @JMS\Groups({"proceso_detalle","proceso_lista"})
      */
     private $prcEstado;
-    
+
+
+    /**
+     * @var string
+     * [0=>'No', 1=>'Si']
+     * @ORM\Column(name="prc_validado", type="boolean")
+     * @JMS\SerializedName("validado_proceso")
+     * @JMS\Groups({"proceso_detalle","proceso_lista"})
+     */
+     private $prcValidado;
+
+
     /**
      * @var text
      *
@@ -68,18 +70,52 @@ class Proceso
      * @JMS\Groups({"proceso_detalle","proceso_lista"})
      */
     private $prcObservacion;
-    
+
+    /**
+     * @var datetime
+     *
+     * @ORM\Column(name="prc_termino", type="datetime", nullable=true)
+     * @JMS\SerializedName("termino_proceso")
+     * @JMS\Groups({"proceso_detalle","proceso_lista"})
+     */
+     private $prcTermino;
+
     /**
      * @ORM\OneToMany(targetEntity="Ruta", mappedBy="proceso", cascade={"persist", "remove"} )
      */
     protected  $ruta;
+
     /**
-     * Constructor
+     * @ORM\ManyToOne(targetEntity="Empresa", inversedBy="procesos" )
+     * @ORM\JoinColumn(name="emp_id", referencedColumnName="emp_id")
+     * @JMS\SerializedName("empresa")
+     * @JMS\Groups({"r_procesos_empresa"})
      */
-    public function __construct()
-    {
-        $this->ruta = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+    protected $empresa;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Region", inversedBy="procesos" )
+     * @ORM\JoinColumn(name="reg_id", referencedColumnName="reg_id", nullable=true)
+     * @JMS\SerializedName("region")
+     * @JMS\Groups({"r_procesos_region"})
+     */
+    protected $region;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ProcesoClientes", mappedBy="proceso")
+     */
+    protected $procesoClientes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ProcesoCamiones", mappedBy="proceso")
+     */
+    protected $procesoCamiones;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Resultado", mappedBy="proceso", cascade={"persist", "remove"} )
+     */
+    protected $resultados;
+
 
     /**
      * Get id
@@ -92,51 +128,27 @@ class Proceso
     }
 
     /**
-     * Set prcFechaInicio
+     * Set prcFecha
      *
-     * @param \DateTime $prcFechaInicio
+     * @param \DateTime $prcFecha
      *
      * @return Proceso
      */
-    public function setPrcFechaInicio($prcFechaInicio)
+    public function setPrcFecha($prcFecha)
     {
-        $this->prcFechaInicio = $prcFechaInicio;
+        $this->prcFecha = $prcFecha;
 
         return $this;
     }
 
     /**
-     * Get prcFechaInicio
+     * Get prcFecha
      *
      * @return \DateTime
      */
-    public function getPrcFechaInicio()
+    public function getPrcFecha()
     {
-        return $this->prcFechaInicio;
-    }
-
-    /**
-     * Set prcFechaTermino
-     *
-     * @param \DateTime $prcFechaTermino
-     *
-     * @return Proceso
-     */
-    public function setPrcFechaTermino($prcFechaTermino)
-    {
-        $this->prcFechaTermino = $prcFechaTermino;
-
-        return $this;
-    }
-
-    /**
-     * Get prcFechaTermino
-     *
-     * @return \DateTime
-     */
-    public function getPrcFechaTermino()
-    {
-        return $this->prcFechaTermino;
+        return $this->prcFecha;
     }
 
     /**
@@ -166,7 +178,7 @@ class Proceso
     /**
      * Set prcEstado
      *
-     * @param string $prcEstado
+     * @param integer $prcEstado
      *
      * @return Proceso
      */
@@ -180,7 +192,7 @@ class Proceso
     /**
      * Get prcEstado
      *
-     * @return string
+     * @return integer
      */
     public function getPrcEstado()
     {
@@ -209,6 +221,61 @@ class Proceso
     public function getPrcObservacion()
     {
         return $this->prcObservacion;
+    }
+
+    /**
+     * Set prcTermino
+     *
+     * @param \DateTime $prcTermino
+     *
+     * @return Proceso
+     */
+    public function setPrcTermino($prcTermino)
+    {
+        $this->prcTermino = $prcTermino;
+
+        return $this;
+    }
+
+    /**
+     * Get prcTermino
+     *
+     * @return \DateTime
+     */
+    public function getPrcTermino()
+    {
+        return $this->prcTermino;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->ruta = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set prcValidado
+     *
+     * @param boolean $prcValidado
+     *
+     * @return Proceso
+     */
+    public function setPrcValidado($prcValidado)
+    {
+        $this->prcValidado = $prcValidado;
+
+        return $this;
+    }
+
+    /**
+     * Get prcValidado
+     *
+     * @return boolean
+     */
+    public function getPrcValidado()
+    {
+        return $this->prcValidado;
     }
 
     /**
@@ -243,5 +310,155 @@ class Proceso
     public function getRuta()
     {
         return $this->ruta;
+    }
+
+    /**
+     * Set empresa
+     *
+     * @param \AppBundle\Entity\Empresa $empresa
+     *
+     * @return Proceso
+     */
+    public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
+    {
+        $this->empresa = $empresa;
+
+        return $this;
+    }
+
+    /**
+     * Get empresa
+     *
+     * @return \AppBundle\Entity\Empresa
+     */
+    public function getEmpresa()
+    {
+        return $this->empresa;
+    }
+
+    /**
+     * Add procesoCliente
+     *
+     * @param \AppBundle\Entity\ProcesoClientes $procesoCliente
+     *
+     * @return Proceso
+     */
+    public function addProcesoCliente(\AppBundle\Entity\ProcesoClientes $procesoCliente)
+    {
+        $this->procesoClientes[] = $procesoCliente;
+
+        return $this;
+    }
+
+    /**
+     * Remove procesoCliente
+     *
+     * @param \AppBundle\Entity\ProcesoClientes $procesoCliente
+     */
+    public function removeProcesoCliente(\AppBundle\Entity\ProcesoClientes $procesoCliente)
+    {
+        $this->procesoClientes->removeElement($procesoCliente);
+    }
+
+    /**
+     * Get procesoClientes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProcesoClientes()
+    {
+        return $this->procesoClientes;
+    }
+
+    /**
+     * Add procesoCamione
+     *
+     * @param \AppBundle\Entity\ProcesoCamiones $procesoCamione
+     *
+     * @return Proceso
+     */
+    public function addProcesoCamione(\AppBundle\Entity\ProcesoCamiones $procesoCamione)
+    {
+        $this->procesoCamiones[] = $procesoCamione;
+
+        return $this;
+    }
+
+    /**
+     * Remove procesoCamione
+     *
+     * @param \AppBundle\Entity\ProcesoCamiones $procesoCamione
+     */
+    public function removeProcesoCamione(\AppBundle\Entity\ProcesoCamiones $procesoCamione)
+    {
+        $this->procesoCamiones->removeElement($procesoCamione);
+    }
+
+    /**
+     * Get procesoCamiones
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProcesoCamiones()
+    {
+        return $this->procesoCamiones;
+    }
+
+    /**
+     * Set region
+     *
+     * @param \AppBundle\Entity\Region $region
+     *
+     * @return Proceso
+     */
+    public function setRegion(\AppBundle\Entity\Region $region = null)
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
+    /**
+     * Get region
+     *
+     * @return \AppBundle\Entity\Region
+     */
+    public function getRegion()
+    {
+        return $this->region;
+    }
+
+    /**
+     * Add resultado
+     *
+     * @param \AppBundle\Entity\Resultado $resultado
+     *
+     * @return Proceso
+     */
+    public function addResultado(\AppBundle\Entity\Resultado $resultado)
+    {
+        $this->resultados[] = $resultado;
+
+        return $this;
+    }
+
+    /**
+     * Remove resultado
+     *
+     * @param \AppBundle\Entity\Resultado $resultado
+     */
+    public function removeResultado(\AppBundle\Entity\Resultado $resultado)
+    {
+        $this->resultados->removeElement($resultado);
+    }
+
+    /**
+     * Get resultados
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getResultados()
+    {
+        return $this->resultados;
     }
 }

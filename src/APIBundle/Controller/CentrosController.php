@@ -28,27 +28,44 @@ class CentrosController extends APIBaseController
     * @return Response La respuesta serializada
     */
     public function postCentrosAction(Request $request){
-        $groups  ='';
-        $latitud = 0;
-        $longitud= 0;
+        
+        $groups =['centro_detalle'];
+        
+        $latitud  = 0;
+        $longitud = 0;
+        $cDeposito= [];
+        
         $comuna  = $this->getDoctrine()->getRepository('AppBundle:Comuna')->find($request->get('comuna')); 
+        
         $centro = new CentroDeAcopio();
+        
         $centro->setCenNombre($request->get('nombre'));
         $centro->setCenDireccion($request->get('direccion'));
-        $centro->setCenNumero($request->get('numero'));
         $centro->setComuna($comuna);
         $centro->setCenVisible(true);
+        
         if( null !== $request->get('latitud') ){
             $latitud = $request->get('latitud');
             $longitud= $request->get('longitud'); 
         }else{
-            $direccion = $request->get('direccion').' '.$request->get('numero').', '.$comuna->getComNombre().', Chile';
-            $coordenadas = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion);        
-            $latitud = $coordenadas['latitud'];
-            $longitud= $coordenadas['longitud'];
+            $region = $comuna->getProvincia()->getRegion()->getRegNombre();
+
+            $direccion = ucwords(mb_strtolower($request->get('direccion').', '.$comuna->getComNombre().', '.$region.',  Chile','UTF-8'));
+
+            $coordenadasGPS = $this->obtenerLatitudYLongitud($direccion);
+
+            $latitud = $coordenadasGPS['latitud'];
+            $longitud= $coordenadasGPS['longitud']; 
         }
+        
+        $coordenadas = $this->obtenerCoordenadasGeograficas($coordenadasGPS);
+        
+        $xcen = $coordenadas['x'];
         $centro->setCenLatitud($latitud);
         $centro->setCenLongitud($longitud);
+        $centro->setCenY($coordenadas['y']);
+        $centro->setCenX($xcen);
+        
         $em = $this->getDoctrine()->getManager();
         $em->persist($centro);
         $em->flush();
@@ -61,28 +78,38 @@ class CentrosController extends APIBaseController
     * @return Response La respuesta serializada
     */
     public function patchCentrosAction(Request $request, CentroDeAcopio $centro){
-        $groups ='';
+        $groups =['centro_detalle'];
         $latitud = 0;
         $longitud= 0;
-        
+
         if($request->get('comuna')){
             $comuna  = $this->getDoctrine()->getRepository('AppBundle:Comuna')->find($request->get('comuna')); 
             $centro->setCenNombre($request->get('nombre'));
             $centro->setCenDireccion($request->get('direccion'));
-            $centro->setCenNumero($request->get('numero'));
             $centro->setComuna($comuna);
             
-            if( null !== $request->get('latitud') && $request->get('latitud') !='' ){
+            if( null !== $request->get('latitud') && $request->get('latitud') !='' && $request->get('latitud') !=0 ){
                 $latitud = $request->get('latitud');
                 $longitud= $request->get('longitud'); 
             }else{
-                $direccion = $request->get('direccion').' '.$request->get('numero').', '.$comuna->getComNombre().', Chile';
-                $coordenadas = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->obtenerLatitudYLongitud($direccion);        
-                $latitud = $coordenadas['latitud'];
-                $longitud= $coordenadas['longitud'];
+
+                $region = $comuna->getProvincia()->getRegion()->getRegNombre();
+
+                $direccion = ucwords(mb_strtolower($request->get('direccion').', '.$comuna->getComNombre().', '.$region.',  Chile','UTF-8'));
+
+                $coordenadasGPS = $this->obtenerLatitudYLongitud($direccion);
+
+                $latitud = $coordenadasGPS['latitud'];
+                $longitud= $coordenadasGPS['longitud'];
             }
-            $centro->setCenLatitud($latitud);
-            $centro->setCenLongitud($longitud);
+            
+            $coordenadas = $this->obtenerCoordenadasGeograficas($coordenadasGPS);
+            $xcen = $coordenadas['X'];
+        
+            $centro->setCenLatitud($latitud)
+                    ->setCenLongitud($longitud)
+                    ->setCenY($coordenadas['y'])
+                    ->setCenX($xcen);
         }
         
         $centro->setCenVisible($request->get('visible'));

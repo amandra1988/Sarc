@@ -1,11 +1,70 @@
 angular.module('admin-clientes')
+.directive('numbersOnly', function () {
+return {
+    restrict: 'A',
+    require: 'ngModel',
+    link: function (scope, element, attrs, ctrl) {
+            var validateNumber = function (inputValue) {
+                var maxLength = 9;
+                if (attrs.max) {
+                    maxLength = attrs.max;
+                }
+                if (inputValue === undefined) {
+                    return '';
+                }
+                var transformedInput = inputValue.replace(/[^0-9]/g, '');
+                if (transformedInput !== inputValue) {
+                    ctrl.$setViewValue(transformedInput);
+                    ctrl.$render();
+                }
+                if (transformedInput.length > maxLength) {
+                    transformedInput = transformedInput.substring(0, maxLength);
+                    ctrl.$setViewValue(transformedInput);
+                    ctrl.$render();
+                }
+                var isNotEmpty = (transformedInput.length === 0) ? true : false;
+                ctrl.$setValidity('notEmpty', isNotEmpty);
+                return transformedInput;
+            };
+
+            ctrl.$parsers.unshift(validateNumber);
+            ctrl.$parsers.push(validateNumber);
+            attrs.$observe('notEmpty', function () {
+                validateNumber(ctrl.$viewValue);
+            });
+        }
+    };
+})
 .controller('ClientesController',['$scope','ClienteFactory','$uibModal','urlBasePartials','ComunaFactory','FrecuenciaFactory','idEmpresa',function ($scope,ClienteFactory,$uibModal,urlBasePartials,ComunaFactory,FrecuenciaFactory,idEmpresa) {
-        
+    $scope.help =  function(modulo){
+        $scope.modulo = modulo;
+        var modalInstance= $uibModal.open({
+                templateUrl: urlBasePartials+'../../help.html',
+                backdrop: 'static',
+                size: 'lg',
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                controller: 'Help',
+                resolve: {
+                    modulo: function() {
+                        return $scope.modulo;
+                    }
+                }
+            });
+            return modalInstance;
+        };
+    
+        $("#help").click( function(){
+            $scope.help('Clientes');
+        });
+    
+    
         $scope.clientes =[];
 
         $scope.listaDeClientes= function (){
             ClienteFactory.query({ idEmpresa: idEmpresa , 'expand[]': []}, function(retorno) {
-                $scope.clientes = retorno;   
+                $scope.clientes = retorno;
             });   
         };
 
@@ -19,13 +78,27 @@ angular.module('admin-clientes')
         $scope.comunas =[];
         $scope.listaDeComunas= function (){
             ComunaFactory.query({'expand[]': []}, function(retorno) {
-                $scope.comunas = retorno;
+                $scope.comunas = retorno;      
             });
         };
 
         $scope.listaDeClientes();
         $scope.listaDeFrecuencias();
         $scope.listaDeComunas();
+
+        $scope.posicion = 10;
+
+        $scope.siguientes = function(){
+            if($scope.clientes.length > $scope.posicion){
+                $scope.posicion += 10;
+            };
+        }
+
+        $scope.anteriores = function(){
+            if($scope.posicion > 10){
+                $scope.posicion -= 10;
+            };
+        }
 
 
         $scope.accion = 1;
@@ -36,7 +109,8 @@ angular.module('admin-clientes')
             var modalInstance = $scope.modal();
             modalInstance.result.then(function()
             {
-               $scope.listaDeClientes();
+               $scope.listaDeClientes();s
+            }, function () {
             });
         };
         
@@ -48,16 +122,15 @@ angular.module('admin-clientes')
             for(var i=0,len=$scope.clientes.length; i<len;i++)
             {
                 if($scope.clientes[i].cliente_id === id) {
-                    $scope.cliente.id =$scope.clientes[i].cliente_id ;
-                    $scope.cliente.nombre =$scope.clientes[i].cliente_nombre ;
-                    $scope.cliente.direccion =$scope.clientes[i].cliente_direccion ;
-                    $scope.cliente.numero =$scope.clientes[i].cliente_numero ;
-                    $scope.cliente.telefono =$scope.clientes[i].cliente_telefono ;
-                    $scope.cliente.celular =$scope.clientes[i].cliente_celular ;
-                    $scope.cliente.correo =$scope.clientes[i].cliente_correo ;
-                    $scope.cliente.demanda =$scope.clientes[i].cliente_demanda ;
-                    $scope.cliente.frecuencia =$scope.clientes[i].cliente_frecuencia ;
-                    $scope.cliente.comuna =$scope.clientes[i].cliente_comuna ;
+                    $scope.cliente.id =$scope.clientes[i].cliente_id;
+                    $scope.cliente.nombre =$scope.clientes[i].cliente_nombre;
+                    $scope.cliente.direccion =$scope.clientes[i].cliente_direccion;
+                    $scope.cliente.telefono =$scope.clientes[i].cliente_telefono;
+                    $scope.cliente.celular =$scope.clientes[i].cliente_celular;
+                    $scope.cliente.correo =$scope.clientes[i].cliente_correo;
+                    $scope.cliente.demanda =$scope.clientes[i].cliente_demanda;
+                    $scope.cliente.frecuencia =$scope.clientes[i].cliente_frecuencia;
+                    $scope.cliente.comuna =$scope.clientes[i].comuna;
                     break;
                 }
             }
@@ -65,6 +138,7 @@ angular.module('admin-clientes')
             modalInstance.result.then(function()
             {
                $scope.listaDeClientes();
+            }, function () {
             });
         };
         
@@ -78,6 +152,7 @@ angular.module('admin-clientes')
                 c.$patch({idEmpresa:idEmpresa,idCliente:id}, function(response) {
                     $scope.listaDeClientes();
                 });
+            }, function () {
             }); 
         };
         
@@ -120,9 +195,11 @@ angular.module('admin-clientes')
     $scope.error='';
     $scope.confirm='';
     $scope.mensaje='';
+    $scope.display = '';
     
     if($scope.accion === 1){
-        $scope.mensaje = 'Nuevo' ;
+        $scope.mensaje = 'Nuevo';
+        $scope.display = 'none';
     }
     
     if($scope.accion === 2){
@@ -133,7 +210,6 @@ angular.module('admin-clientes')
         $scope.mensaje ='Eliminar';
     }
 
-    
     $scope.guardar= function(){
 
         if(!$scope.cli.nombre){
@@ -156,11 +232,6 @@ angular.module('admin-clientes')
             return;
         }
 
-        if(!$scope.cli.numero){
-            $scope.error = 'Ingrese número de la dirección del cliente';
-            return;
-        }
-
         if(!$scope.cli.comuna){
             $scope.error = 'Ingrese comuna del cliente';
             return;
@@ -177,14 +248,14 @@ angular.module('admin-clientes')
         c.nombre=$scope.cli.nombre;
         c.frecuencia=$scope.cli.frecuencia.frecuencia_id;
         c.direccion=$scope.cli.direccion;
-        c.numero= $scope.cli.numero;
         c.comuna= $scope.cli.comuna.comuna_id;
+
+        console.log(c.comuna);
         c.telefono=$scope.cli.telefono;
         c.celular=$scope.cli.celular;
         c.correo=$scope.cli.correo;
         c.demanda=$scope.cli.demanda;
         c.visible=true;
-
         if(accion === 1)
         {
             c.$save({idEmpresa:idEmpresa}, function(response) {

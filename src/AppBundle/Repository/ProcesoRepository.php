@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Proceso;
+
 /**
  * ProcesoRepository
  *
@@ -10,16 +12,55 @@ namespace AppBundle\Repository;
  */
 class ProcesoRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function buscarProcesosDeLaEmpresa($idEmpresa){
+    public function obtenerProcesosDeLaEmpresa($idEmpresa){
 
-            return $this->getEntityManager()
-            ->createQuery(' SELECT p
-                            FROM AppBundle:Proceso p
-                            LEFT JOIN p.ruta r
-                            LEFT JOIN r.rutaDetalle rd
-                            LEFT JOIN rd.cliente c
-                            WHERE c.empresa = :idEmpresa')
-            ->setParameter('idEmpresa',$idEmpresa)
-            ->getResult();
-	}
+        $query = $this->createQueryBuilder('p')
+                ->where('p.empresa = ?1')
+                ->orderBy('p.id', 'DESC')
+                ->setParameter(1, $idEmpresa);      
+        return $query->getQuery()->getResult();
+    }
+
+    public function agregarActualizarProceso($empresa,$clientes,$region){
+
+        $proceso = $this->findBy(array('empresa'=>$empresa,'prcEstado'=>0,'region'=>$region));
+        $totalcli = count($clientes);
+
+        $mensaje ='';
+        $observacion='Debe validar este proceso para que pueda ser ejecutado.';
+        
+        if(count($proceso) === 0){
+            $proceso = new Proceso();
+            $mensaje ='Nuevo proceso creado correctamente.';
+        }else{
+            $proceso = $proceso[0];
+            $mensaje ='Proceso actualizado.';
+        }
+
+        $proceso->setPrcCantidadClientes($totalcli)
+                ->setPrcFecha(new \DateTime(date('Y-m-d H:s:i')))
+                ->setPrcEstado(0)
+                ->setPrcValidado(false)
+                ->setEmpresa($empresa)
+                ->setRegion($region)
+                ->setPrcObservacion($observacion);
+
+        $em = $this->getEntityManager();
+        $em->persist($proceso);
+        $em->flush();
+        
+        return $mensaje;
+    }
+    
+    public function procesoEnEsperaDeEjecucion($validado,$estado){
+        
+        return $this->getEntityManager()
+                ->createQuery(' SELECT p
+                                FROM AppBundle:Proceso p
+                                WHERE p.prcValidado= :validado
+                                AND p.prcEstado= :estado')
+                ->setParameter('validado', $validado)
+                ->setParameter('estado', $estado)
+                ->getResult();
+    }
 }

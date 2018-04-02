@@ -1,13 +1,36 @@
 angular.module('admin-camiones')
 .controller('CamionesController',['$scope','CamionFactory','OperadorFactory','$uibModal','urlBasePartials','idEmpresa',function ($scope,CamionFactory,OperadorFactory,$uibModal,urlBasePartials,idEmpresa) {
         
+        $scope.help =  function(modulo){
+        $scope.modulo = modulo;
+        var modalInstance= $uibModal.open({
+                templateUrl: urlBasePartials+'../../help.html',
+                backdrop: 'static',
+                size: 'lg',
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                controller: 'Help',
+                resolve: {
+                    modulo: function() {
+                        return $scope.modulo;
+                    }
+                }
+            });
+            return modalInstance;
+        };
+    
+        $("#help").click( function(){
+            $scope.help('Camiones');
+        });
+    
+    
         $scope.camiones=[];
         $scope.operadores=[];
 
         $scope.listaDeCamiones= function (){
             CamionFactory.query({ idEmpresa: idEmpresa , 'expand[]': ['r_camion_operador','operador_detalle']}, function(retorno) {
                 $scope.camiones = retorno;
-                 console.log(retorno);
             });
         };
         
@@ -29,6 +52,7 @@ angular.module('admin-camiones')
             modalInstance.result.then(function()
             {
                $scope.listaDeCamiones();
+            }, function () {
             });
         };
         
@@ -43,6 +67,7 @@ angular.module('admin-camiones')
                     $scope.camion.patente = $scope.camiones[i].patente_camion ;
                     $scope.camion.capacidad = $scope.camiones[i].capacidad_camion ;
                     $scope.camion.tipo_carga = $scope.camiones[i].tipo_carga_camion ;
+                    $scope.camion.estado = $scope.camiones[i].estado_camion ;
                     $scope.camion.operador = $scope.camiones[i].camion_operador ;
                     break;
                 }
@@ -51,6 +76,7 @@ angular.module('admin-camiones')
             modalInstance.result.then(function()
             {
                $scope.listaDeCamiones();
+            }, function () {
             });
         };
         
@@ -60,10 +86,21 @@ angular.module('admin-camiones')
             modalInstance.result.then(function()
             {
                 var c = new CamionFactory();
+                for(var i=0,len=$scope.camiones.length; i<len;i++)
+                {
+                    if($scope.camiones[i].id_camion === id) {
+                        c.patente = $scope.camiones[i].patente_camion ;
+                        c.capacidad = $scope.camiones[i].capacidad_camion ;
+                        c.estado = $scope.camiones[i].estado_camion ;
+                        break;
+                    }
+                }
+
                 c.visible = 0;
                 c.$patch({idEmpresa:idEmpresa,idCamion:id}, function(response) {
                     $scope.listaDeCamiones();
                 });
+            }, function () {
             }); 
         };
         
@@ -101,10 +138,10 @@ angular.module('admin-camiones')
     $scope.error   = '';
     $scope.confirm = '';
     $scope.mensaje = '';
-    $scope.cam={tipo_carga:'1'};
+    $scope.cam     = { tipo_carga:'1', estado:'1' };
 
     if($scope.accion === 1){
-        $scope.mensaje = 'Nueva' ;
+        $scope.mensaje = 'Nuevo' ;
     }
     
     if($scope.accion === 2){
@@ -113,10 +150,17 @@ angular.module('admin-camiones')
         $scope.cam.patente = $scope.camion.patente;
         $scope.cam.capacidad = $scope.camion.capacidad;
         $scope.cam.operador = $scope.camion.operador;
-        if($scope.camion.tipo_carga === 1){
+        $scope.cam.estado = $scope.camion.estado;
+        if($scope.camion.tipo_carga){
             $scope.cam.tipo_carga ='1';
         }else{
             $scope.cam.tipo_carga ='2';
+        }
+
+        if(!$scope.camion.estado){
+            $scope.cam.estado ='0';
+        }else{
+            $scope.cam.estado ='1';
         }
     }
 
@@ -151,8 +195,8 @@ angular.module('admin-camiones')
         c.patente    = $scope.cam.patente;
         c.capacidad  = $scope.cam.capacidad;
         c.tipo_carga = $scope.cam.tipo_carga;
+        c.estado     = $scope.cam.estado;
         c.operador   = $scope.cam.operador.id_operador;
-        c.estado     = 1;
         c.visible    = 1;
 
         if(accion === 1)

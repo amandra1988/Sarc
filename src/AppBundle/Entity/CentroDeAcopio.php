@@ -41,17 +41,8 @@ class CentroDeAcopio
      * @JMS\Groups({"centro_lista"})
      */
     private $cenDireccion;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="cen_numero", type="integer")
-     * @JMS\SerializedName("numero_centro")
-     * @JMS\Groups({"centro_lista"})
-     */
-    private $cenNumero;
     
-     /**
+    /**
      * @var boolean
      *
      * @ORM\Column(name="cen_visible", type="boolean")
@@ -70,9 +61,7 @@ class CentroDeAcopio
      * @ORM\OneToMany(targetEntity="Empresa", mappedBy="centroDeAcopio", cascade={"persist", "remove"} )
      */
     protected  $empresas;
-    
-    
-    
+       
     /**
      * @var string
      *
@@ -90,7 +79,25 @@ class CentroDeAcopio
      * @JMS\Groups({"centro_detalle","centro_lista"})
      */
     private $cenLatitud;
-    
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cen_x", type="string", length=20)
+     * @JMS\SerializedName("centro_x")
+     * @JMS\Groups({"centro_detalle","centro_lista"})
+     */
+     private $cenX;
+     
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cen_y", type="string", length=20)
+     * @JMS\SerializedName("centro_y")
+     * @JMS\Groups({"centro_detalle","centro_lista"})
+     */
+     private $cenY;
+
     /**
      * Get id
      *
@@ -147,30 +154,6 @@ class CentroDeAcopio
     public function getCenDireccion()
     {
         return $this->cenDireccion;
-    }
-
-    /**
-     * Set cenNumero
-     *
-     * @param string $cenNumero
-     *
-     * @return CentroDeAcopio
-     */
-    public function setCenNumero($cenNumero)
-    {
-        $this->cenNumero = $cenNumero;
-
-        return $this;
-    }
-
-    /**
-     * Get cenNumero
-     *
-     * @return string
-     */
-    public function getCenNumero()
-    {
-        return $this->cenNumero;
     }
 
     /**
@@ -309,5 +292,53 @@ class CentroDeAcopio
     public function getCenLatitud()
     {
         return $this->cenLatitud;
+    }
+
+    /**
+     * Set cenX
+     *
+     * @param string $cenX
+     *
+     * @return CentroDeAcopio
+     */
+    public function setCenX($cenX)
+    {
+        $this->cenX = $cenX;
+
+        return $this;
+    }
+
+    /**
+     * Get cenX
+     *
+     * @return string
+     */
+    public function getCenX()
+    {
+        return $this->cenX;
+    }
+
+    /**
+     * Set cenY
+     *
+     * @param string $cenY
+     *
+     * @return CentroDeAcopio
+     */
+    public function setCenY($cenY)
+    {
+        $this->cenY = $cenY;
+
+        return $this;
+    }
+
+    /**
+     * Get cenY
+     *
+     * @return string
+     */
+    public function getCenY()
+    {
+        return $this->cenY;
     }
 }

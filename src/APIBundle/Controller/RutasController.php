@@ -17,8 +17,9 @@ class RutasController extends APIBaseController
             $groups = array_merge($groups, $request->get('expand'));
         }
         $anio = $request->get('anio');
-        $mes  = date('m',$request->get('mes')); 
-        $rutas = $this->getDoctrine()->getRepository('AppBundle:Ruta')->buscarRutasDelMes($mes,$anio,$idEmpresa);
+        $mes  = date('m',$request->get('mes'));
+
+        $rutas = $this->getDoctrine()->getRepository('AppBundle:Ruta')->buscarRutasDelMes($mes,$anio,$idEmpresa); 
         return $this->serializedResponse($rutas, $groups);
     }
 }

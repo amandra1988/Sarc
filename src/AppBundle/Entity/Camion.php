@@ -81,6 +81,16 @@ class Camion
     protected $rutas;
 
     /**
+     * @ORM\OneToMany(targetEntity="ProcesoCamiones", mappedBy="camion")
+     */
+    protected $procesoCamiones;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Resultado", mappedBy="camion", cascade={"persist", "remove"} )
+     */
+    protected $resultados;
+
+    /**
      * Get id
      *
      * @return int
@@ -277,5 +287,73 @@ class Camion
     public function getOperador()
     {
         return $this->operador;
+    }
+
+    /**
+     * Add procesoCamione
+     *
+     * @param \AppBundle\Entity\ProcesoCamiones $procesoCamione
+     *
+     * @return Camion
+     */
+    public function addProcesoCamione(\AppBundle\Entity\ProcesoCamiones $procesoCamione)
+    {
+        $this->procesoCamiones[] = $procesoCamione;
+
+        return $this;
+    }
+
+    /**
+     * Remove procesoCamione
+     *
+     * @param \AppBundle\Entity\ProcesoCamiones $procesoCamione
+     */
+    public function removeProcesoCamione(\AppBundle\Entity\ProcesoCamiones $procesoCamione)
+    {
+        $this->procesoCamiones->removeElement($procesoCamione);
+    }
+
+    /**
+     * Get procesoCamiones
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProcesoCamiones()
+    {
+        return $this->procesoCamiones;
+    }
+
+    /**
+     * Add resultado
+     *
+     * @param \AppBundle\Entity\Resultado $resultado
+     *
+     * @return Camion
+     */
+    public function addResultado(\AppBundle\Entity\Resultado $resultado)
+    {
+        $this->resultados[] = $resultado;
+
+        return $this;
+    }
+
+    /**
+     * Remove resultado
+     *
+     * @param \AppBundle\Entity\Resultado $resultado
+     */
+    public function removeResultado(\AppBundle\Entity\Resultado $resultado)
+    {
+        $this->resultados->removeElement($resultado);
+    }
+
+    /**
+     * Get resultados
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getResultados()
+    {
+        return $this->resultados;
     }
 }

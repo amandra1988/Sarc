@@ -1,6 +1,7 @@
 angular.module('superadmin-centro-de-acopio')
 .controller('CentroController',['$scope','CentroFactory','$uibModal','urlBasePartials','ComunaFactory',function ($scope,CentroFactory, $uibModal,urlBasePartials,ComunaFactory) {
-        
+
+        console.log('Hola Romina');
         $scope.centros =[];
 
         $scope.listaDeCentros= function (){
@@ -20,7 +21,7 @@ angular.module('superadmin-centro-de-acopio')
         };
             
         $scope.listaDeComunas();
-		$scope.centro = [];
+	$scope.centro = [];
 		
         $scope.nuevoCentro = function() {
             $scope.accion = 1;

@@ -1,53 +1,66 @@
 {% extends 'base.html.twig' %}
-{% block title %}SAARC{% endblock %}
+{% block title %}SARC{% endblock %}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
 {% endblock %}
 
 {% block bodystyle%}
-    style="background-image: url({{ asset('assets/img/superadmin.jpg') }});
-    background-repeat:no-repeat;
-    background-position: center top;
-    background-size: 100% auto;"
+    style="background-color: #FFF;"
 {% endblock %}
 
 {% block header %}
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">SAARC</a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                  <li class="active"><a href="#">Home</a></li>
-                  <li><a href="centros">Centros de acopio</a></li>
-                  <li><a href="empresas">Empresas</a></li> 
-                  <li><a href="usuarios">Usuarios</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                  <li><a href="{{path('logout')}}">Cerrar sesión</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+  <img class="img-responsive" width="15%" style="margin: 7px auto;" src="{{asset('assets/img/sarc.png') }}" alt="">
+  <hr>
+  <section style="background:#FFF;" class="row animated fadeInDown">
+      <div class="board">
+        <ul class="nav nav-tabs" id="myTab">
+          <div class="liner"></div>
+          <li class="active">
+            <a href="#home" data-toggle="tab" title="Home">
+              <span class="round-tabs one">
+                <img class="img-responsive" width="80%" style="margin: 7px auto;" src="{{asset('assets/img/home.png') }}" alt="">
+              </span> 
+            </a>
+          </li>
+          <li>
+            <a href="{{path('centros')}}" title="Centros de acopio">
+              <span class="round-tabs two">
+                <img class="img-responsive" width="70%" style="margin: 3px auto;" src="{{asset('assets/img/centro.png') }}" alt="">
+              </span> 
+            </a>
+          </li>
+          <li>
+            <a href="{{path('empresas')}}" title="Empresas">
+              <span class="round-tabs three" >
+                <img class="img-responsive" width="85%" style="margin: 7px auto;" src="{{asset('assets/img/empresas.png') }}" alt="">
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="{{path('usuarios')}}"  title="Usuarios">
+              <span class="round-tabs four">
+                <img class="img-responsive" width="70%" style="margin: 3px auto;" src="{{asset('assets/img/login.png') }}" alt="">
+              </span> 
+            </a>
+          </li>
+          <li>
+            <a href="{{path('logout')}}"  title="Salir">
+              <span class="round-tabs five">
+                <img class="img-responsive" width="50%" style="margin: 16px auto;" src="{{asset('assets/img/logout.png') }}" alt="">
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+  </section>
 {% endblock %}
 
 {% block body %}
-    <div class="jumbotron">
-        <h1>Bienvenido</h1>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque viverra, mi vitae rutrum ullamcorper, turpis nulla mattis sem, ut pellentesque nisl lacus ac eros. Nulla pharetra, purus eget fermentum egestas, arcu ex posuere leo, vel tempor diam ipsum nec ipsum. Sed vitae nibh non nibh volutpat interdum. Curabitur non neque sit amet augue sollicitudin fermentum in at quam. Aliquam ullamcorper, nunc imperdiet lacinia aliquam, justo ipsum convallis ex, quis imperdiet massa nunc id sem. Curabitur laoreet odio eu orci sagittis, vel consectetur magna sagittis. Donec et leo sollicitudin, volutpat augue eu, bibendum risus. Nulla tellus nulla, vulputate id purus non, volutpat pellentesque eros. Ut ac euismod justo.
-        </p>
+    <div class="contenedor animated fadeInDown" style="text-align:center">
+        <h3 style="color:#3e5e9a;margin-top: 50px;">Bienvenido Súper administrador</h3>      
     </div>
 {% endblock %}
-
 {% block javascripts %}
     {{ parent() }}
 {% endblock %}

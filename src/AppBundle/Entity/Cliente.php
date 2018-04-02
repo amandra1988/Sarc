@@ -44,20 +44,11 @@ class Cliente
     private $cliDireccion;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="cli_numero", type="string", length=255)
-     * @JMS\SerializedName("cliente_numero")
-     * @JMS\Groups({"cliente_detalle","cliente_lista"})
-     */
-    private $cliNumero;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="cli_telefono", type="integer", length=9, nullable=true)
      * @JMS\SerializedName("cliente_telefono")
-     * @JMS\Groups({"cliente_lista"})
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
      */
     private $cliTelefono;
 
@@ -66,7 +57,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_celular", type="integer", length=9, nullable=true)
      * @JMS\SerializedName("cliente_celular")
-     * @JMS\Groups({"cliente_lista"})
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
      */
     private $cliCelular;
 
@@ -75,7 +66,7 @@ class Cliente
      *
      * @ORM\Column(name="cli_correo", type="string", length=100, nullable=true)
      * @JMS\SerializedName("cliente_correo")
-     * @JMS\Groups({"cliente_lista"})
+     * @JMS\Groups({"cliente_detalle","cliente_lista"})
      */
     private $cliCorreo;
 
@@ -103,11 +94,38 @@ class Cliente
      * @JMS\Groups({"cliente_lista"})
      */
     private $cliLatitud;
-    
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cli_x", type="string", length=20)
+     * @JMS\SerializedName("cliente_x")
+     * @JMS\Groups({"cliente_lista"})
+     */
+     private $cliX;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="cli_y", type="string", length=20)
+     * @JMS\SerializedName("cliente_y")
+     * @JMS\Groups({"cliente_lista"})
+     */
+     private $cliY;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="cli_theta", type="string", length=20)
+     * @JMS\SerializedName("cliente_theta")
+     * @JMS\Groups({"cliente_lista"})
+     */
+     private $cliTheta;
+     
      /**
      * @var int
      *
-     * @ORM\Column(name="cli_demanda", type="integer")
+     * @ORM\Column(name="cli_demanda", type="string", length=10 )
      * @JMS\SerializedName("cliente_demanda")
      * @JMS\Groups({"cliente_lista"})
      */
@@ -129,20 +147,12 @@ class Cliente
      * @JMS\Groups({"r_cliente_usuario"})
      */
     protected $usuario;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Empresa", inversedBy="clientes" )
-     * @ORM\JoinColumn(name="emp_id", referencedColumnName="emp_id")
-     * @JMS\SerializedName("cliente_empresa")
-     * @JMS\Groups({"r_empresa_cliente"})
-     */
-    protected $empresa;
-    
+        
     /**
      * @ORM\ManyToOne(targetEntity="Comuna", inversedBy="clientes" )
      * @ORM\JoinColumn(name="com_id", referencedColumnName="com_id")
-     * @JMS\SerializedName("cliente_comuna")
-     * @JMS\Groups({"cliente_lista"})
+     * @JMS\SerializedName("comuna")
+     * @JMS\Groups({"r_cliente_comuna"})
      */
     protected $comuna;
 
@@ -151,6 +161,12 @@ class Cliente
      * @ORM\OneToMany(targetEntity="RutaDetalle", mappedBy="cliente", cascade={"persist", "remove"} )
      */
     protected  $rutas;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="ProcesoClientes", mappedBy="cliente")
+     */
+    protected $procesoClientes;
     
     /**
      * Get id
@@ -210,31 +226,6 @@ class Cliente
     public function getCliDireccion()
     {
         return $this->cliDireccion;
-    }
-
-    /**
-     * Set cliNumero
-     *
-     * @param string $cliNumero
-     *
-     * @return Cliente
-     */
-    public function setCliNumero($cliNumero)
-    {
-        if($cliNumero) {
-            $this->cliNumero = $cliNumero;
-        }
-        return $this;
-    }
-
-    /**
-     * Get cliNumero
-     *
-     * @return string
-     */
-    public function getCliNumero()
-    {
-        return $this->cliNumero;
     }
 
     /**
@@ -548,5 +539,111 @@ class Cliente
     public function getUsuario()
     {
         return $this->usuario;
+    }
+
+    /**
+     * Add procesoCliente
+     *
+     * @param \AppBundle\Entity\ProcesoClientes $procesoCliente
+     *
+     * @return Cliente
+     */
+    public function addProcesoCliente(\AppBundle\Entity\ProcesoClientes $procesoCliente)
+    {
+        $this->procesoClientes[] = $procesoCliente;
+
+        return $this;
+    }
+
+    /**
+     * Remove procesoCliente
+     *
+     * @param \AppBundle\Entity\ProcesoClientes $procesoCliente
+     */
+    public function removeProcesoCliente(\AppBundle\Entity\ProcesoClientes $procesoCliente)
+    {
+        $this->procesoClientes->removeElement($procesoCliente);
+    }
+
+    /**
+     * Get procesoClientes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProcesoClientes()
+    {
+        return $this->procesoClientes;
+    }
+
+    /**
+     * Set cliX
+     *
+     * @param string $cliX
+     *
+     * @return Cliente
+     */
+    public function setCliX($cliX)
+    {
+        $this->cliX = $cliX;
+
+        return $this;
+    }
+
+    /**
+     * Get cliX
+     *
+     * @return string
+     */
+    public function getCliX()
+    {
+        return $this->cliX;
+    }
+
+    /**
+     * Set cliY
+     *
+     * @param string $cliY
+     *
+     * @return Cliente
+     */
+    public function setCliY($cliY)
+    {
+        $this->cliY = $cliY;
+
+        return $this;
+    }
+
+    /**
+     * Get cliY
+     *
+     * @return string
+     */
+    public function getCliY()
+    {
+        return $this->cliY;
+    }
+
+    /**
+     * Set cliTheta
+     *
+     * @param string $cliTheta
+     *
+     * @return Cliente
+     */
+    public function setCliTheta($cliTheta)
+    {
+        $this->cliTheta = $cliTheta;
+
+        return $this;
+    }
+
+    /**
+     * Get cliTheta
+     *
+     * @return string
+     */
+    public function getCliTheta()
+    {
+        return $this->cliTheta;
     }
 }

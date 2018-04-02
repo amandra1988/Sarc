@@ -1,12 +1,75 @@
 var app = angular.module('superadmin-empresas');
 
+app.directive('numbersOnly', function () {
+return {
+    restrict: 'A',
+    require: 'ngModel',
+    link: function (scope, element, attrs, ctrl) {
+            var validateNumber = function (inputValue) {
+                var maxLength = 9;
+                if (attrs.max) {
+                    maxLength = attrs.max;
+                }
+                if (inputValue === undefined) {
+                    return '';
+                }
+                var transformedInput = inputValue.replace(/[^0-9]/g, '');
+                if (transformedInput !== inputValue) {
+                    ctrl.$setViewValue(transformedInput);
+                    ctrl.$render();
+                }
+                if (transformedInput.length > maxLength) {
+                    transformedInput = transformedInput.substring(0, maxLength);
+                    ctrl.$setViewValue(transformedInput);
+                    ctrl.$render();
+                }
+                var isNotEmpty = (transformedInput.length === 0) ? true : false;
+                ctrl.$setValidity('notEmpty', isNotEmpty);
+                return transformedInput;
+            };
+
+            ctrl.$parsers.unshift(validateNumber);
+            ctrl.$parsers.push(validateNumber);
+            attrs.$observe('notEmpty', function () {
+                validateNumber(ctrl.$viewValue);
+            });
+        }
+    };
+});
+
+
 app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','$uibModal','urlBasePartials',function ($scope,EmpresaFactory,CentroFactory,$uibModal,urlBasePartials) {
+        
+        $scope.help =  function(modulo){
+        $scope.modulo = modulo;
+        var modalInstance= $uibModal.open({
+                templateUrl: urlBasePartials+'../../help.html',
+                backdrop: 'static',
+                size: 'lg',
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                controller: 'Help',
+                resolve: {
+                    modulo: function() {
+                        return $scope.modulo;
+                    }
+                }
+            });
+            return modalInstance;
+        };
+        
+        $("#help").click( function(){
+            $scope.help('Empresas');
+        });
+    
+
         
         $scope.empresas =[];
 
         $scope.listaDeEmpresas= function (){
             EmpresaFactory.query({'expand[]': ['r_empresa_centro_acopio','centro_detalle']}, function(retorno) {
-                $scope.empresas = retorno;   
+               $scope.empresas = retorno;   
             });   
         };
         
@@ -29,6 +92,7 @@ app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','
             modalInstance.result.then(function()
             {
                $scope.listaDeEmpresas();
+            }, function () {
             });
         };
         
@@ -52,6 +116,7 @@ app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','
             modalInstance.result.then(function()
             {
                $scope.listaDeEmpresas();
+            }, function () {
             });
         };
         
@@ -65,7 +130,8 @@ app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','
                 e.$patch({idEmpresa:id}, function(response) {
                     $scope.listaDeEmpresas();
                 });
-            }); 
+            }, function () {
+            });
         };
         
         $scope.modal =  function(){
@@ -113,7 +179,6 @@ app.controller('EmpresasController',['$scope','EmpresaFactory','CentroFactory','
         $scope.emp.direccion = empresa.dir;
         $scope.emp.telefono = empresa.tel;
         $scope.emp.celular = empresa.cel;
-        console.log($scope.emp);
     }
 
     if($scope.accion === 0){

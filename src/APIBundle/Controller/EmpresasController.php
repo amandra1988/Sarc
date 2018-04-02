@@ -3,6 +3,7 @@
 namespace APIBundle\Controller;
 
 use AppBundle\Entity\Empresa;
+use AppBundle\Entity\ConfiguracionAmpl;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -28,8 +29,11 @@ class EmpresasController extends APIBaseController
     * @return Response La respuesta serializada
     */
     public function postEmpresasAction(Request $request){
-        $groups ='';
+        $groups =['empresa_detalle'];
         $centroDeAcopio  = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->find($request->get('centro'));
+        
+        $em = $this->getDoctrine()->getManager();
+
         $empresa = new Empresa();
         $empresa->setCentroDeAcopio($centroDeAcopio)
                 ->setEmpNombre($request->get('nombre'))
@@ -38,9 +42,21 @@ class EmpresasController extends APIBaseController
                 ->setEmpVisible(true)
                 ->setEmpCelular($request->get('celular'))
                 ->setEmpTelefono($request->get('telefono')); 
-        $em = $this->getDoctrine()->getManager();
+        
         $em->persist($empresa);
         $em->flush();
+
+        $configuracion = new ConfiguracionAmpl();
+        $configuracion
+            ->setEmpresa($empresa)
+            ->setDias(21)
+            ->setInfinito(360)
+            ->setEpsilon(20)
+            ->setEpciloDos(7);
+
+        $em->persist($configuracion);
+        $em->flush();
+
         return $this->serializedResponse($empresa, $groups);
     }
     
@@ -50,7 +66,7 @@ class EmpresasController extends APIBaseController
     * @return Response La respuesta serializada
     */
     public function patchEmpresasAction(Request $request, Empresa $empresa){
-        $groups ='';
+        $groups =['empresa_detalle'];
         if($request->get('centro')){
             $centroDeAcopio  = $this->getDoctrine()->getRepository('AppBundle:CentroDeAcopio')->find($request->get('centro')); 
             $empresa->setCentroDeAcopio($centroDeAcopio);  

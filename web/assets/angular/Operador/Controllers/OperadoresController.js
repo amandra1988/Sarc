@@ -1,5 +1,66 @@
 var app = angular.module('admin-operadores');
+
+app.directive('numbersOnly', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, element, attrs, ctrl) {
+                var validateNumber = function (inputValue) {
+                    var maxLength = 9;
+                    if (attrs.max) {
+                        maxLength = attrs.max;
+                    }
+                    if (inputValue === undefined) {
+                        return '';
+                    }
+                    var transformedInput = inputValue.replace(/[^0-9]/g, '');
+                    if (transformedInput !== inputValue) {
+                        ctrl.$setViewValue(transformedInput);
+                        ctrl.$render();
+                    }
+                    if (transformedInput.length > maxLength) {
+                        transformedInput = transformedInput.substring(0, maxLength);
+                        ctrl.$setViewValue(transformedInput);
+                        ctrl.$render();
+                    }
+                    var isNotEmpty = (transformedInput.length === 0) ? true : false;
+                    ctrl.$setValidity('notEmpty', isNotEmpty);
+                    return transformedInput;
+                };
+    
+                ctrl.$parsers.unshift(validateNumber);
+                ctrl.$parsers.push(validateNumber);
+                attrs.$observe('notEmpty', function () {
+                    validateNumber(ctrl.$viewValue);
+                });
+            }
+        };
+    });
+
 app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','urlBasePartials','idEmpresa',function ($scope,OperadorFactory,$uibModal,urlBasePartials,idEmpresa) {
+        
+        $scope.help =  function(modulo){
+        $scope.modulo = modulo;
+        var modalInstance= $uibModal.open({
+                templateUrl: urlBasePartials+'../../help.html',
+                backdrop: 'static',
+                size: 'lg',
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                controller: 'Help',
+                resolve: {
+                    modulo: function() {
+                        return $scope.modulo;
+                    }
+                }
+            });
+            return modalInstance;
+        };
+
+        $("#help").click( function(){
+            $scope.help('Operadores');
+        });
         
         $scope.operadores =[];
 
@@ -20,6 +81,7 @@ app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','u
             modalInstance.result.then(function()
             {
                $scope.listaDeOperadores();
+            }, function () {
             });
         };
 
@@ -45,6 +107,7 @@ app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','u
             modalInstance.result.then(function()
             {
                $scope.listaDeOperadores();
+            }, function () {
             });
         };
         
@@ -58,6 +121,7 @@ app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','u
                 o.$patch({idEmpresa:idEmpresa,idOperador:id}, function(response) {
                     $scope.listaDeOperadores();
                 });
+            }, function () {
             }); 
         };
         
@@ -123,12 +187,6 @@ app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','u
             $scope.error = 'Ingrese n° de licencia del operador.';
             return;   
         }
-        
-        if($scope.ope.celular > 999999999)
-        {
-            $scope.error = 'El campo celular deben tener máximo 9 dígitos.';
-            return;
-        }
 
         var o = new OperadorFactory();
         o.nombre = $scope.ope.nombre;
@@ -140,8 +198,12 @@ app.controller('OperadoresController',['$scope','OperadorFactory','$uibModal','u
         o.visible = true;
         if(accion === 1)
         {
-            o.$save({idEmpresa: idEmpresa}, function(response) {
-               $uibModalInstance.close();
+            o.$save({idEmpresa: idEmpresa}, function(response) {  
+                if(response.error){
+                    $scope.error = response.error;
+                }else{
+                    $uibModalInstance.close();
+                }
             });
         }else{ // Editar
             o.$patch({idEmpresa:idEmpresa, idOperador:$scope.ope.id }, function(response) {

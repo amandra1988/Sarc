@@ -1,0 +1,110 @@
+<table width="50%">
+    <tr>
+        <td colspan="3">
+            <strong>Resultados generales</strong>
+        </td>
+    </tr>
+    <tr>
+        <td> Total de clientes del procesados </td>
+        <td> :</td>
+        <td> {{ total_clientes }}</td>
+    </tr>
+    <tr>
+        <td> Total de clientes realmente procesado</td>
+        <td> :</td>
+        <td>{{ total_clientes_procesados }} </td>
+    </tr>
+    <tr>
+        <td> Clientes con visita generadas</td>
+        <td> :</td>
+        <td> {{ cumplidos }}</td>
+    </tr>
+    <tr>
+        <td> Cumplimiento de visitas </td>
+        <td> :</td>
+        <td> {{ porcentajeCumplimiento }}</td>
+    </tr>
+</table>
+<br>
+
+<table>
+    <tr>
+        <td colspan="3">Resultados por cliente</td>
+    </tr>
+</table>
+<br>
+
+<table border="1" width="50%" style="font-size: 11px">
+<tr>
+    <th>Cliente ID</th>
+    <th>Correlativo</th>
+    <th>Frecuencia</th>
+    <th>Visitas generadas</th>
+    <th>Visitas esperadas</th>
+    <th>Críterio de éxito</th>
+    <th>¿El objetivo se cumplió?</th>
+</tr>
+{% for cliente in clientes %}
+        <tr>
+            <td>{{ cliente.id }} </td>
+            <td>{{ cliente.correlativo }}</td>
+            <td>{{ cliente.frecuencia }}</td>
+            <td>{{ cliente.cantVisitasGeneradas }}</td>
+            <td>{{ cliente.visitasEsperadas }}</td>
+            <td>{{ cliente.criterioDeExito }}</td>
+            <td>{% if cliente.cumplido %}<span style="color: green;">Sí!</span>{% else %}<span style="color: red;">No</span>{% endif %}</td>
+        </tr>
+{% endfor %}
+</table>
+<br>
+
+<table border="1" width="50%" style="font-size: 11px">
+    {% set  anterior = '' %}
+    {% set break = false %}
+
+    {% for carga in cargaDiaria if not break  %}
+        {% if  anterior == '' %}
+            <tr>
+            <th> Día</th>
+        {% endif %}
+        {% if  anterior != '' and  anterior != carga.resDia %}
+            <th>Total Capacidad</th>
+            </tr>
+            {% set break = true %}
+        {% endif %}
+        {%  if not break %}
+            <th> Camión </th>
+            <th> Clientes </th>
+        {% endif %}
+        {% set  anterior = carga.resDia %}
+    {% endfor %}
+    {% set  anterior = '' %}
+    {% set  demanda   = 0 %}
+    {% set  clientes  = 0 %}
+    {% set  promedio  = 0 %}
+    {% for carga in cargaDiaria %}
+        {% if  anterior == '' %}
+        <tr>
+            <td>{{ carga.resDia }}</td>
+            {% endif %}
+            {% if  anterior != '' and  anterior != carga.resDia %}
+            {% set  promedio  = demanda/clientes %}
+            <td>{{ promedio|round(2, 'floor') }}</td>
+
+            {% set  demanda   = 0 %}
+            {% set  clientes  = 0 %}
+        </tr>
+        <tr>
+            <td> {{ carga.resDia }}</td>
+            {% endif %}
+            <td> {{ carga.camion.id }} </td>
+            <td> {{ carga.resClientes }} </td>
+            {% set  demanda   = demanda + carga.resTotalDemanda %}
+            {% set  clientes  = clientes + carga.resTotalClientes %}
+            {% set  anterior  = carga.resDia %}
+        {% endfor %}
+        {% set  promedio  = demanda/clientes %}
+        <td>{{ promedio|round(2, 'floor') }}</td>
+    </tr>
+</table>
+

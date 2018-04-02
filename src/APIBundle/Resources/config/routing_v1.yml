@@ -49,3 +49,15 @@ misrutas:
 visitas:
   type: rest
   resource: APIBundle\Controller\VisitasController
+
+detalleRuta:
+  type: rest
+  resource: APIBundle\Controller\DetalleRutaController
+
+comentariosVisitas:
+  type: rest
+  resource: APIBundle\Controller\ComentariosVisitasController
+
+regiones:
+  type: rest
+  resource: APIBundle\Controller\RegionesController

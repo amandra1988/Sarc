@@ -1,0 +1,19 @@
+{
+  "name": "jQuery",
+  "homepage": "https://github.com/jquery/jquery",
+  "version": "2.2.4",
+  "_release": "2.2.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.2.4",
+    "commit": "f5416725afefb0c8ff3beb4ed4ff4b8ab3d22f0d"
+  },
+  "_source": "https://github.com/jquery/jquery.git",
+  "_target": "2.X"
+}type": "version",
+    "tag": "3.3.1",
+    "commit": "9e8ec3d10fad04748176144f108d7355662ae75e"
+  },
+  "_source": "https://github.com/jquery/jquery-dist.git",
+  "_target": "1.9.1 - 3"
+}

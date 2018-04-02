@@ -10,40 +10,40 @@
     <div class="container-fluid" ng-if="accion !== 0">
 
         <div class="form-group row">
-            <label class="col-2 col-form-label">(*)Nombres:</label>
+            <label class="col-2 col-form-label">(*) Nombres del operador:</label>
             <div class="col-10">
-                <input class="form-control" type="text" value="" ng-model="ope.nombre" name="nombre">
+                <input class="form-control" type="text" value="" ng-model="ope.nombre" name="nombre" title="Ingrese ambos nombres del operador">
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-2 col-form-label">(*)Apellidos:</label>
+            <label class="col-2 col-form-label">(*) Apellidos del operador:</label>
             <div class="col-10">
-                <input class="form-control" type="text" value="" ng-model="ope.apellido" name="apellido">
+                <input class="form-control" type="text" value="" ng-model="ope.apellido" name="apellido"  title="Ingrese ambos apellidos del operador">
             </div>
         </div>
         <div class="form-group row">
-          <label class="col-2 col-form-label">(*)RUT</label>
+          <label class="col-2 col-form-label">(*) RUN</label>
           <div class="col-10">
-            <input class="form-control" type="text" ng-model="ope.rut" name="rut" placeholder="00.000.000-0" maxlength="13">
+            <input class="form-control" type="text" ng-model="ope.rut" name="rut" placeholder="Sin puntos ni guión." maxlength="13"  title="Ingrese RUT del operador">
           </div>
         </div>
         <div class="form-group row">
-          <label class="col-2 col-form-label">(*)N° de licencia</label>
+          <label class="col-2 col-form-label">(*) N° de licencia de conducir</label>
           <div class="col-10">
-            <input class="form-control" type="text" ng-model="ope.licencia" name="licencia">
+            <input class="form-control" type="text" ng-model="ope.licencia" name="licencia" title="Ingrese número de licencia de conducir">
           </div>
         </div>
         <div class="form-group row">
           <label class="col-2 col-form-label">Celular</label>
            <div class="input-group mb-2 mr-sm-2 mb-sm-0">        
             <div class="input-group-addon">+56</div>
-            <input class="form-control col-2" type="number" ng-model="ope.celular" name="celular" placeholder="999999999">
+            <input class="form-control col-2" type="text" ng-model="ope.celular" numbers-only max="9" name="celular" placeholder="999999999"  title="Ingrese correo electrónico" >
           </div>
         </div>
         <div class="form-group row">
           <label class="col-2 col-form-label">Correo</label>
           <div class="col-10">
-            <input class="form-control" type="correo" ng-model="ope.correo" name="correo">
+            <input class="form-control" type="correo" ng-model="ope.correo" name="correo" title="Ingrese número de celular">
           </div>
         </div>
         <div style="color:red">(*) Campo requerido </div>

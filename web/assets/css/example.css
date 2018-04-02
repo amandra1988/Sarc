@@ -7,7 +7,6 @@ body {
     height: 100%;
 }
 
-/* fix for Twitter Bootstrap handling of responsive images */
 .angular-google-map img {
     max-width: none;
 }
@@ -40,22 +39,14 @@ body {
     white-space: nowrap;
 }
 
-/** FIX for Bootstrap and Google Maps Info window styes problem **/
 img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
   max-width: none;
 }
-
-
-/* uncomment this if you are using the <google-map> element instead of a div
-.angular-google-map {
-  display: block;
-  }*/
 
 .custom-info-window{
     background: rgba(0,0,0,0.5);
     color: white;
     padding: 20px;
-    /*border: 1px solid white;*/
     box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
     border-radius: 5px;
     width: 200px;

@@ -10,16 +10,22 @@ namespace AppBundle\Repository;
  */
 class CamionRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function buscarCamionesDeLaEmpresa($idEmpresa){
+    public function buscarCamionesDeLaEmpresa($empresa,$operativo=null){
 
-            return $this->getEntityManager()
-            ->createQuery(' SELECT c
-                            FROM AppBundle:Camion c
-                            LEFT JOIN c.operador o
-                            LEFT JOIN o.usuario u
-                            WHERE u.empresa = :idEmpresa
-                            AND c.camVisible = :visible')
-            ->setParameter('idEmpresa', $idEmpresa)->setParameter('visible', 1)
-            ->getResult();
+        $qb=$this->createQueryBuilder('c');
+        $qb->add('from', 'AppBundle:Camion c');
+        $qb->innerJoin('c.operador', 'o');
+        $qb->innerJoin('o.usuario', 'u');
+
+        $qb->andWhere($qb->expr()->eq('c.camVisible', 1));
+        $qb->andWhere($qb->expr()->eq('u.empresa', ':empresa'))
+            ->setParameter('empresa', $empresa);
+
+        if($operativo)
+            $qb->andWhere($qb->expr()->eq('c.camEstado', ':estado'))
+                ->setParameter('estado', 1);
+
+        return $qb->getQuery()->getResult();
+
     }
 }

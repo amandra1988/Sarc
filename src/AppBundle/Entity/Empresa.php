@@ -81,10 +81,17 @@ class Empresa
      */
     protected  $usuarios;
 
-     /**
-     * @ORM\OneToMany(targetEntity="Cliente", mappedBy="empresa", cascade={"persist", "remove"} )
+
+    /**
+     * @ORM\OneToOne(targetEntity="ConfiguracionAmpl", mappedBy="empresa", cascade={"persist", "remove"} )
      */
-    protected  $clientes;
+    protected  $configuracionAmpl;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Proceso", mappedBy="empresa", cascade={"persist", "remove"} )
+     */
+     protected  $procesos;
        
     /**
      * @ORM\ManyToOne(targetEntity="CentroDeAcopio", inversedBy="empresas" )
@@ -353,5 +360,63 @@ class Empresa
     public function getCentroDeAcopio()
     {
         return $this->centroDeAcopio;
+    }
+
+    /**
+     * Add proceso
+     *
+     * @param \AppBundle\Entity\Proceso $proceso
+     *
+     * @return Empresa
+     */
+    public function addProceso(\AppBundle\Entity\Proceso $proceso)
+    {
+        $this->procesos[] = $proceso;
+
+        return $this;
+    }
+
+    /**
+     * Remove proceso
+     *
+     * @param \AppBundle\Entity\Proceso $proceso
+     */
+    public function removeProceso(\AppBundle\Entity\Proceso $proceso)
+    {
+        $this->procesos->removeElement($proceso);
+    }
+
+    /**
+     * Get procesos
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProcesos()
+    {
+        return $this->procesos;
+    }
+
+    /**
+     * Set configuracionAmpl
+     *
+     * @param \AppBundle\Entity\ConfiguracionAmpl $configuracionAmpl
+     *
+     * @return Empresa
+     */
+    public function setConfiguracionAmpl(\AppBundle\Entity\ConfiguracionAmpl $configuracionAmpl = null)
+    {
+        $this->configuracionAmpl = $configuracionAmpl;
+
+        return $this;
+    }
+
+    /**
+     * Get configuracionAmpl
+     *
+     * @return \AppBundle\Entity\ConfiguracionAmpl
+     */
+    public function getConfiguracionAmpl()
+    {
+        return $this->configuracionAmpl;
     }
 }

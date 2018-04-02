@@ -25,30 +25,32 @@ class OperadoresController extends APIBaseController
     }
     
     public function postEmpresasOperadoresAction(Request $request, Empresa $empresa){
-        $groups ='';
+        $groups =['operador_detalle'];
+        $em = $this->getDoctrine()->getManager();
         
-        //Confirmar que no exista un operador con el mismo rut
         $rut = str_replace('.','', str_replace('-', '', $request->get('rut')));
         $usuario = $this->getDoctrine()->getRepository('AppBundle:Operador')->existeElUsuario($rut);
-        if( count($usuario) === 0)
-        {
-            //Crear el usuario con rol operador
-            $rol   = $this->getDoctrine()->getRepository('AppBundle:Rol')->find(4); 
-            $token = $this->getDoctrine()->getRepository('AppBundle:User')->obtenerTokenParaElUsuario();
+    
+        if( count($usuario) === 0){
             $usuario = new User();
-            $pass  = $this->container->get('security.password_encoder');
-            $password = $pass->encodePassword($usuario,12345);
-            $usuario->setEmpresa($empresa);
-            $usuario->setRol($rol);
-            $usuario->setUsername($rut);
-            $usuario->setPassword($password);
-            $usuario->setToken($token);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($usuario);
-            $em->flush();
+        }else{
+            if($usuario[0]->getVisible() == 0){
+                $usuario = $usuario[0]; 
+            }else{
+                $respuesta['error'] ="Ya existe un operador con el rut ingresado!";
+                return $this->serializedResponse($respuesta,''); 
+            }
         }
-        
-        // Se crea el nuevo operador.
+
+        $rol   = $this->getDoctrine()->getRepository('AppBundle:Rol')->find(4); 
+        $token = $this->getDoctrine()->getRepository('AppBundle:User')->obtenerTokenParaElUsuario();
+        $pass  = $this->container->get('security.password_encoder');
+        $password = $pass->encodePassword($usuario,12345);
+        $usuario->setEmpresa($empresa)->setRol($rol)->setUsername($rut)->setPassword($password)->setToken($token);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($usuario);
+        $em->flush();
+
         $operador= new Operador();
         $operador->setOpeNombre($request->get('nombre'))
                  ->setOpeApellido($request->get('apellido'))
@@ -58,28 +60,31 @@ class OperadoresController extends APIBaseController
                  ->setOpeCorreo($request->get('correo'))
                  ->setUsuario($usuario)
                  ->setOpeVisible(true);
-        $em = $this->getDoctrine()->getManager();
         $em->persist($operador);
         $em->flush();
         return $this->serializedResponse($operador, $groups);
     }
     
     public function patchEmpresasOperadoresAction(Request $request, $idEmpresa, Operador $operador ){
-        $groups ='';
-        $rut = str_replace('.','', str_replace('-', '', $request->get('rut')));
+        $groups =['operador_detalle'];
+        $em = $this->getDoctrine()->getManager();
+
+        $rut = str_replace('.','', str_replace('-', '', $request->get('rut')));   
         $operador->setOpeNombre($request->get('nombre'))
                 ->setOpeApellido($request->get('apellido'))
-                ->setOpeRut($request->get('rut'))
+                ->setOpeRut($rut)
                 ->setOpeLicencia($request->get('licencia'))
                 ->setOpeCorreo($request->get('correo'))
-                ->setOpeCelular($request->get('celular'));
-
-        $operador->setOpeVisible($request->get('visible'));
-        $em = $this->getDoctrine()->getManager();
+                ->setOpeCelular($request->get('celular'))
+                ->setOpeVisible($request->get('visible'));
         $em->persist($operador);
         $em->flush();
-        return $this->serializedResponse($operador, $groups);
-        
-    }
 
+        $usuario = $operador->getUsuario();
+        $usuario->setVisible($request->get('visible'));
+        $em->persist($usuario);
+        $em->flush();
+
+        return $this->serializedResponse($operador, $groups);   
+    }
 }

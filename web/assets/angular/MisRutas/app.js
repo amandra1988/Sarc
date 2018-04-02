@@ -16,16 +16,26 @@
 
     .config( ['$stateProvider', '$urlRouterProvider', 'urlBasePartials','uiGmapGoogleMapApiProvider',
         function  ($stateProvider ,  $urlRouterProvider ,  urlBasePartials, uiGmapGoogleMapApiProvider) {
+            
             var listaMisRutas = {
                 name: 'mis_rutas',
                 url: '/',
                 controller: 'MisRutasController',
                 templateUrl: urlBasePartials + 'mis_rutas.html'
             };
+
+            var detalleMiRuta = {
+                name: 'detalle_mi_ruta',
+                url: '/detalle_ruta/:idRuta',
+                controller: 'DetalleRutaController',
+                templateUrl: urlBasePartials + 'detalle_ruta.html'
+            };
+
             $stateProvider.state(listaMisRutas);
+            $stateProvider.state(detalleMiRuta);
+
             $urlRouterProvider.when('', '/');
             
-            //config para google map
             uiGmapGoogleMapApiProvider.configure({
                 key: 'AIzaSyAQSqyqFQIfB_RPG0h7HC7-G25c7w2OkUI',
                 v: '3.25',
