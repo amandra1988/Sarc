@@ -112,6 +112,12 @@ class Proceso
     protected $procesoCamiones;
 
     /**
+     * @ORM\OneToMany(targetEntity="Resultado", mappedBy="proceso", cascade={"persist", "remove"} )
+     */
+    protected $resultados;
+
+
+    /**
      * Get id
      *
      * @return integer
@@ -420,5 +426,39 @@ class Proceso
     public function getRegion()
     {
         return $this->region;
+    }
+
+    /**
+     * Add resultado
+     *
+     * @param \AppBundle\Entity\Resultado $resultado
+     *
+     * @return Proceso
+     */
+    public function addResultado(\AppBundle\Entity\Resultado $resultado)
+    {
+        $this->resultados[] = $resultado;
+
+        return $this;
+    }
+
+    /**
+     * Remove resultado
+     *
+     * @param \AppBundle\Entity\Resultado $resultado
+     */
+    public function removeResultado(\AppBundle\Entity\Resultado $resultado)
+    {
+        $this->resultados->removeElement($resultado);
+    }
+
+    /**
+     * Get resultados
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getResultados()
+    {
+        return $this->resultados;
     }
 }

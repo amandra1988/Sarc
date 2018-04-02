@@ -45,7 +45,7 @@ class SwitchProcessCommand extends ContainerAwareCommand
         $fs = new Filesystem();
 
         $this->_execute = $this->getContainer();
-        
+
         //argregamos al log todos los parametros
         $logger = $this->getContainer()->get('logger');
         $nameEvent = ltrim($input->getArgument('event'), '"');
@@ -54,7 +54,6 @@ class SwitchProcessCommand extends ContainerAwareCommand
         $archivo = explode(".", $fileName);
         $file = $archivo[0];
 
-
         //obtenemos la ruta del modulo AdminBundle
         $absolutePath =$this->getContainer()->get('kernel')->locateResource('@AdminBundle/Resources/');
         //siempre borramos el archivo, temas cache
@@ -62,12 +61,12 @@ class SwitchProcessCommand extends ContainerAwareCommand
             $logger->info('SARC: ERROR proceso ya realizado');
             throw new \RuntimeException("Proceso ya realizado");
         }
-  
+
         $a = substr($fileName,strrpos($fileName,'.',-1),strlen($fileName));
         $fileExtension = str_replace('"','',$a);
-        
+
         if($fs->exists($absolutePath."data/".$file.".PID")){
-            
+
             $logger->info($nameEvent .$fileName. $fileExtension);
 
             if($fileExtension == ".sol"  && $nameEvent == "IN_CREATE"){
